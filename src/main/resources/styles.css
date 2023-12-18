@@ -1,0 +1,24 @@
+.label {
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+}
+
+.text-field {
+    -fx-pref-width: 150;
+}
+
+.button {
+    -fx-font-size: 14;
+    -fx-background-color: #484fa0;
+    -fx-text-fill: white;
+}
+
+.vbox {
+    -fx-spacing: 10;
+    -fx-alignment: center;
+}
+
+.hbox {
+    -fx-spacing: 5;
+    -fx-alignment: center;
+}

@@ -1,0 +1,14 @@
+Map height: 600
+Map width: 800
+Initial number of plants: 50
+Energy gained from eating one plant: 10
+Number of plants growing each day: 5
+Plant growth variant: 1
+Initial number of animals: 10
+Initial energy of animals: 50
+Energy required to consider an animal well-fed: 30
+Energy consumed by parents to create offspring: 20
+Minimum number of mutations in offspring: 1
+Maximum number of mutations in offspring: 5
+Length of animals' genome: 8
+Behavior variant of animals: 2

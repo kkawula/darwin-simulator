@@ -1,4 +1,4 @@
-package agh.ics.oop.view;
+package agh.ics.oop.presenter;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;

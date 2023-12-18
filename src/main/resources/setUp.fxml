@@ -16,7 +16,7 @@
             xmlns:fx="http://javafx.com/fxml"
             minHeight="550.0" minWidth="850.0"
             stylesheets="styles.css"
-            fx:controller="agh.ics.oop.view.setUpController">
+            fx:controller="agh.ics.oop.presenter.setUpController">
     <center>
         <VBox alignment="CENTER" spacing="5">
             <HBox spacing="10">

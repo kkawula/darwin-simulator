@@ -1,0 +1,41 @@
+.root {
+    -fx-font-family: Arial, sans-serif;
+}
+
+.vbox {
+    -fx-padding: 20;
+    -fx-background-color: #f8f8f8;
+    -fx-border-radius: 5;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 0);
+    -fx-max-width: 500;
+    -fx-alignment: center;
+}
+
+.hbox {
+    -fx-alignment: center;
+}
+
+.label {
+    -fx-font-weight: bold;
+}
+
+.text-field {
+    -fx-padding: 5;
+    -fx-border-radius: 5;
+}
+
+.button {
+    -fx-background-color: #484fa0;
+    -fx-text-fill: white;
+    -fx-padding: 10 20;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #3b428f;
+}
+
+.radio-button {
+    -fx-spacing: 10;
+}

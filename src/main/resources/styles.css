@@ -13,6 +13,7 @@
 
 .hbox {
     -fx-alignment: center;
+    -fx-spacing: 10;
 }
 
 .label {

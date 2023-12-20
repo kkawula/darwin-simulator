@@ -1,6 +1,6 @@
-Map height: 600
-Map width: 800
-Initial number of plants: 50
+Map height: 10
+Map width: 10
+Initial number of plants: 5
 Energy gained from eating one plant: 10
 Number of plants growing each day: 5
 Plant growth variant: 1

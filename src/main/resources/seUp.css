@@ -2,7 +2,7 @@
     -fx-font-family: Arial, sans-serif;
 }
 
-.vbox {
+VBox {
     -fx-padding: 20;
     -fx-background-color: #f8f8f8;
     -fx-border-radius: 5;
@@ -11,13 +11,9 @@
     -fx-alignment: center;
 }
 
-.hbox {
+HBox {
     -fx-alignment: center;
     -fx-spacing: 10;
-}
-
-.label {
-    -fx-font-weight: bold;
 }
 
 .text-field {

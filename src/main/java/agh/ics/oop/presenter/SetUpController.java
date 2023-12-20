@@ -64,6 +64,8 @@ public class SetUpController {
     @FXML
     private RadioButton behaviorVariant2;
 
+    SimulationLauncher simulationLauncher = new SimulationLauncher();
+
     @FXML
     private void saveData() {
         try {
@@ -96,7 +98,8 @@ public class SetUpController {
             }
 
             ConfigurationData configurationData = new ConfigurationData(height, width, initialPlants, plantEnergy, plantsPerDay, growthVariant, initialAnimals, initialAnimalEnergy, fullnessThreshold, parentEnergyConsumption, minMutations, maxMutations, genomeLength, behaviorVariant);
-            // Send configurationData to the simulation
+
+            simulationLauncher.openNewWindow(configurationData);
 
             System.out.println("Map height: " + height);
             System.out.println("Map width: " + width);

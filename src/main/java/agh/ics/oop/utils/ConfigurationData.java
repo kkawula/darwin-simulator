@@ -32,5 +32,8 @@ public class ConfigurationData {
         this.genomeLength = genomeLength;
         this.behaviorVariant = behaviorVariant;
     }
+
+    public int getMapHeight() { return mapHeight; }
+    public int getMapWidth() { return mapWidth; }
 }
 

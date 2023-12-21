@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane fx:id="borderPane"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            minHeight="500.0" minWidth="600.0"
+            stylesheets="simulation.css"
+            fx:controller="agh.ics.oop.presenter.SimulationController">
+    <top>
+        <BorderPane styleClass="header-section">
+            <center>
+                <Label id="header-text" text="Darwin's evolution simulator"/>
+            </center>
+        </BorderPane>
+    </top>
+    <left>
+        <VBox styleClass="sidebar-section">
+            <Label text="Map width: "/>
+            <Label text="Map height: "/>
+        </VBox>
+    </left>
+    <center>
+        <VBox fx:id="content" styleClass="content-section">
+
+        </VBox>
+    </center>
+</BorderPane>

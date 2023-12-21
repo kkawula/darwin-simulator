@@ -5,16 +5,12 @@ import java.util.Random;
 import static java.lang.Math.max;
 
 public class Genome {
-    private int length;
+    private final int length;
 
-    private MapDirection[] genes;
+    private final MapDirection[] genes;
 
     public MapDirection[] getGenes() {
         return genes;
-    }
-
-    public int getLength() {
-        return length;
     }
 
     public Genome(MapDirection[] genes) {// for testing
@@ -38,24 +34,30 @@ public class Genome {
         Genome weakerGenome = fatherEnergy > motherEnergy ? motherGenome : fatherGenome;
 
         double strongerRatio = max(fatherEnergy, motherEnergy)  / (motherEnergy + fatherEnergy);
-        int strongerLenght = (int) (strongerRatio * length);
-        int weakerLenght = length - strongerLenght;
+        int strongerLength = (int) (strongerRatio * length);
+        int weakerLength = length - strongerLength;
 
         boolean startFromLeft = new Random().nextBoolean();
 
-        for (int i = 0; i < strongerLenght; i++) {
+        for (int i = 0; i < strongerLength; i++) {
             if (startFromLeft)
                 this.genes[i] = strongerGenome.genes[i];
             else
                 this.genes[length - i - 1] = strongerGenome.genes[length - i - 1];
         }
-        for (int i = 0; i < weakerLenght; i++) {
+        for (int i = 0; i < weakerLength; i++) {
             if (startFromLeft)
-                this.genes[i + strongerLenght] = weakerGenome.genes[i + strongerLenght];
+                this.genes[i + strongerLength] = weakerGenome.genes[i + strongerLength];
             else
-                this.genes[length - i - 1 - strongerLenght] = weakerGenome.genes[length - i - 1 - strongerLenght];
+                this.genes[length - i - 1 - strongerLength] = weakerGenome.genes[length - i - 1 - strongerLength];
         }
     }
+
+    public void setGenes(int index, MapDirection gene) {
+        this.genes[index] = gene;
+    }
+
+    public int getLength() { return length; }
 
     @Override
     public String toString() {

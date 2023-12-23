@@ -1,8 +1,9 @@
 package agh.ics.oop.model;
 
+import java.util.Comparator;
 import java.util.HashSet;
 
-public class Animal {
+public class Animal implements Comparable<Animal> {
     private Vector2d position;
     private Animal father;
     private Animal mother;
@@ -96,12 +97,10 @@ public class Animal {
         return energy;
     }
 
-    public void setEnergy(int energy) {
-        this.energy = energy;
-    }
+    public int getAge(){return age;}
 
-    public void setPosition(Vector2d position) {
-        this.position = position;
+    public Vector2d getPosition() {
+        return position;
     }
 
     @Override
@@ -109,4 +108,18 @@ public class Animal {
         return position.toString();
     }
 
+    public void eatGrass(int plantEnergy) {
+        energy+=plantEnergy;
+    }
+    public void move()
+    {
+
+    }
+    @Override
+    public int compareTo(Animal other) {
+        return Comparator.comparing(Animal::getEnergy)
+                .thenComparing(Animal::getAge)
+                .thenComparing(Animal::getOffspring)
+                .compare(this, other);
+    }
 }

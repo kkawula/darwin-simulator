@@ -17,7 +17,6 @@ public class Genome {
         this.length = genes.length;
         this.genes = genes;
     }
-
     public Genome(int length) {
         this.length = length;
         this.genes = new MapDirection[length];
@@ -58,6 +57,11 @@ public class Genome {
     }
 
     public int getLength() { return length; }
+
+    public MapDirection getGene(int index)
+    {
+        return genes[index];
+    }
 
     @Override
     public String toString() {

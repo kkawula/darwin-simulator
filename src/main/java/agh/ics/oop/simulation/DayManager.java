@@ -24,8 +24,11 @@ public class DayManager {
 
     private final int plantEnergy;
 
+    private final int plantsPerDay;
+
     public DayManager(int initialPlants, int initialAnimals, int initialAnimalEnergy,
-                      int parentEnergyConsumption, int genomeLength, int plantEnergy)
+                      int parentEnergyConsumption, int genomeLength, int plantEnergy,
+                      int plantsPerDay)
     {
         this.initialPlants = initialPlants;
         this.initialAnimals = initialAnimals;
@@ -33,6 +36,7 @@ public class DayManager {
         this.parentEnergyConsumption = parentEnergyConsumption;
         this.genomeLength = genomeLength;
         this.plantEnergy = plantEnergy;
+        this.plantsPerDay = plantsPerDay;
     }
     public void initializeFirstDay(WorldMap worldMap)
     {
@@ -63,12 +67,11 @@ public class DayManager {
     {
         HashMap<Vector2d,TreeSet<Animal>> animals=map.getAnimals();
         LinkedList<Grass> grasses=map.getGrasses();
-
         removeDeadAnimals(animals);
         moveAnimals(animals);
         eatGrass(grasses,animals);
         reproduceAnimals(animals);
-        growGrass();
+        growGrass(grasses);
     }
     private void removeDeadAnimals(HashMap<Vector2d,TreeSet<Animal>> animals)
     {
@@ -89,9 +92,13 @@ public class DayManager {
         }
     }
 
-    private void growGrass()
+    private void growGrass(LinkedList<Grass> grasses, int width, int height)
     {
-        return;
+        RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(plantsPerDay,width,height,grasses);
+        for (Vector2d position : randomPositionGenerator)
+        {
+            grasses.add(new Grass(position));
+        }
     }
     private void moveAnimals(HashMap<Vector2d, TreeSet<Animal>> animals)
     {
@@ -121,7 +128,10 @@ public class DayManager {
                 Animal mother = entry.getValue().pollLast();
                 if(mother.getEnergy()>=parentEnergyConsumption)
                 {
-                    animals.get(position).add(new Animal(position,initialAnimalEnergy,father,mother));
+                    Animal child=father.reproduce(mother, initialAnimalEnergy);
+                    animals.get(position).add(child);
+                    animals.get(position).add(father);
+                    animals.get(position).add(mother);
                 }
             }
         }

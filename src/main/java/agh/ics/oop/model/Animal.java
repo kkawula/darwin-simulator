@@ -2,6 +2,7 @@ package agh.ics.oop.model;
 
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Vector;
 
 public class Animal implements Comparable<Animal> {
     private Vector2d position;
@@ -9,7 +10,7 @@ public class Animal implements Comparable<Animal> {
     private Animal mother;
 
     private int energy;
-    private final int age = 0;
+    private int age = 0;
     private final int birthDay = 0;
     private final int deathDay = 0;
     private final boolean isDead = false;
@@ -111,9 +112,25 @@ public class Animal implements Comparable<Animal> {
     public void eatGrass(int plantEnergy) {
         energy+=plantEnergy;
     }
-    public void move()
+    public void move(int width,int height)
     {
-
+        age+=1;
+        Vector2d newPosition=position.add(genome.getGene(activeGene).toUnitVector());
+        if(0<newPosition.getX() && newPosition.getX()<width)
+        {
+            position=newPosition;
+        }
+        updateGenome();
+    }
+    void updateGenome()
+    {
+        activeGene=(activeGene+1)%genomeLength;
+    }
+    public Animal reproduce(Animal mother, int initialAnimalEnergy)
+    {
+        mother.energy-=initialAnimalEnergy/2;
+        father.energy-=initialAnimalEnergy/2;
+        return new Animal(position,initialAnimalEnergy,father,mother);
     }
     @Override
     public int compareTo(Animal other) {

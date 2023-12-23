@@ -1,5 +1,6 @@
 package agh.ics.oop.utils;
 
+import agh.ics.oop.model.Grass;
 import agh.ics.oop.model.Vector2d;
 
 import java.lang.reflect.Array;
@@ -20,6 +21,17 @@ public class RandomPositionGenerator implements Iterable<Vector2d>{
         for(int i=0;i<numberOfPositions;i++)
             arrayOfPositions.add(new Vector2d(linearizedArrayOfGrassPosition.get(i)%maxWidth,linearizedArrayOfGrassPosition.get(i)/maxHeight));
     }
+    public RandomPositionGenerator(int numberOfPositions, int maxWidth, int maxHeight, LinkedList<Grass> grasses)
+    {
+        arrayOfPositions=new ArrayList<>(numberOfPositions);
+        ArrayList<Integer> linearizedArrayOfGrassPosition =
+                new ArrayList<>(IntStream.range(0, maxWidth * maxHeight).boxed().toList());
+        for(Grass grass:grasses)
+        {
+            int linearizedVector2d;
+        }
+    }
+
 
     public Iterator<Vector2d> iterator() {
         return new randomPositionGeneratorIterator();

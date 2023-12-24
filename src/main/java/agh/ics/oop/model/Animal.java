@@ -1,20 +1,22 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.simulation.MoveValidator;
+
+
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Vector;
+import java.util.Objects;
+
 
 public class Animal implements Comparable<Animal> {
     private Vector2d position;
     private Animal father;
     private Animal mother;
-
     private int energy;
     private int age = 0;
     private final int birthDay = 0;
     private final int deathDay = 0;
     private final boolean isDead = false;
-
     private int children = 0;
     private int offspring = 0;
     private final int grassEaten = 0;
@@ -34,6 +36,7 @@ public class Animal implements Comparable<Animal> {
     public Animal (Vector2d newPosition, int energy, int genomeLength) {
         this.position = newPosition;
         this.energy = energy;
+        this.genomeLength = genomeLength;
         this.genome = new Genome(genomeLength);
     }
 
@@ -53,7 +56,6 @@ public class Animal implements Comparable<Animal> {
 
         HashSet<Animal> visitedParents = new HashSet<>();
         updateOffspring(visitedParents);
-
     }
 
     public void updateOffspring(HashSet<Animal> visitedParents) {
@@ -112,19 +114,17 @@ public class Animal implements Comparable<Animal> {
     public void eatGrass(int plantEnergy) {
         energy+=plantEnergy;
     }
-    public void move(int width,int height)
+
+    public void move(MoveValidator moveValidator)
     {
-        age+=1;
-        Vector2d newPosition=position.add(genome.getGene(activeGene).toUnitVector());
-        if(0<newPosition.getX() && newPosition.getX()<width)
-        {
-            position=newPosition;
-        }
+        age++;
+        position =moveValidator.newPosition(position,genome.getGene(activeGene));
+
         updateGenome();
     }
-    void updateGenome()
+    public void updateGenome() //solution for the moment of testing this version
     {
-        activeGene=(activeGene+1)%genomeLength;
+         activeGene=(activeGene+1)%genomeLength;
     }
     public Animal reproduce(Animal mother, int initialAnimalEnergy)
     {
@@ -138,5 +138,18 @@ public class Animal implements Comparable<Animal> {
                 .thenComparing(Animal::getAge)
                 .thenComparing(Animal::getOffspring)
                 .compare(this, other);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Animal animal = (Animal) o;
+        return birthDay == animal.birthDay && Objects.equals(position, animal.position) && Objects.equals(father, animal.father) && Objects.equals(mother, animal.mother);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(position, father, mother, birthDay);
     }
 }

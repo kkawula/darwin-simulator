@@ -1,5 +1,6 @@
 package agh.ics.oop.presenter;
 
+import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.utils.ConfigurationData;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -21,8 +22,9 @@ public class SimulationLauncher {
             SimulationController controller = loader.getController();
             controller.getContent().getChildren().add(gridPane);
 
+            Simulation simulation = new Simulation(config);
+            simulation.run();
             Stage stage = new Stage();
-
             stage.setTitle("Simulation");
             stage.setScene(scene);
             stage.show();

@@ -13,15 +13,15 @@ public class Simulation {
     private final WorldMap worldMap;
 
     public Simulation(ConfigurationData cfg) {
-        worldMap = new WorldMap(cfg.getMapWidth(), cfg.getMapHeight(), cfg.getPlantEnergy());
+        worldMap = new WorldMap(cfg.getMapWidth(), cfg.getMapHeight());
         dayManager = new DayManager(cfg.getInitialPlants(), cfg.getInitialAnimalEnergy(),
                 cfg.getInitialAnimalEnergy(), cfg.getParentEnergyConsumption(),
-                cfg.getGenomeLength(),cfg.getPlantEnergy());
+                cfg.getGenomeLength(),cfg.getPlantEnergy(), cfg.getPlantsPerDay());
         dayManager.initializeFirstDay(worldMap);
     }
     public void run()
     {
-
+        dayManager.updateDay(worldMap);
     }
 
 }

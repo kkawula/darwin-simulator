@@ -8,34 +8,53 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
+import static java.util.Collections.max;
+import static java.util.Collections.swap;
+
 public class RandomPositionGenerator implements Iterable<Vector2d>{
 
     private final ArrayList<Vector2d> arrayOfPositions;
 
     public RandomPositionGenerator(int numberOfPositions, int maxWidth, int maxHeight)
     {
-        arrayOfPositions=new ArrayList<>(numberOfPositions);
-        ArrayList<Integer> linearizedArrayOfGrassPosition =
+        arrayOfPositions=new ArrayList<>();
+        ArrayList<Integer> linearizedArrayOfPositions =
                 new ArrayList<>(IntStream.range(0, maxWidth * maxHeight).boxed().toList());
-        Collections.shuffle(linearizedArrayOfGrassPosition);
+        Collections.shuffle(linearizedArrayOfPositions);
         for(int i=0;i<numberOfPositions;i++)
-            arrayOfPositions.add(new Vector2d(linearizedArrayOfGrassPosition.get(i)%maxWidth,linearizedArrayOfGrassPosition.get(i)/maxHeight));
-    }
-    public RandomPositionGenerator(int numberOfPositions, int maxWidth, int maxHeight, LinkedList<Grass> grasses)
-    {
-        arrayOfPositions=new ArrayList<>(numberOfPositions);
-        ArrayList<Integer> linearizedArrayOfGrassPosition =
-                new ArrayList<>(IntStream.range(0, maxWidth * maxHeight).boxed().toList());
-        for(Grass grass:grasses)
-        {
-            int linearizedVector2d;
-        }
+            arrayOfPositions.add(Vector2d.intToVector2d(linearizedArrayOfPositions.get(i),maxWidth));
     }
 
+    public RandomPositionGenerator(int numberOfPositions, int maxWidth, int maxHeight, LinkedList<Grass> grasses)
+    {
+        arrayOfPositions=new ArrayList<>();
+
+        ArrayList<Integer> linearizedArrayOfPositions =  new ArrayList<>(IntStream.range(0, maxWidth * maxHeight).boxed().toList());
+        Collections.shuffle(linearizedArrayOfPositions);
+
+        ArrayList<Boolean> areGrassAlreadyOnMap = new ArrayList<>(Collections.nCopies(maxWidth*maxHeight,false));
+        for(Grass grass : grasses)
+            areGrassAlreadyOnMap.set(grass.getPosition().linearizedVector2d(maxWidth),true);
+        int numberOfNewPositions=0;
+        int i=0;
+        while(numberOfNewPositions<numberOfPositions && i<maxWidth*maxHeight)
+        {
+            int newPosition=linearizedArrayOfPositions.get(i);
+            if(!areGrassAlreadyOnMap.get(newPosition))
+            {
+                arrayOfPositions.add(Vector2d.intToVector2d(newPosition,maxWidth));
+                numberOfNewPositions++;
+            }
+            i++;
+        }
+
+
+    }
 
     public Iterator<Vector2d> iterator() {
         return new randomPositionGeneratorIterator();
     }
+
     private class randomPositionGeneratorIterator implements Iterator<Vector2d>
     {
         private int index;

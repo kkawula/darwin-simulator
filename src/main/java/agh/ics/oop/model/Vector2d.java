@@ -1,7 +1,6 @@
 package agh.ics.oop.model;
 
 import java.util.Objects;
-import java.util.Vector;
 
 public class Vector2d {
     private final int x;
@@ -54,13 +53,13 @@ public class Vector2d {
 
     public int getY() { return y; }
 
-    public int linearizedVector2d(int width, int height)
+    public int linearizedVector2d(int width)
     {
         return width*y+x;
     }
-    public Vector2d intToVector2d(int linearizedVector, int width, int height)
+    public static Vector2d intToVector2d(int linearizedVector2d, int width)
     {
-        return
+        return new Vector2d(linearizedVector2d%width,linearizedVector2d/width);
     }
     @Override
     public String toString() {

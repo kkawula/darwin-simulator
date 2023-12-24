@@ -5,7 +5,6 @@ import agh.ics.oop.model.Grass;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.utils.RandomPositionGenerator;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class DayManager {
@@ -57,7 +56,7 @@ public class DayManager {
     }
     private void placeGrasses(LinkedList<Grass> grasses, int width, int height)
     {
-        RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(initialAnimals,width,height);
+        RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(initialPlants,width,height);
         for (Vector2d position : randomPositionGenerator)
         {
             grasses.add(new Grass(position));
@@ -67,11 +66,12 @@ public class DayManager {
     {
         HashMap<Vector2d,TreeSet<Animal>> animals=map.getAnimals();
         LinkedList<Grass> grasses=map.getGrasses();
+
         removeDeadAnimals(animals);
-        moveAnimals(animals);
+        moveAnimals(map,animals);
         eatGrass(grasses,animals);
         reproduceAnimals(animals);
-        growGrass(grasses);
+        growGrass(grasses,map.getWidth(),map.getHeight());
     }
     private void removeDeadAnimals(HashMap<Vector2d,TreeSet<Animal>> animals)
     {
@@ -100,18 +100,18 @@ public class DayManager {
             grasses.add(new Grass(position));
         }
     }
-    private void moveAnimals(HashMap<Vector2d, TreeSet<Animal>> animals)
+    private void moveAnimals(MoveValidator moveValidator,HashMap<Vector2d, TreeSet<Animal>> animals)
     {
         LinkedList<Animal> copyOfValues = new LinkedList<>();
         for (Map.Entry<Vector2d, TreeSet<Animal>> entry : animals.entrySet())
         {
-            for (Animal animal : entry.getValue()) {
+            for(int i=0;i<entry.getValue().size();i++)
                 copyOfValues.add(entry.getValue().pollLast());
-            }
         }
+        System.out.println(animals);
         for (Animal animal:copyOfValues)
         {
-            animal.move();
+            animal.move(moveValidator);
             animals.get(animal.getPosition()).add(animal);
         }
 
@@ -121,9 +121,9 @@ public class DayManager {
     {
         for (Map.Entry<Vector2d, TreeSet<Animal>> entry : animals.entrySet())
         {
-            if(entry.getValue().size()>=2)
+            Vector2d position = entry.getKey();
+            while(entry.getValue().size()>=2)
             {
-                Vector2d position = entry.getKey();
                 Animal father = entry.getValue().pollLast();
                 Animal mother = entry.getValue().pollLast();
                 if(mother.getEnergy()>=parentEnergyConsumption)
@@ -132,6 +132,12 @@ public class DayManager {
                     animals.get(position).add(child);
                     animals.get(position).add(father);
                     animals.get(position).add(mother);
+                }
+                else
+                {
+                    animals.get(position).add(father);
+                    animals.get(position).add(mother);
+                    break;
                 }
             }
         }

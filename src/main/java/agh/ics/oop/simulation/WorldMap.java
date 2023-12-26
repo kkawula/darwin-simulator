@@ -8,6 +8,8 @@ import agh.ics.oop.model.Vector2d;
 
 import java.util.*;
 
+import static java.lang.Math.max;
+
 public class WorldMap implements MoveValidator{
 
     private final int width;
@@ -26,7 +28,6 @@ public class WorldMap implements MoveValidator{
     private void initializeHashMap(int width, int height)
     {
         for (int i = 0; i < width*height; i++) {
-
             animals.put(new Vector2d(i%width,i/width),new TreeSet<>());
         }
     }
@@ -51,13 +52,16 @@ public class WorldMap implements MoveValidator{
 
     public Vector2d newPosition(Vector2d position, MapDirection mapDirection)
     {
-        if(position.getY()<0 && position.getY()>=height)
+        int newX =(position.getX()+mapDirection.toUnitVector().getX()) >= 0 ?
+                position.getX()+mapDirection.toUnitVector().getX() % width : width-1;
+        int newY= position.getY()+mapDirection.toUnitVector().getY();
+        if(newY<0 || newY>=height)
         {
-            return position;
+            return new Vector2d(newX,position.getY());
         }
         else
         {
-            return new Vector2d(position.getX()%width,position.getY());
+            return new Vector2d(newX,newY);
         }
     }
 }

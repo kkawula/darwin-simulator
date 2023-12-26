@@ -23,7 +23,9 @@ public class SimulationLauncher {
             controller.getContent().getChildren().add(gridPane);
 
             Simulation simulation = new Simulation(config);
-            simulation.run();
+            for (int i = 0; i < 10000; i++) {
+                simulation.run();
+            }
             Stage stage = new Stage();
             stage.setTitle("Simulation");
             stage.setScene(scene);
@@ -47,4 +49,5 @@ public class SimulationLauncher {
 
         return gridPane;
     }
+
 }

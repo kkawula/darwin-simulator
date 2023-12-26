@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
+import static java.lang.Math.min;
 import static java.util.Collections.max;
 import static java.util.Collections.swap;
 
@@ -21,7 +22,7 @@ public class RandomPositionGenerator implements Iterable<Vector2d>{
         ArrayList<Integer> linearizedArrayOfPositions =
                 new ArrayList<>(IntStream.range(0, maxWidth * maxHeight).boxed().toList());
         Collections.shuffle(linearizedArrayOfPositions);
-        for(int i=0;i<numberOfPositions;i++)
+        for(int i=0;i<min(maxHeight*maxWidth,numberOfPositions);i++)
             arrayOfPositions.add(Vector2d.intToVector2d(linearizedArrayOfPositions.get(i),maxWidth));
     }
 

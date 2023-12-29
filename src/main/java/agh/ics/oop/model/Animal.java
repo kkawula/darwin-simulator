@@ -1,18 +1,22 @@
 package agh.ics.oop.model;
 
-import java.util.HashSet;
+import agh.ics.oop.simulation.MoveValidator;
 
-public class Animal {
+
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Objects;
+
+
+public class Animal implements Comparable<Animal> {
     private Vector2d position;
     private Animal father;
     private Animal mother;
-
     private int energy;
-    private final int age = 0;
+    private int age = 0;
     private final int birthDay = 0;
     private final int deathDay = 0;
     private final boolean isDead = false;
-
     private int children = 0;
     private int offspring = 0;
     private final int grassEaten = 0;
@@ -32,6 +36,7 @@ public class Animal {
     public Animal (Vector2d newPosition, int energy, int genomeLength) {
         this.position = newPosition;
         this.energy = energy;
+        this.genomeLength = genomeLength;
         this.genome = new Genome(genomeLength);
     }
 
@@ -51,7 +56,6 @@ public class Animal {
 
         HashSet<Animal> visitedParents = new HashSet<>();
         updateOffspring(visitedParents);
-
     }
 
     public void updateOffspring(HashSet<Animal> visitedParents) {
@@ -96,12 +100,10 @@ public class Animal {
         return energy;
     }
 
-    public void setEnergy(int energy) {
-        this.energy = energy;
-    }
+    public int getAge(){return age;}
 
-    public void setPosition(Vector2d position) {
-        this.position = position;
+    public Vector2d getPosition() {
+        return position;
     }
 
     @Override
@@ -109,4 +111,42 @@ public class Animal {
         return position.toString();
     }
 
+    public void eatGrass(int plantEnergy) {
+        energy+=plantEnergy;
+    }
+
+    public void move(MoveValidator moveValidator) {
+        age++;
+        position =moveValidator.newPosition(position, genome.getGene(activeGene));
+
+        updateGenome();
+    }
+    public void updateGenome() {//solution for the moment of testing this version
+         activeGene=(activeGene+1)%genomeLength;
+    }
+    public Animal reproduce(Animal mother, int initialAnimalEnergy) {
+        mother.energy-=initialAnimalEnergy/2;
+        father.energy-=initialAnimalEnergy/2;
+        return new Animal(position, initialAnimalEnergy, father, mother);
+    }
+    @Override
+    public int compareTo(Animal other) {
+        return Comparator.comparing(Animal::getEnergy)
+                .thenComparing(Animal::getAge)
+                .thenComparing(Animal::getOffspring)
+                .compare(this, other);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Animal animal = (Animal) o;
+        return birthDay == animal.birthDay && Objects.equals(position, animal.position) && Objects.equals(father, animal.father) && Objects.equals(mother, animal.mother);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(position, father, mother, birthDay);
+    }
 }

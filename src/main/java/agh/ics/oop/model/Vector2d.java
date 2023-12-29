@@ -53,6 +53,14 @@ public class Vector2d {
 
     public int getY() { return y; }
 
+    public int linearizedVector2d(int width)
+    {
+        return width*y+x;
+    }
+    public static Vector2d intToVector2d(int linearizedVector2d, int width)
+    {
+        return new Vector2d(linearizedVector2d%width,linearizedVector2d/width);
+    }
     @Override
     public String toString() {
         return "(" + x + "," + y + ")";
@@ -65,7 +73,6 @@ public class Vector2d {
         Vector2d vector2d = (Vector2d) o;
         return x == vector2d.x && y == vector2d.y;
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(x, y);

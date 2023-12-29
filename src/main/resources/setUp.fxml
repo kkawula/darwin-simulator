@@ -7,97 +7,97 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
 
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
 <?import javafx.scene.control.RadioButton?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="550.0" minWidth="850.0"
-            stylesheets="styles.css"
-            fx:controller="agh.ics.oop.presenter.setUpController">
+            stylesheets="setUp.css"
+            fx:controller="agh.ics.oop.presenter.SetUpController">
     <center>
         <VBox alignment="CENTER" spacing="5">
-            <HBox spacing="10">
-                <Button text="Wczytaj z pliku"/>
+            <HBox>
+                <Button text="Load"/>
             </HBox>
 
-            <HBox spacing="10">
-                <Label text="Wysokość mapy:"/>
+            <HBox>
+                <Button text="Save"/>
+            </HBox>
+
+            <HBox>
+                <Label text="Map height:"/>
                 <TextField fx:id="heightField"/>
             </HBox>
 
-            <HBox spacing="10">
-                <Label text="Szerokość mapy:"/>
+            <HBox>
+                <Label text="Map width:"/>
                 <TextField fx:id="widthField"/>
             </HBox>
 
-            <HBox spacing="10">
-                <Label text="Startowa liczba roślin:"/>
+            <HBox>
+                <Label text="Initial number of plants:"/>
                 <TextField fx:id="initialPlantsField"/>
             </HBox>
 
-            <HBox spacing="10">
-                <Label text="Energia zjedzenia jednej rośliny:"/>
+            <HBox>
+                <Label text="Energy from eating one plant:"/>
                 <TextField fx:id="plantEnergyField"/>
             </HBox>
 
-            <HBox spacing="10">
-                <Label text="Liczba roślin wyrastająca każdego dnia:"/>
+            <HBox>
+                <Label text="Plants growing each day:"/>
                 <TextField fx:id="plantsPerDayField"/>
             </HBox>
 
-            <HBox spacing="10">
-                <Label text="Wariant wzrostu roślin:"/>
-
-                <RadioButton fx:id="growVariant1" text="Wariant 1" />
-                <RadioButton fx:id="growVariant2" text="Wariant 2" />
+            <HBox>
+                <Label text="Plant growth variant:"/>
+                <RadioButton fx:id="growVariant1" text="1" />
+                <RadioButton fx:id="growVariant2" text="2" />
             </HBox>
 
-            <HBox spacing="10">
-                <Label text="Startowa liczba zwierzaków:"/>
+            <HBox>
+                <Label text="Initial number of animals:"/>
                 <TextField fx:id="initialAnimalsField"/>
             </HBox>
 
-            <HBox spacing="10">
-                <Label text="Startowa energia zwierzaków:"/>
+            <HBox>
+                <Label text="Initial animal anergy:"/>
                 <TextField fx:id="initialAnimalEnergyField"/>
             </HBox>
 
-            <HBox spacing="10">
-                <Label text="Energia konieczna, by uznać zwierzaka za najedzonego:"/>
+            <HBox>
+                <Label text="Energy for well-fed animal:"/>
                 <TextField fx:id="fullnessThresholdField"/>
             </HBox>
 
-            <HBox spacing="10">
-                <Label text="Energia rodziców zużywana by stworzyć potomka:"/>
+            <HBox>
+                <Label text="Energy for parent-offspring:"/>
                 <TextField fx:id="parentEnergyConsumptionField"/>
             </HBox>
 
-            <HBox spacing="10">
-                <Label text="Minimalna liczba mutacji u potomków:"/>
+            <HBox>
+                <Label text="Minimum mutations:"/>
                 <TextField fx:id="minMutationsField"/>
             </HBox>
 
-            <HBox spacing="10">
-                <Label text="Maksymalna liczba mutacji u potomków:"/>
+            <HBox>
+                <Label text="Maximum mutations:"/>
                 <TextField fx:id="maxMutationsField"/>
             </HBox>
 
-
-            <HBox spacing="10">
-                <Label text="Długość genomu zwierzaków:"/>
+            <HBox>
+                <Label text="Genome length:"/>
                 <TextField fx:id="genomeLengthField"/>
             </HBox>
 
-            <HBox spacing="10">
-                <Label text="Wariant zachowania zwierzaków:"/>
-                <RadioButton fx:id="behaviorVariant1" text="Wariant 1" />
-                <RadioButton fx:id="behaviorVariant2" text="Wariant 2" />
+            <HBox>
+                <Label text="Animal behavior variant:"/>
+                <RadioButton fx:id="behaviorVariant1" text="1" />
+                <RadioButton fx:id="behaviorVariant2" text="2" />
             </HBox>
 
-            <Button text="Zapisz" onAction="#saveData"/>
+
+            <Button text="Save" onAction="#saveData"/>
         </VBox>
     </center>
 </BorderPane>

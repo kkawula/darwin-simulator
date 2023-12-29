@@ -39,6 +39,11 @@ public enum MapDirection {
         return values()[nextOrdinal];
     }
 
+    public static MapDirection random() {
+        int randomOrdinal = (int) (Math.random() * values().length);
+        return values()[randomOrdinal];
+    }
+
     public Vector2d toUnitVector() {
         return switch (this) {
             case NORTH_WEST -> new Vector2d(-1, 1);

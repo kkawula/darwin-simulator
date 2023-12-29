@@ -12,16 +12,16 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="550.0" minWidth="850.0"
-            stylesheets="seUp.css"
+            stylesheets="setUp.css"
             fx:controller="agh.ics.oop.presenter.SetUpController">
     <center>
         <VBox alignment="CENTER" spacing="5">
             <HBox>
-                <Button text="Load from File" onAction="#loadDataFromFile"/>
+                <Button text="Load"/>
             </HBox>
 
             <HBox>
-                <Button text="Save to File" onAction="#saveDataToText"/>
+                <Button text="Save"/>
             </HBox>
 
             <HBox>
@@ -40,19 +40,19 @@
             </HBox>
 
             <HBox>
-                <Label text="Energy gained from eating one plant:"/>
+                <Label text="Energy from eating one plant:"/>
                 <TextField fx:id="plantEnergyField"/>
             </HBox>
 
             <HBox>
-                <Label text="Number of plants growing each day:"/>
+                <Label text="Plants growing each day:"/>
                 <TextField fx:id="plantsPerDayField"/>
             </HBox>
 
             <HBox>
                 <Label text="Plant growth variant:"/>
-                <RadioButton fx:id="growVariant1" text="Variant 1" />
-                <RadioButton fx:id="growVariant2" text="Variant 2" />
+                <RadioButton fx:id="growVariant1" text="1" />
+                <RadioButton fx:id="growVariant2" text="2" />
             </HBox>
 
             <HBox>
@@ -61,40 +61,41 @@
             </HBox>
 
             <HBox>
-                <Label text="Initial energy of animals:"/>
+                <Label text="Initial animal anergy:"/>
                 <TextField fx:id="initialAnimalEnergyField"/>
             </HBox>
 
             <HBox>
-                <Label text="Energy required to consider an animal well-fed:"/>
+                <Label text="Energy for well-fed animal:"/>
                 <TextField fx:id="fullnessThresholdField"/>
             </HBox>
 
             <HBox>
-                <Label text="Energy consumed by parents to create offspring:"/>
+                <Label text="Energy for parent-offspring:"/>
                 <TextField fx:id="parentEnergyConsumptionField"/>
             </HBox>
 
             <HBox>
-                <Label text="Minimum number of mutations in offspring:"/>
+                <Label text="Minimum mutations:"/>
                 <TextField fx:id="minMutationsField"/>
             </HBox>
 
             <HBox>
-                <Label text="Maximum number of mutations in offspring:"/>
+                <Label text="Maximum mutations:"/>
                 <TextField fx:id="maxMutationsField"/>
             </HBox>
 
             <HBox>
-                <Label text="Length of animals' genome:"/>
+                <Label text="Genome length:"/>
                 <TextField fx:id="genomeLengthField"/>
             </HBox>
 
             <HBox>
-                <Label text="Behavior variant of animals:"/>
-                <RadioButton fx:id="behaviorVariant1" text="Variant 1" />
-                <RadioButton fx:id="behaviorVariant2" text="Variant 2" />
+                <Label text="Animal behavior variant:"/>
+                <RadioButton fx:id="behaviorVariant1" text="1" />
+                <RadioButton fx:id="behaviorVariant2" text="2" />
             </HBox>
+
 
             <Button text="Save" onAction="#saveData"/>
         </VBox>

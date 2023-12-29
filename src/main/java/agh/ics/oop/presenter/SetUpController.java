@@ -5,6 +5,7 @@ import agh.ics.oop.utils.FileNameGenerator;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -67,6 +68,18 @@ public class SetUpController {
     SimulationLauncher simulationLauncher = new SimulationLauncher();
 
     @FXML
+    private void initialize() {
+        ToggleGroup group = new ToggleGroup();
+        growVariant1.setToggleGroup(group);
+        growVariant2.setToggleGroup(group);
+
+        ToggleGroup group2 = new ToggleGroup();
+        behaviorVariant1.setToggleGroup(group2);
+        behaviorVariant2.setToggleGroup(group2);
+
+    }
+
+    @FXML
     private void saveData() {
         try {
             int height = Integer.parseInt(heightField.getText());
@@ -103,18 +116,19 @@ public class SetUpController {
 
             System.out.println("Map height: " + height);
             System.out.println("Map width: " + width);
-            System.out.println("Initial number of plants: " + initialPlants);
-            System.out.println("Energy gained from eating one plant: " + plantEnergy);
-            System.out.println("Number of plants growing each day: " + plantsPerDay);
+            System.out.println("Initial plant count: " + initialPlants);
+            System.out.println("Plant energy gain: " + plantEnergy);
+            System.out.println("Plants per day: " + plantsPerDay);
             System.out.println("Plant growth variant: " + growthVariant);
-            System.out.println("Initial number of animals: " + initialAnimals);
-            System.out.println("Initial energy of animals: " + initialAnimalEnergy);
-            System.out.println("Energy required to consider an animal well-fed: " + fullnessThreshold);
-            System.out.println("Energy consumed by parents to create offspring: " + parentEnergyConsumption);
-            System.out.println("Minimum number of mutations in offspring: " + minMutations);
-            System.out.println("Maximum number of mutations in offspring: " + maxMutations);
-            System.out.println("Length of animals' genome: " + genomeLength);
-            System.out.println("Behavior variant of animals: " + behaviorVariant);
+            System.out.println("Initial animal count: " + initialAnimals);
+            System.out.println("Initial animal energy: " + initialAnimalEnergy);
+            System.out.println("Fullness threshold: " + fullnessThreshold);
+            System.out.println("Parent energy consumption: " + parentEnergyConsumption);
+            System.out.println("Min mutations in offspring: " + minMutations);
+            System.out.println("Max mutations in offspring: " + maxMutations);
+            System.out.println("Genome length: " + genomeLength);
+            System.out.println("Animal behavior variant: " + behaviorVariant);
+
         } catch (NumberFormatException e) {
             System.out.println("The entered data is not an integer.");
         }
@@ -158,10 +172,10 @@ public class SetUpController {
                 case "Initial number of plants":
                     initialPlantsField.setText(value);
                     break;
-                case "Energy gained from eating one plant":
+                case "Energy from eating one plant":
                     plantEnergyField.setText(value);
                     break;
-                case "Number of plants growing each day":
+                case "Plants growing each day":
                     plantsPerDayField.setText(value);
                     break;
                 case "Plant growth variant":
@@ -179,22 +193,22 @@ public class SetUpController {
                 case "Initial energy of animals":
                     initialAnimalEnergyField.setText(value);
                     break;
-                case "Energy required to consider an animal well-fed":
+                case "Energy for well-fed animal":
                     fullnessThresholdField.setText(value);
                     break;
-                case "Energy consumed by parents to create offspring":
+                case "Energy for parent-offspring":
                     parentEnergyConsumptionField.setText(value);
                     break;
-                case "Minimum number of mutations in offspring":
+                case "Min mutations in offspring":
                     minMutationsField.setText(value);
                     break;
-                case "Maximum number of mutations in offspring":
+                case "Max mutations in offspring":
                     maxMutationsField.setText(value);
                     break;
-                case "Length of animals' genome":
+                case "Genome length":
                     genomeLengthField.setText(value);
                     break;
-                case "Behavior variant of animals":
+                case "Animal behavior variant":
                     if (value.equals("1")) {
                         behaviorVariant1.setSelected(true);
                         behaviorVariant2.setSelected(false);
@@ -203,6 +217,7 @@ public class SetUpController {
                         behaviorVariant2.setSelected(true);
                     }
                     break;
+
             }
         }
     }
@@ -223,12 +238,13 @@ public class SetUpController {
             data.put("Plant growth variant", growVariant1.isSelected() ? "1" : "2");
             data.put("Initial number of animals", initialAnimalsField.getText());
             data.put("Initial energy of animals", initialAnimalEnergyField.getText());
-            data.put("Energy required to consider an animal well-fed", fullnessThresholdField.getText());
-            data.put("Energy consumed by parents to create offspring", parentEnergyConsumptionField.getText());
-            data.put("Minimum number of mutations in offspring", minMutationsField.getText());
-            data.put("Maximum number of mutations in offspring", maxMutationsField.getText());
-            data.put("Length of animals' genome", genomeLengthField.getText());
-            data.put("Behavior variant of animals", behaviorVariant1.isSelected() ? "1" : "2");
+            data.put("Energy for well-fed animal", fullnessThresholdField.getText());
+            data.put("Energy for parent-offspring", parentEnergyConsumptionField.getText());
+            data.put("Min mutations in offspring", minMutationsField.getText());
+            data.put("Max mutations in offspring", maxMutationsField.getText());
+            data.put("Genome length", genomeLengthField.getText());
+            data.put("Animal behavior variant", behaviorVariant1.isSelected() ? "1" : "2");
+
 
             try (FileWriter writer = new FileWriter(filePath.toFile())) {
                 for (Map.Entry<String, String> entry : data.entrySet()) {

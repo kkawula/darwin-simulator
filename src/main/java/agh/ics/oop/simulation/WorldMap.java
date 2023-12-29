@@ -14,20 +14,17 @@ public class WorldMap implements MoveValidator{
 
     private final int height;
 
-
     private final HashMap<Vector2d, TreeSet<Animal>> animals= new HashMap<>();
 
     private final LinkedList<Grass> grasses= new LinkedList<>();
     public WorldMap(int width, int height) {
-        this.width=width;
-        this.height=height;
-        initializeHashMap(width,height);
+        this.width = width;
+        this.height = height;
+        initializeHashMap(width, height);
     }
-    private void initializeHashMap(int width, int height)
-    {
+    private void initializeHashMap(int width, int height) {
         for (int i = 0; i < width*height; i++) {
-
-            animals.put(new Vector2d(i%width,i/width),new TreeSet<>());
+            animals.put(new Vector2d(i % width,i / width), new TreeSet<>());
         }
     }
 
@@ -49,14 +46,11 @@ public class WorldMap implements MoveValidator{
         return height;
     }
 
-    public Vector2d newPosition(Vector2d position, MapDirection mapDirection)
-    {
-        if(position.getY()<0 && position.getY()>=height)
-        {
+    public Vector2d newPosition(Vector2d position, MapDirection mapDirection) {
+        if(position.getY()<0 && position.getY()>=height) {
             return position;
         }
-        else
-        {
+        else {
             return new Vector2d(position.getX()%width,position.getY());
         }
     }

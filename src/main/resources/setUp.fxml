@@ -14,34 +14,26 @@
             minHeight="550.0" minWidth="850.0"
             stylesheets="setUp.css"
             fx:controller="agh.ics.oop.presenter.SetUpController">
-    <center>
-        <VBox alignment="CENTER" spacing="5">
-            <HBox>
-                <Button text="Load"/>
-            </HBox>
+    <left>
+        <VBox>
 
-            <HBox>
-                <Button text="Save"/>
-            </HBox>
+            <Label styleClass="options">Map options</Label>
 
             <HBox>
                 <Label text="Map height:"/>
                 <TextField fx:id="heightField"/>
-            </HBox>
 
-            <HBox>
                 <Label text="Map width:"/>
                 <TextField fx:id="widthField"/>
             </HBox>
 
-            <HBox>
-                <Label text="Initial number of plants:"/>
-                <TextField fx:id="initialPlantsField"/>
-            </HBox>
-
+            <Label styleClass="options">Plant options</Label>
             <HBox>
                 <Label text="Energy from eating one plant:"/>
                 <TextField fx:id="plantEnergyField"/>
+
+                <Label text="Initial number of plants:"/>
+                <TextField fx:id="initialPlantsField"/>
             </HBox>
 
             <HBox>
@@ -55,12 +47,11 @@
                 <RadioButton fx:id="growVariant2" text="2" />
             </HBox>
 
+            <Label styleClass="options">Animal options</Label>
             <HBox>
                 <Label text="Initial number of animals:"/>
                 <TextField fx:id="initialAnimalsField"/>
-            </HBox>
 
-            <HBox>
                 <Label text="Initial animal anergy:"/>
                 <TextField fx:id="initialAnimalEnergyField"/>
             </HBox>
@@ -68,9 +59,7 @@
             <HBox>
                 <Label text="Energy for well-fed animal:"/>
                 <TextField fx:id="fullnessThresholdField"/>
-            </HBox>
 
-            <HBox>
                 <Label text="Energy for parent-offspring:"/>
                 <TextField fx:id="parentEnergyConsumptionField"/>
             </HBox>
@@ -78,9 +67,7 @@
             <HBox>
                 <Label text="Minimum mutations:"/>
                 <TextField fx:id="minMutationsField"/>
-            </HBox>
 
-            <HBox>
                 <Label text="Maximum mutations:"/>
                 <TextField fx:id="maxMutationsField"/>
             </HBox>
@@ -96,8 +83,16 @@
                 <RadioButton fx:id="behaviorVariant2" text="2" />
             </HBox>
 
+        </VBox>
+    </left>
+
+    <bottom>
+        <HBox alignment="CENTER">
+            <Button text="Load"/>
+
+            <Button text="Save"/>
 
             <Button text="Save" onAction="#saveData"/>
-        </VBox>
-    </center>
+        </HBox>
+    </bottom>
 </BorderPane>

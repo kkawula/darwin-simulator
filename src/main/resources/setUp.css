@@ -3,22 +3,26 @@
 }
 
 VBox {
-    -fx-padding: 20;
     -fx-background-color: #f8f8f8;
     -fx-border-radius: 5;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 0);
-    -fx-max-width: 500;
-    -fx-alignment: center;
+    -fx-padding: 10;
+    -fx-spacing: 5;
 }
 
 HBox {
-    -fx-alignment: center;
-    -fx-spacing: 10;
+    /*-fx-spacing: 10;*/
+    /*-fx-padding: 10;*/
 }
 
 .text-field {
     -fx-padding: 5;
     -fx-border-radius: 5;
+    -fx-max-width: 100px;
+}
+
+.options {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
 }
 
 .button {

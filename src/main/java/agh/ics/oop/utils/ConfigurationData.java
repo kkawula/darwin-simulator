@@ -9,14 +9,14 @@ public class ConfigurationData {
     private final int growthVariant;
     private final int initialAnimals;
     private final int initialAnimalEnergy;
-    private final int fullnessThreshold;
+    private final int minEnergyToReproduce;
     private final int parentEnergyConsumption;
     private final int minMutations;
     private final int maxMutations;
     private final int genomeLength;
     private final int behaviorVariant;
 
-    public ConfigurationData(int mapWidth, int mapHeight, int initialPlants, int plantEnergy, int plantsPerDay, int growthVariant, int initialAnimals, int initialAnimalEnergy, int fullnessThreshold, int parentEnergyConsumption, int minMutations, int maxMutations, int genomeLength, int behaviorVariant) {
+    public ConfigurationData(int mapHeight, int mapWidth, int initialPlants, int plantEnergy, int plantsPerDay, int growthVariant, int initialAnimals, int initialAnimalEnergy, int minEnergyToReproduce, int parentEnergyConsumption, int minMutations, int maxMutations, int genomeLength, int behaviorVariant) {
         this.mapHeight = mapHeight;
         this.mapWidth = mapWidth;
         this.initialPlants = initialPlants;
@@ -25,7 +25,7 @@ public class ConfigurationData {
         this.growthVariant = growthVariant;
         this.initialAnimals = initialAnimals;
         this.initialAnimalEnergy = initialAnimalEnergy;
-        this.fullnessThreshold = fullnessThreshold;
+        this.minEnergyToReproduce = minEnergyToReproduce;
         this.parentEnergyConsumption = parentEnergyConsumption;
         this.minMutations = minMutations;
         this.maxMutations = maxMutations;
@@ -60,8 +60,8 @@ public class ConfigurationData {
         return initialAnimalEnergy;
     }
 
-    public int getFullnessThreshold() {
-        return fullnessThreshold;
+    public int getMinEnergyToReproduce() {
+        return minEnergyToReproduce;
     }
 
     public int getParentEnergyConsumption() {

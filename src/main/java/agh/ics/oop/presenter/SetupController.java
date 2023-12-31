@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SetUpController {
+public class SetupController {
     @FXML
     private TextField heightField;
 
@@ -45,7 +45,7 @@ public class SetUpController {
     private TextField initialAnimalEnergyField;
 
     @FXML
-    private TextField fullnessThresholdField;
+    private TextField minEnergyToReproduceField;
 
     @FXML
     private TextField parentEnergyConsumptionField;
@@ -97,7 +97,7 @@ public class SetUpController {
 
             int initialAnimals = Integer.parseInt(initialAnimalsField.getText());
             int initialAnimalEnergy = Integer.parseInt(initialAnimalEnergyField.getText());
-            int fullnessThreshold = Integer.parseInt(fullnessThresholdField.getText());
+            int minEnergyToReproduce = Integer.parseInt(minEnergyToReproduceField.getText());
             int parentEnergyConsumption = Integer.parseInt(parentEnergyConsumptionField.getText());
             int minMutations = Integer.parseInt(minMutationsField.getText());
             int maxMutations = Integer.parseInt(maxMutationsField.getText());
@@ -110,7 +110,7 @@ public class SetUpController {
                 behaviorVariant = 2;
             }
 
-            ConfigurationData configurationData = new ConfigurationData(height, width, initialPlants, plantEnergy, plantsPerDay, growthVariant, initialAnimals, initialAnimalEnergy, fullnessThreshold, parentEnergyConsumption, minMutations, maxMutations, genomeLength, behaviorVariant);
+            ConfigurationData configurationData = new ConfigurationData(height, width, initialPlants, plantEnergy, plantsPerDay, growthVariant, initialAnimals, initialAnimalEnergy, minEnergyToReproduce, parentEnergyConsumption, minMutations, maxMutations, genomeLength, behaviorVariant);
 
             simulationLauncher.openNewWindow(configurationData);
 
@@ -122,7 +122,7 @@ public class SetUpController {
             System.out.println("Plant growth variant: " + growthVariant);
             System.out.println("Initial animal count: " + initialAnimals);
             System.out.println("Initial animal energy: " + initialAnimalEnergy);
-            System.out.println("Fullness threshold: " + fullnessThreshold);
+            System.out.println("Min energy to reproduce: " + minEnergyToReproduce);
             System.out.println("Parent energy consumption: " + parentEnergyConsumption);
             System.out.println("Min mutations in offspring: " + minMutations);
             System.out.println("Max mutations in offspring: " + maxMutations);
@@ -193,16 +193,16 @@ public class SetUpController {
                 case "Initial energy of animals":
                     initialAnimalEnergyField.setText(value);
                     break;
-                case "Energy for well-fed animal":
-                    fullnessThresholdField.setText(value);
+                case "Min energy to reproduce":
+                    minEnergyToReproduceField.setText(value);
                     break;
-                case "Energy for parent-offspring":
+                case "Energy used for reproduction":
                     parentEnergyConsumptionField.setText(value);
                     break;
-                case "Min mutations in offspring":
+                case "Minimum mutations":
                     minMutationsField.setText(value);
                     break;
-                case "Max mutations in offspring":
+                case "Maximum mutations":
                     maxMutationsField.setText(value);
                     break;
                 case "Genome length":
@@ -238,10 +238,10 @@ public class SetUpController {
             data.put("Plant growth variant", growVariant1.isSelected() ? "1" : "2");
             data.put("Initial number of animals", initialAnimalsField.getText());
             data.put("Initial energy of animals", initialAnimalEnergyField.getText());
-            data.put("Energy for well-fed animal", fullnessThresholdField.getText());
-            data.put("Energy for parent-offspring", parentEnergyConsumptionField.getText());
-            data.put("Min mutations in offspring", minMutationsField.getText());
-            data.put("Max mutations in offspring", maxMutationsField.getText());
+            data.put("Min energy to reproduce", minEnergyToReproduceField.getText());
+            data.put("Energy used for reproduction", parentEnergyConsumptionField.getText());
+            data.put("Minimum mutations", minMutationsField.getText());
+            data.put("Maximum mutations", maxMutationsField.getText());
             data.put("Genome length", genomeLengthField.getText());
             data.put("Animal behavior variant", behaviorVariant1.isSelected() ? "1" : "2");
 

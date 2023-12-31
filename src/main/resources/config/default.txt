@@ -6,9 +6,9 @@ Plants growing each day: 5
 Plant growth variant: 1
 Initial number of animals: 10
 Initial energy of animals: 50
-Energy for well-fed animal: 30
-Energy for parent-offspring: 20
-Min mutations in offspring: 1
-Max mutations in offspring: 5
+Min energy to reproduce: 30
+Energy used for reproduction: 20
+Minimum mutations: 1
+Maximum mutations: 5
 Genome length: 8
 Animal behavior variant: 2

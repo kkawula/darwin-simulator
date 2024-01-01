@@ -77,6 +77,16 @@ public class SetupController {
         behaviorVariant1.setToggleGroup(group2);
         behaviorVariant2.setToggleGroup(group2);
 
+        Path resourcesPath = null;
+        try {
+            resourcesPath = Paths.get(getClass().getClassLoader().getResource("").toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        Path configFolder = resourcesPath.resolve("config");
+        Path filePath = configFolder.resolve("default.txt").normalize().toAbsolutePath();
+        loadConfigurationFromFile(String.valueOf(filePath));
+
     }
 
     @FXML

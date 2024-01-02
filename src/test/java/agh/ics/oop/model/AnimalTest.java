@@ -1,6 +1,9 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.simulation.WorldMap;
 import org.junit.jupiter.api.Test;
+
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -95,5 +98,15 @@ class AnimalTest {
         assertEquals(2, kid1.getOffspring());
         assertEquals(2, kid2.getOffspring());
         assertEquals(1, kid3.getOffspring());
+    }
+    @Test
+    void IsAnimalMovingOutOfMap()
+    {
+        WorldMap map = new WorldMap(4,4);
+        Animal animal = new Animal(new Vector2d(2,2),10,5);
+        for(int i=0;i<100;i++)
+            animal.move(map);
+        assertTrue(animal.getPosition().precedes(new Vector2d(3,3))
+                && animal.getPosition().follows(new Vector2d(0,0)));
     }
 }

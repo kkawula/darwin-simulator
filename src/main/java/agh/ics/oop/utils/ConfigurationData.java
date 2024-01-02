@@ -16,7 +16,7 @@ public class ConfigurationData {
     private final int genomeLength;
     private final int behaviorVariant;
 
-    public ConfigurationData(int mapHeight, int mapWidth, int initialPlants, int plantEnergy, int plantsPerDay, int growthVariant, int initialAnimals, int initialAnimalEnergy, int fullnessThreshold, int parentEnergyConsumption, int minMutations, int maxMutations, int genomeLength, int behaviorVariant) {
+    public ConfigurationData(int mapWidth, int mapHeight, int initialPlants, int plantEnergy, int plantsPerDay, int growthVariant, int initialAnimals, int initialAnimalEnergy, int fullnessThreshold, int parentEnergyConsumption, int minMutations, int maxMutations, int genomeLength, int behaviorVariant) {
         this.mapHeight = mapHeight;
         this.mapWidth = mapWidth;
         this.initialPlants = initialPlants;

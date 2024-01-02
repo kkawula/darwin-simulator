@@ -12,7 +12,7 @@ public class Simulation {
 
     public Simulation(ConfigurationData cfg) {
         worldMap = new WorldMap(cfg.getMapWidth(), cfg.getMapHeight());
-        dayManager = new DayManager(cfg.getInitialPlants(), cfg.getInitialAnimalEnergy(),
+        dayManager = new DayManager(cfg.getInitialPlants(), cfg.getInitialAnimals(),
                 cfg.getInitialAnimalEnergy(), cfg.getParentEnergyConsumption(),
                 cfg.getGenomeLength(),cfg.getPlantEnergy(), cfg.getPlantsPerDay());
         dayManager.initializeFirstDay(worldMap);

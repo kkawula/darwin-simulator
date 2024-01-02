@@ -52,7 +52,7 @@ public class WorldMap implements MoveValidator{
     public Vector2d newPosition(Vector2d position, MapDirection mapDirection)
     {
         int newX =(position.getX() + mapDirection.toUnitVector().getX()) >= 0 ?
-                position.getX() + mapDirection.toUnitVector().getX() % width : width - 1;
+                (position.getX() + mapDirection.toUnitVector().getX()) % width : width - 1;
         int newY = position.getY() + mapDirection.toUnitVector().getY();
         if(newY < 0 || newY >= height)
         {

@@ -70,7 +70,7 @@ public class DayManager {
         removeDeadAnimals(animals);
         moveAnimals(map, animals);
         eatGrass(grasses, animals);
-        reproduceAnimals(animals);
+        //reproduceAnimals(animals);
         growGrass(grasses, map.getWidth(), map.getHeight());
     }
     private void removeDeadAnimals(HashMap<Vector2d, TreeSet<Animal>> animals)
@@ -109,7 +109,6 @@ public class DayManager {
             for(int i = 0;i < entry.getValue().size(); i++)
                 copyOfValues.add(entry.getValue().pollLast());
         }
-        System.out.println(animals);
         for (Animal animal:copyOfValues)
         {
             animal.move(moveValidator);

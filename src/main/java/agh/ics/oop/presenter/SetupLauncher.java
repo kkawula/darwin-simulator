@@ -6,22 +6,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-public class SetUpLauncher extends Application{
+public class SetupLauncher extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getClassLoader().getResource("setUp.fxml"));
+        loader.setLocation(getClass().getClassLoader().getResource("setup.fxml"));
         BorderPane viewRoot = loader.load();
-
-        Path resourcesPath = Paths.get(getClass().getClassLoader().getResource("").toURI());
-        Path configFolder = resourcesPath.resolve("config");
-        Path filePath = configFolder.resolve("default.txt").normalize().toAbsolutePath();
-        SetUpController controller = loader.getController();
-        controller.loadConfigurationFromFile(String.valueOf(filePath));
 
         configureStage(primaryStage, viewRoot);
         primaryStage.show();

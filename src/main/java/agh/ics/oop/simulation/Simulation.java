@@ -2,8 +2,6 @@ package agh.ics.oop.simulation;
 
 import agh.ics.oop.utils.ConfigurationData;
 
-
-
 public class Simulation {
 
     private int numberOfAnimals;
@@ -19,8 +17,7 @@ public class Simulation {
                 cfg.getGenomeLength(),cfg.getPlantEnergy(), cfg.getPlantsPerDay());
         dayManager.initializeFirstDay(worldMap);
     }
-    public void run()
-    {
+    public void run() {
         dayManager.updateDay(worldMap);
     }
 

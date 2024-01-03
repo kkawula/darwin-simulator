@@ -106,7 +106,8 @@ class AnimalTest {
         Animal animal = new Animal(new Vector2d(2,2),10,5);
         for(int i=0;i<100;i++)
             animal.move(map);
-        assertTrue(animal.getPosition().precedes(new Vector2d(3,3))
-                && animal.getPosition().follows(new Vector2d(0,0)));
+        System.out.println(animal);
+        assertTrue((animal.getPosition().precedes(new Vector2d(3,3))
+                && animal.getPosition().follows(new Vector2d(0,0))));
     }
 }

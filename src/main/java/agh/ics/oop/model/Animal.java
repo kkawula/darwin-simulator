@@ -125,11 +125,11 @@ public class Animal implements Comparable<Animal> {
     public void move(MoveValidator moveValidator) {
         age++;
         position = moveValidator.newPosition(position, genome.getGene(activeGene));
-        updateGenome();
     }
     public void updateGenome() {//solution for the moment of testing this version
          activeGene=(activeGene+1)%genomeLength;
     }
+
 
     @Override
     public int compareTo(Animal other) {

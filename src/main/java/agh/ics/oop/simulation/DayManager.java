@@ -73,7 +73,7 @@ public class DayManager {
         removeDeadAnimals(animals);
         moveAnimals(map, animals);
         eatGrass(grasses, animals);
-        //reproduceAnimals(animals);
+        reproduceAnimals(animals);
         growGrass(grasses, map.getWidth(), map.getHeight());
     }
     private void removeDeadAnimals(HashMap<Vector2d, TreeSet<Animal>> animals)
@@ -127,11 +127,13 @@ public class DayManager {
             Vector2d position = entry.getKey();
             while(entry.getValue().size() >= 2)
             {
+
                 Animal father = entry.getValue().pollLast();
                 Animal mother = entry.getValue().pollLast();
                 if(mother.getEnergy() >= parentEnergyConsumption)
                 {
-                    Animal child = new Animal(position, initialAnimalEnergy, father, mother, behaviorVariant);
+
+                    Animal child = new Animal(position, parentEnergyConsumption, father, mother, behaviorVariant);
                     animals.get(position).add(child);
                     animals.get(position).add(father);
                     animals.get(position).add(mother);

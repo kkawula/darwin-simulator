@@ -118,15 +118,15 @@ public class Animal implements Comparable<Animal> {
     public void move(MoveValidator moveValidator) {
         age++;
         position = moveValidator.newPosition(position, genome.getGene(activeGene));
-        updateGenome();
     }
     public void updateGenome() {//solution for the moment of testing this version
          activeGene=(activeGene+1)%genomeLength;
     }
-    public Animal reproduce(Animal mother, int initialAnimalEnergy) {
-        mother.energy-=initialAnimalEnergy/2;
-        energy-=initialAnimalEnergy/2;
-        return new Animal(position, initialAnimalEnergy, this, mother);
+    public Animal reproduce(Animal mother, int parentEnergyConsumption) {
+        Animal child = new Animal(position, parentEnergyConsumption, this, mother);
+        mother.energy-=parentEnergyConsumption/2;
+        energy-=parentEnergyConsumption/2;
+        return child;
     }
     @Override
     public int compareTo(Animal other) {

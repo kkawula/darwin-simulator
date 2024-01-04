@@ -79,5 +79,9 @@ public class ConfigurationData {
     public int getGenomeLength() {
         return genomeLength;
     }
+
+    public int getBehaviorVariant() {
+        return behaviorVariant;
+    }
 }
 

@@ -25,9 +25,11 @@ public class DayManager {
 
     private final int plantsPerDay;
 
+    private final int behaviorVariant;
+
     public DayManager(int initialPlants, int initialAnimals, int initialAnimalEnergy,
                       int parentEnergyConsumption, int genomeLength, int plantEnergy,
-                      int plantsPerDay)
+                      int plantsPerDay, int behaviorVariant)
     {
         this.initialPlants = initialPlants;
         this.initialAnimals = initialAnimals;
@@ -36,6 +38,7 @@ public class DayManager {
         this.genomeLength = genomeLength;
         this.plantEnergy = plantEnergy;
         this.plantsPerDay = plantsPerDay;
+        this.behaviorVariant = behaviorVariant;
     }
     public void initializeFirstDay(WorldMap worldMap)
     {
@@ -129,7 +132,8 @@ public class DayManager {
                 Animal mother = entry.getValue().pollLast();
                 if(mother.getEnergy() >= parentEnergyConsumption)
                 {
-                    Animal child=father.reproduce(mother, parentEnergyConsumption);
+
+                    Animal child = new Animal(position, parentEnergyConsumption, father, mother, behaviorVariant);
                     animals.get(position).add(child);
                     animals.get(position).add(father);
                     animals.get(position).add(mother);

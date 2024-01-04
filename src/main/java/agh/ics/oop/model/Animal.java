@@ -40,11 +40,18 @@ public class Animal implements Comparable<Animal> {
         this.genome = new Genome(genomeLength);
     }
 
-    public Animal(Vector2d newPosition, int energy, Animal father, Animal mother) {
+    public Animal(Vector2d newPosition, int energy, Animal father, Animal mother, int behaviorVariant) {
         position = newPosition;
         this.energy = energy;
         this.father = father;
         this.mother = mother;
+        mother.energy -= energy / 2;
+        father.energy -= energy / 2;
+        if (behaviorVariant == 0) {
+            behavior = new PredestinationBehavior();
+        } else {
+            behavior = new TraversalBehavior();
+        }
         updateChildren();
 
         this.genome = new Genome(father.getEnergy(), mother.getEnergy(), father.getGenome(), mother.getGenome());
@@ -122,12 +129,8 @@ public class Animal implements Comparable<Animal> {
     public void updateGenome() {//solution for the moment of testing this version
          activeGene=(activeGene+1)%genomeLength;
     }
-    public Animal reproduce(Animal mother, int parentEnergyConsumption) {
-        Animal child = new Animal(position, parentEnergyConsumption, this, mother);
-        mother.energy-=parentEnergyConsumption/2;
-        energy-=parentEnergyConsumption/2;
-        return child;
-    }
+
+
     @Override
     public int compareTo(Animal other) {
         return Comparator.comparing(Animal::getEnergy)

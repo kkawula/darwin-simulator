@@ -3,7 +3,6 @@ package agh.ics.oop.model;
 import agh.ics.oop.simulation.WorldMap;
 import org.junit.jupiter.api.Test;
 
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,8 +10,8 @@ class AnimalTest {
 
     @Test
     void updateChildren1() {
-        Animal father = new Animal(new Vector2d(0,0), 30, 4);
-        Animal mother = new Animal(new Vector2d(0,0), 30, 4);
+        Animal father = new Animal(new Vector2d(0,0), 30, 4, 0);
+        Animal mother = new Animal(new Vector2d(0,0), 30, 4, 0);
         Animal kid1 = new Animal(new Vector2d(0,0), 30, father, mother, 0);
         assertEquals(1, father.getChildren());
         assertEquals(1, mother.getChildren());
@@ -20,8 +19,8 @@ class AnimalTest {
 
     @Test
     void updateChildren2() {
-        Animal father = new Animal(new Vector2d(0,0), 30, 4);
-        Animal mother = new Animal(new Vector2d(0,0), 30, 4);
+        Animal father = new Animal(new Vector2d(0,0), 30, 4, 0);
+        Animal mother = new Animal(new Vector2d(0,0), 30, 4, 0);
         Animal kid1 = new Animal(new Vector2d(0,0), 30, father, mother, 0);
         Animal kid2 = new Animal(new Vector2d(0,0), 30, father, mother, 0);
         assertEquals(2, father.getChildren());
@@ -29,9 +28,9 @@ class AnimalTest {
     }
     @Test
     void updateChildren3() {
-        Animal father = new Animal(new Vector2d(0,0), 30, 4);
-        Animal mother = new Animal(new Vector2d(0,0), 30, 4);
-        Animal postMan = new Animal(new Vector2d(0,0), 30, 4);
+        Animal father = new Animal(new Vector2d(0,0), 30, 4, 0);
+        Animal mother = new Animal(new Vector2d(0,0), 30, 4, 0);
+        Animal postMan = new Animal(new Vector2d(0,0), 30, 4, 0);
         Animal kid1 = new Animal(new Vector2d(0,0), 30, father, mother, 0);
         Animal kid2 = new Animal(new Vector2d(0,0), 30, postMan, mother, 0);
         assertEquals(1, father.getChildren());
@@ -41,16 +40,16 @@ class AnimalTest {
 
     @Test
     void updateOffSpring1() {
-        Animal father = new Animal(new Vector2d(0,0), 30, 4);
-        Animal mother = new Animal(new Vector2d(0,0), 30, 4);
+        Animal father = new Animal(new Vector2d(0,0), 30, 4, 0);
+        Animal mother = new Animal(new Vector2d(0,0), 30, 4, 0);
         Animal kid1 = new Animal(new Vector2d(0,0), 30, father, mother, 0);
         assertEquals(1, father.getOffspring());
         assertEquals(1, mother.getOffspring());
     }
     @Test
     void updateOffSpring2() {
-        Animal father = new Animal(new Vector2d(0,0), 30, 4);
-        Animal mother = new Animal(new Vector2d(0,0), 30, 4);
+        Animal father = new Animal(new Vector2d(0,0), 30, 4, 0);
+        Animal mother = new Animal(new Vector2d(0,0), 30, 4, 0);
         Animal kid1 = new Animal(new Vector2d(0,0), 30, father, mother, 0);
         Animal kid2 = new Animal(new Vector2d(0,0), 30, father, mother, 0);
         assertEquals(2, father.getOffspring());
@@ -58,9 +57,9 @@ class AnimalTest {
     }
     @Test
     void updateOffspring3() {
-        Animal father = new Animal(new Vector2d(0,0), 30, 4);
-        Animal mother = new Animal(new Vector2d(0,0), 30, 4);
-        Animal postMan = new Animal(new Vector2d(0,0), 30, 4);
+        Animal father = new Animal(new Vector2d(0,0), 30, 4, 0);
+        Animal mother = new Animal(new Vector2d(0,0), 30, 4, 0);
+        Animal postMan = new Animal(new Vector2d(0,0), 30, 4, 0);
         Animal kid1 = new Animal(new Vector2d(0,0), 30, father, mother, 0);
         Animal kid2 = new Animal(new Vector2d(0,0), 30, postMan, mother, 0);
         assertEquals(1, father.getOffspring());
@@ -71,8 +70,8 @@ class AnimalTest {
     @Test
     void updateOffspring4(){
 
-        Animal father = new Animal(new Vector2d(0,0), 30, 4);
-        Animal mother = new Animal(new Vector2d(0,0), 30, 4);
+        Animal father = new Animal(new Vector2d(0,0), 30, 4, 0);
+        Animal mother = new Animal(new Vector2d(0,0), 30, 4, 0);
         Animal kid1 = new Animal(new Vector2d(0,0), 30, father, mother, 0);
         Animal kid2 = new Animal(new Vector2d(0,0), 30, father, mother, 0);
         Animal kid3 = new Animal(new Vector2d(0,0), 30, kid1, kid2, 0);
@@ -86,8 +85,8 @@ class AnimalTest {
     @Test
     void updateOffspring5(){
 
-        Animal father = new Animal(new Vector2d(0,0), 30, 4);
-        Animal mother = new Animal(new Vector2d(0,0), 30, 4);
+        Animal father = new Animal(new Vector2d(0,0), 30, 4, 0);
+        Animal mother = new Animal(new Vector2d(0,0), 30, 4, 0);
         Animal kid1 = new Animal(new Vector2d(0,0), 30, father, mother, 0);
         Animal kid2 = new Animal(new Vector2d(0,0), 30, father, mother, 0);
         Animal kid3 = new Animal(new Vector2d(0,0), 30, kid1, kid2, 0);
@@ -103,8 +102,8 @@ class AnimalTest {
     void IsAnimalMovingOutOfMap()
     {
         WorldMap map = new WorldMap(4,4);
-        Animal animal = new Animal(new Vector2d(2,2),10,5);
-        for(int i=0;i<100;i++)
+        Animal animal = new Animal(new Vector2d(2,2), 10, 5, 0);
+        for(int i = 0; i < 100; i++)
             animal.move(map);
         System.out.println(animal);
         assertTrue((animal.getPosition().precedes(new Vector2d(3,3))

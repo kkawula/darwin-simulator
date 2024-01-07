@@ -27,16 +27,17 @@ public class Animal implements Comparable<Animal> {
     public Behavior behavior;
 
 
-    public void setBehavior(Behavior behavior) {
-        this.behavior = behavior;
-    }
-
-
-
-    public Animal (Vector2d newPosition, int energy, int genomeLength) {
+    public Animal (Vector2d newPosition, int energy, int genomeLength, int behaviorVariant) {
         this.position = newPosition;
         this.energy = energy;
         this.genomeLength = genomeLength;
+
+        if (behaviorVariant == 0) {
+            behavior = new PredestinationBehavior();
+        } else {
+            behavior = new TraversalBehavior();
+        }
+
         this.genome = new Genome(genomeLength);
     }
 
@@ -45,8 +46,7 @@ public class Animal implements Comparable<Animal> {
         this.energy = energy;
         this.father = father;
         this.mother = mother;
-        mother.energy -= energy / 2;
-        father.energy -= energy / 2;
+
         if (behaviorVariant == 0) {
             behavior = new PredestinationBehavior();
         } else {
@@ -139,16 +139,5 @@ public class Animal implements Comparable<Animal> {
                 .compare(this, other);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Animal animal = (Animal) o;
-        return birthDay == animal.birthDay && Objects.equals(position, animal.position) && Objects.equals(father, animal.father) && Objects.equals(mother, animal.mother);
-    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(position, father, mother, birthDay);
-    }
 }

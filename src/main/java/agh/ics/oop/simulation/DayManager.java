@@ -42,32 +42,29 @@ public class DayManager {
     }
     public void initializeFirstDay(WorldMap worldMap)
     {
-        int width= worldMap.getWidth();
+        int width = worldMap.getWidth();
         int height = worldMap.getHeight();
         placeAnimals(worldMap.getAnimals(), width, height);
         placeGrasses(worldMap.getGrasses(), width, height);
     }
 
-    private void placeAnimals(HashMap<Vector2d,TreeSet<Animal>> animals, int width, int height)
-    {
+    private void placeAnimals(HashMap<Vector2d,TreeSet<Animal>> animals, int width, int height) {
         RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(initialAnimals, width, height);
-        for (Vector2d position : randomPositionGenerator)
-        {
-            Animal animal = new Animal(position,initialAnimalEnergy,genomeLength);
+
+        for (Vector2d position : randomPositionGenerator) {
+            Animal animal = new Animal(position, initialAnimalEnergy, genomeLength, behaviorVariant);
             animals.get(position).add(animal);
         }
     }
-    private void placeGrasses(LinkedList<Grass> grasses, int width, int height)
-    {
+    private void placeGrasses(LinkedList<Grass> grasses, int width, int height) {
         RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(initialPlants, width, height);
-        for (Vector2d position : randomPositionGenerator)
-        {
+
+        for (Vector2d position : randomPositionGenerator) {
             grasses.add(new Grass(position));
         }
     }
-    public void updateDay(WorldMap map)
-    {
-        HashMap<Vector2d,TreeSet<Animal>> animals = map.getAnimals();
+    public void updateDay(WorldMap map) {
+        HashMap<Vector2d, TreeSet<Animal>> animals = map.getAnimals();
         LinkedList<Grass> grasses = map.getGrasses();
 
         removeDeadAnimals(animals);
@@ -76,10 +73,11 @@ public class DayManager {
         reproduceAnimals(animals);
         growGrass(grasses, map.getWidth(), map.getHeight());
     }
-    private void removeDeadAnimals(HashMap<Vector2d, TreeSet<Animal>> animals)
-    {
-        for (Map.Entry<Vector2d, TreeSet<Animal>> entry : animals.entrySet())
+    private void removeDeadAnimals(HashMap<Vector2d, TreeSet<Animal>> animals) {
+        for (Map.Entry<Vector2d, TreeSet<Animal>> entry : animals.entrySet()) {
             entry.getValue().removeIf(animal -> animal.getEnergy() <= 0);
+        }
+
     }
     private void eatGrass(LinkedList<Grass> grasses, HashMap<Vector2d, TreeSet<Animal>> animals) {
         Iterator<Grass> iterator = grasses.iterator();
@@ -109,7 +107,7 @@ public class DayManager {
         LinkedList<Animal> copyOfValues = new LinkedList<>();
         for (Map.Entry<Vector2d, TreeSet<Animal>> entry : animals.entrySet())
         {
-            for(int i = 0;i < entry.getValue().size(); i++)
+            for(int i = 0; i < entry.getValue().size(); i++)
                 copyOfValues.add(entry.getValue().pollLast());
         }
         for (Animal animal:copyOfValues)
@@ -134,6 +132,7 @@ public class DayManager {
                 {
 
                     Animal child = new Animal(position, parentEnergyConsumption, father, mother, behaviorVariant);
+                    // parents energy update
                     animals.get(position).add(child);
                     animals.get(position).add(father);
                     animals.get(position).add(mother);

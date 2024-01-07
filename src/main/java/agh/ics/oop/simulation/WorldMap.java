@@ -16,7 +16,7 @@ public class WorldMap implements MoveValidator{
 
     private final int height;
 
-    private final HashMap<Vector2d, TreeSet<Animal>> animals= new HashMap<>();
+    private HashMap<Vector2d, TreeSet<Animal>> animals = new HashMap<>();
 
     private final LinkedList<Grass> grasses= new LinkedList<>();
     public WorldMap(int width, int height) {
@@ -31,14 +31,31 @@ public class WorldMap implements MoveValidator{
         }
     }
 
-    public HashMap<Vector2d, TreeSet<Animal>> getAnimals()
-    {
+    public HashMap<Vector2d, TreeSet<Animal>> getAnimals() {
         return animals;
     }
 
-    public LinkedList<Grass> getGrasses()
-    {
+    public LinkedList<Vector2d> getAnimalsPositions() {
+        LinkedList<Vector2d> positions = new LinkedList<>();
+        for (Vector2d position : animals.keySet()) {
+            if (!animals.get(position).isEmpty()) {
+                positions.add(position);
+            }
+        }
+        return positions;
+    }
+
+    public LinkedList<Grass> getGrasses() {
         return grasses;
+    }
+
+    public LinkedList<Vector2d> getGrassesPositions() {
+        LinkedList<Vector2d> positions = new LinkedList<>();
+        for (Grass grass : grasses) {
+            positions.add(grass.getPosition());
+        }
+
+        return positions;
     }
 
     public int getWidth() {
@@ -47,6 +64,13 @@ public class WorldMap implements MoveValidator{
 
     public int getHeight() {
         return height;
+    }
+
+    public String toString() {
+        for (Vector2d key : animals.keySet()) {
+            System.out.println(key + " : " + animals.get(key));
+        }
+        return "pomidor";
     }
 
     public Vector2d newPosition(Vector2d position, MapDirection mapDirection)

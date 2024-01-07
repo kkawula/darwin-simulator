@@ -65,8 +65,6 @@ public class SetupController {
     @FXML
     private RadioButton behaviorVariant2;
 
-    SimulationLauncher simulationLauncher = new SimulationLauncher();
-
     @FXML
     private void initialize() {
         ToggleGroup group = new ToggleGroup();
@@ -122,7 +120,7 @@ public class SetupController {
 
             ConfigurationData configurationData = new ConfigurationData(height, width, initialPlants, plantEnergy, plantsPerDay, growthVariant, initialAnimals, initialAnimalEnergy, minEnergyToReproduce, parentEnergyConsumption, minMutations, maxMutations, genomeLength, behaviorVariant);
 
-            simulationLauncher.openNewWindow(configurationData);
+            new SimulationLauncher().openNewWindow(configurationData);
 
             System.out.println("Map height: " + height);
             System.out.println("Map width: " + width);

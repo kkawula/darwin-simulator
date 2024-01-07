@@ -12,18 +12,17 @@ public class SimulationLauncher extends Application {
     private static final int WIDTH = 600;
     private static final int HEIGHT = 600;
     private ConfigurationData config;
-    private WorldMap worldMap;
+    private Simulation simulation;
+    private SimulationController controller;
 
     public void openNewWindow(ConfigurationData config) {
         this.config = config;
 
         try {
-            Simulation simulation = new Simulation(config);
-            worldMap = simulation.worldMap;
-//            Thread simulationThread = new Thread(simulation);
+            simulation = new Simulation(config, this);
+            Thread simulationThread = new Thread(simulation);
             start(new Stage());
-//            simulationThread.start();
-            simulation.run();
+            simulationThread.start();
         }
         catch (Exception e) {
             System.out.println("Error while opening new window");
@@ -35,20 +34,16 @@ public class SimulationLauncher extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader().getResource("simulation.fxml"));
         Scene scene = new Scene(loader.load());
-        SimulationController controller = loader.getController();
-        controller.wire(config, worldMap);
-
-        controller.generateGrid();
+        controller = loader.getController();
+        controller.wire(config, simulation);
+        updateGrid();
 
         primaryStage.setTitle("Simulation");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    public void startSimulation() {
-    	Simulation simulation = new Simulation(config);
-        for (int i = 0; i < 1; i++) {
-            simulation.run();
-        }
+    public void updateGrid() {
+        controller.generateGrid();
     }
 }

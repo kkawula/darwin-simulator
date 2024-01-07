@@ -66,6 +66,9 @@ public class SetupController {
     private RadioButton behaviorVariant2;
 
     @FXML
+    private TextField movingCostField;
+
+    @FXML
     private void initialize() {
         ToggleGroup group = new ToggleGroup();
         growVariant1.setToggleGroup(group);
@@ -117,8 +120,9 @@ public class SetupController {
             } else {
                 behaviorVariant = 2;
             }
+            int movingCost = Integer.parseInt(movingCostField.getText());
 
-            ConfigurationData configurationData = new ConfigurationData(height, width, initialPlants, plantEnergy, plantsPerDay, growthVariant, initialAnimals, initialAnimalEnergy, minEnergyToReproduce, parentEnergyConsumption, minMutations, maxMutations, genomeLength, behaviorVariant);
+            ConfigurationData configurationData = new ConfigurationData(height, width, initialPlants, plantEnergy, plantsPerDay, growthVariant, initialAnimals, initialAnimalEnergy, minEnergyToReproduce, parentEnergyConsumption, minMutations, maxMutations, genomeLength, behaviorVariant, movingCost);
 
             new SimulationLauncher().openNewWindow(configurationData);
 
@@ -136,6 +140,7 @@ public class SetupController {
             System.out.println("Max mutations in offspring: " + maxMutations);
             System.out.println("Genome length: " + genomeLength);
             System.out.println("Animal behavior variant: " + behaviorVariant);
+            System.out.println("Moving cost: " + movingCost);
 
         } catch (NumberFormatException e) {
             System.out.println("The entered data is not an integer.");
@@ -225,6 +230,9 @@ public class SetupController {
                         behaviorVariant2.setSelected(true);
                     }
                     break;
+                case "Moving cost":
+                    movingCostField.setText(value);
+                    break;
 
             }
         }
@@ -252,6 +260,7 @@ public class SetupController {
             data.put("Maximum mutations", maxMutationsField.getText());
             data.put("Genome length", genomeLengthField.getText());
             data.put("Animal behavior variant", behaviorVariant1.isSelected() ? "1" : "2");
+            data.put("Moving cost", movingCostField.getText());
 
 
             try (FileWriter writer = new FileWriter(filePath.toFile())) {

@@ -74,6 +74,9 @@
             <HBox>
                 <Label text="Genome length:"/>
                 <TextField fx:id="genomeLengthField"/>
+
+                <Label text="Moving cost:"/>
+                <TextField fx:id="movingCostField"/>
             </HBox>
 
             <HBox>

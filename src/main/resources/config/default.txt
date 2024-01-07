@@ -1,9 +1,10 @@
 Map height: 10
 Map width: 10
-Initial number of plants: 5
+Initial number of plants: 1
 Energy from eating one plant: 10
-Plants growing each day: 5
+Plants growing each day: 1
 Plant growth variant: 1
+Moving cost: 5
 Initial number of animals: 10
 Initial energy of animals: 50
 Min energy to reproduce: 30

@@ -1,7 +1,7 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.model.Animal;
 import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.simulation.WorldMap;
 import agh.ics.oop.utils.ConfigurationData;
 import javafx.fxml.FXML;
@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.TreeSet;
+
 
 public class SimulationController {
 
@@ -21,6 +21,7 @@ public class SimulationController {
     private static final int HEIGHT = 600;
     private ConfigurationData config;
     private WorldMap worldMap;
+    private Simulation simulation;
 
     @FXML
     private VBox content;
@@ -35,23 +36,35 @@ public class SimulationController {
     private Label animalsAliveValue;
 
     @FXML
-    private void initialize() {
-        setLabelValues();
-    }
-    public void wire(ConfigurationData config, WorldMap worldMap) {
+    private Label animalsDeadValue;
+
+    @FXML
+    private Label plantsValue;
+
+    private int animalsAlive = 0;
+
+    public void wire(ConfigurationData config, Simulation simulation) {
         this.config = config;
-        this.worldMap = worldMap;
+        this.simulation = simulation;
+        this.worldMap = simulation.worldMap;
+        animalsAlive = config.getInitialAnimals();
     }
 
     public void generateGrid() {
+        content.getChildren().clear();
+
         int rows = config.getMapHeight();
         int columns = config.getMapWidth();
         GridPane grid = new GridPane();
         int size = Math.min(WIDTH/columns, HEIGHT/rows);
 
-        List<Vector2d> animalsPositions = worldMap.getAnimalsPositions();
+        HashMap<Vector2d, Integer> animalsPositions = worldMap.getAnimalsPositions();
         List<Vector2d> grassesPositions = worldMap.getGrassesPositions();
 
+        animalsAlive = 0;
+        for (Vector2d position : animalsPositions.keySet()) {
+            animalsAlive += animalsPositions.get(position);
+        }
 
         ColumnConstraints width = new ColumnConstraints(size);
         RowConstraints height = new RowConstraints(size);
@@ -65,8 +78,8 @@ public class SimulationController {
                 cell.getColumnConstraints().add(width);
                 cell.getRowConstraints().add(height);
 
-                if (animalsPositions.contains(new Vector2d(col, row))) {
-                    Label animal = new Label("A");
+                if (animalsPositions.keySet().contains(new Vector2d(col, row))) {
+                    Label animal = new Label(animalsPositions.get(new Vector2d(col, row)) + "");
                     cell.add(animal, 0, 0);
                 }
                 if (grassesPositions.contains(new Vector2d(col, row))) {
@@ -77,42 +90,43 @@ public class SimulationController {
             }
         }
 
+        setLabelValues();
         content.getChildren().add(grid);
     }
 
 
     @FXML
     private void startSimulation(){
-
+        simulation.start();
     }
     @FXML void stopSimulation(){
-
+        simulation.stop();
     }
-    @FXML void saveSimulation(){
-
+    @FXML void pauseSimulation(){
+        simulation.pause();
     }
 
     public void setLabelValues() {
 
-        mapWidthValue.setText("10");
-        mapHeightValue.setText("12");
-        animalsAliveValue.setText("12");
+        mapWidthValue.setText(config.getMapWidth() + "");
+        mapHeightValue.setText(config.getMapHeight() + "");
+        animalsAliveValue.setText(animalsAlive + "");
+        animalsDeadValue.setText(worldMap.getDeadAnimals().size() + "");
+        plantsValue.setText(worldMap.getGrasses().size() + "");
+//         freeFieldsValue.setText(freeFields);
+//         averageEnergyValue.setText(averageEnergy);
+//         averageLifespanValue.setText(averageLifespan);
+//         averageChildrenValue.setText(averageChildren);
 
-        // animalsDeadValue.setText(animalsDead);
-        // plantsValue.setText(plants);
-        // freeFieldsValue.setText(freeFields);
-        // averageEnergyValue.setText(averageEnergy);
-        // averageLifespanValue.setText(averageLifespan);
-        // averageChildrenValue.setText(averageChildren);
-        // birthdayValue.setText(birthday);
-        // genomeValue.setText(genome);
-        // activeGeneValue.setText(activeGene);
-        // energyValue.setText(energy);
-        // eatenPlantsValue.setText(eatenPlants);
-        // childrenValue.setText(children);
-        // descendantsValue.setText(descendants);
-        // ageValue.setText(age);
-        // directionValue.setText(direction);
+//         birthdayValue.setText(birthday);
+//         genomeValue.setText(genome);
+//         activeGeneValue.setText(activeGene);
+//         energyValue.setText(energy);
+//         eatenPlantsValue.setText(eatenPlants);
+//         childrenValue.setText(children);
+//         descendantsValue.setText(descendants);
+//         ageValue.setText(age);
+//         directionValue.setText(direction);
     }
 
 }

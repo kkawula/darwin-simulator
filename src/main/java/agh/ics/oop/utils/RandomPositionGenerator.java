@@ -24,6 +24,7 @@ public class RandomPositionGenerator implements Iterable<Vector2d>{
         Collections.shuffle(linearizedArrayOfPositions);
         for(int i = 0; i < min(maxHeight * maxWidth, numberOfPositions); i++)
             arrayOfPositions.add(Vector2d.intToVector2d(linearizedArrayOfPositions.get(i),maxWidth));
+            System.out.println(arrayOfPositions);
     }
 
     public RandomPositionGenerator(int numberOfPositions, int maxWidth, int maxHeight, LinkedList<Grass> grasses)

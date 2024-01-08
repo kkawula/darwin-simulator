@@ -128,8 +128,10 @@ public class DayManager {
         for (Map.Entry<Vector2d, TreeSet<Animal>> entry : animals.entrySet()) {
 
             Vector2d position = entry.getKey();
-            while(entry.getValue().size() >= 2) {
-
+            LinkedList<Animal> newAnimals = new LinkedList<>();
+            if(entry.getValue().size() >= 2) {
+                System.out.println("jebanko");
+                System.out.println(entry.getValue().size());
                 Animal father = entry.getValue().pollLast();
                 Animal mother = entry.getValue().pollLast();
 
@@ -138,15 +140,20 @@ public class DayManager {
                     Animal child = new Animal(position, initialAnimalEnergy, father, mother, behaviorVariant);
                     mother.setEnergy(mother.getEnergy() - parentEnergyConsumption);
                     father.setEnergy(father.getEnergy() - parentEnergyConsumption);
-                    animals.get(position).add(child);
-                    animals.get(position).add(father);
-                    animals.get(position).add(mother);
+                    newAnimals.add(child);
+                    newAnimals.add(father);
+                    newAnimals.add(mother);
+
+
                 }
                 else {
-                    animals.get(position).add(father);
-                    animals.get(position).add(mother);
-                    break;
+                    newAnimals.add(father);
+                    newAnimals.add(mother);
                 }
+            }
+            for(Animal animal : newAnimals)
+            {
+                animals.get(position).add(animal);
             }
         }
     }

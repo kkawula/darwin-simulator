@@ -15,8 +15,9 @@ public class ConfigurationData {
     private final int maxMutations;
     private final int genomeLength;
     private final int behaviorVariant;
+    private final int movingCost;
 
-    public ConfigurationData(int mapHeight, int mapWidth, int initialPlants, int plantEnergy, int plantsPerDay, int growthVariant, int initialAnimals, int initialAnimalEnergy, int minEnergyToReproduce, int parentEnergyConsumption, int minMutations, int maxMutations, int genomeLength, int behaviorVariant) {
+    public ConfigurationData(int mapHeight, int mapWidth, int initialPlants, int plantEnergy, int plantsPerDay, int growthVariant, int initialAnimals, int initialAnimalEnergy, int minEnergyToReproduce, int parentEnergyConsumption, int minMutations, int maxMutations, int genomeLength, int behaviorVariant, int movingCost) {
         this.mapHeight = mapHeight;
         this.mapWidth = mapWidth;
         this.initialPlants = initialPlants;
@@ -31,6 +32,7 @@ public class ConfigurationData {
         this.maxMutations = maxMutations;
         this.genomeLength = genomeLength;
         this.behaviorVariant = behaviorVariant;
+        this.movingCost = movingCost;
     }
     public int getMapHeight() { return mapHeight; }
 
@@ -82,6 +84,10 @@ public class ConfigurationData {
 
     public int getBehaviorVariant() {
         return behaviorVariant;
+    }
+
+    public int getMovingCost() {
+        return movingCost;
     }
 }
 

@@ -19,36 +19,6 @@ public class Vector2d {
         return this.x >= other.x && this.y >= other.y;
     }
 
-    public Vector2d add(Vector2d other) {
-        int newX = this.x + other.x;
-        int newY = this.y + other.y;
-        return new Vector2d(newX, newY);
-    }
-
-    public Vector2d subtract(Vector2d other) {
-        int newX = this.x - other.x;
-        int newY = this.y - other.y;
-        return new Vector2d(newX, newY);
-    }
-
-    public Vector2d upperRight(Vector2d other) {
-        int newX = Math.max(this.x, other.x);
-        int newY = Math.max(this.y, other.y);
-        return new Vector2d(newX, newY);
-    }
-
-    public Vector2d lowerLeft(Vector2d other) {
-        int newX = Math.min(this.x, other.x);
-        int newY = Math.min(this.y, other.y);
-        return new Vector2d(newX, newY);
-    }
-
-    public Vector2d opposite() {
-        int newX = -this.x;
-        int newY = -this.y;
-        return new Vector2d(newX, newY);
-    }
-
     public int getX() { return x; }
 
     public int getY() { return y; }

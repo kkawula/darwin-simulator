@@ -56,8 +56,7 @@ public class Genome {
 
     public int getLength() { return length; }
 
-    public MapDirection getGene(int index)
-    {
+    public MapDirection getGene(int index)  {
         return genes[index];
     }
 

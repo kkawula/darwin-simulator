@@ -52,7 +52,7 @@ public class Animal implements Comparable<Animal> {
         } else {
             behavior = new TraversalBehavior();
         }
-        //updateChildren();
+        updateChildren();
 
         this.genome = new Genome(father.getEnergy(), mother.getEnergy(), father.getGenome(), mother.getGenome());
     }

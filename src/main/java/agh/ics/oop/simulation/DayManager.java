@@ -10,6 +10,7 @@ import java.util.*;
 
 public class DayManager {
 
+    private final GrassDealer grassDealer = null;
     private final int initialPlants;
     private final int initialAnimals;
     private final int initialAnimalEnergy;
@@ -32,6 +33,8 @@ public class DayManager {
         this.behaviorVariant = config.getBehaviorVariant();
         this.minEnergyToReproduce = config.getMinEnergyToReproduce();
         this.movingCost = config.getMovingCost();
+        System.out.println((config.getGrowthVariant()));
+        System.out.println((config.getBehaviorVariant()));
     }
     public void initializeFirstDay(WorldMap worldMap)
     {
@@ -63,11 +66,11 @@ public class DayManager {
         LinkedList<Grass> grasses = map.getGrasses();
         LinkedList<Animal> deadAnimals = map.getDeadAnimals();
 
+        growGrass(grasses, map.getWidth(), map.getHeight());
         removeDeadAnimals(animals, deadAnimals);
         moveAnimals(map, animals);
         eatGrass(grasses, animals);
         reproduceAnimals(animals);
-        growGrass(grasses, map.getWidth(), map.getHeight());
     }
 
     private void removeDeadAnimals(HashMap<Vector2d, TreeSet<Animal>> animals, LinkedList<Animal> deadAnimals) {
@@ -115,7 +118,7 @@ public class DayManager {
             for(int i = 0; i < entry.getValue().size(); i++)
                 copyOfValues.add(entry.getValue().pollLast());
         }
-        for (Animal animal:copyOfValues)
+        for (Animal animal : copyOfValues)
         {
             animal.move(moveValidator);
             animal.setEnergy(animal.getEnergy() - movingCost);
@@ -130,7 +133,7 @@ public class DayManager {
             Vector2d position = entry.getKey();
             LinkedList<Animal> newAnimals = new LinkedList<>();
             if(entry.getValue().size() >= 2) {
-                System.out.println("jebanko");
+
                 System.out.println(entry.getValue().size());
                 Animal father = entry.getValue().pollLast();
                 Animal mother = entry.getValue().pollLast();
@@ -141,15 +144,11 @@ public class DayManager {
                     mother.setEnergy(mother.getEnergy() - parentEnergyConsumption);
                     father.setEnergy(father.getEnergy() - parentEnergyConsumption);
                     newAnimals.add(child);
-                    newAnimals.add(father);
-                    newAnimals.add(mother);
 
 
                 }
-                else {
-                    newAnimals.add(father);
-                    newAnimals.add(mother);
-                }
+                newAnimals.add(father);
+                newAnimals.add(mother);
             }
             for(Animal animal : newAnimals)
             {

@@ -8,7 +8,6 @@ import agh.ics.oop.model.Vector2d;
 
 import java.util.*;
 
-import static java.lang.Math.max;
 
 public class WorldMap implements MoveValidator{
 
@@ -16,11 +15,15 @@ public class WorldMap implements MoveValidator{
 
     private final int height;
 
-    private HashMap<Vector2d, TreeSet<Animal>> animals = new HashMap<>();
+    private final HashMap<Vector2d, TreeSet<Animal>> animals = new HashMap<>();
 
-    private LinkedList<Animal> deadAnimals = new LinkedList<>();
+    private final LinkedList<Animal> aliveAnimals = new LinkedList<>();
 
-    private final LinkedList<Grass> grasses= new LinkedList<>();
+    private final LinkedList<Animal> deadAnimals = new LinkedList<>();
+
+    private final LinkedList<Vector2d> lastDayDeadAnimalsPositions = new LinkedList<>();
+
+    private final LinkedList<Grass> grasses = new LinkedList<>();
     public WorldMap(int width, int height) {
         this.width = width;
         this.height = height;
@@ -28,11 +31,12 @@ public class WorldMap implements MoveValidator{
     }
     private void initializeHashMap(int width, int height) {
         for (int i = 0; i < width*height; i++) {
-
             animals.put(new Vector2d(i % width,i / width), new TreeSet<>());
         }
     }
-
+    public LinkedList<Animal> getAliveAnimals(){
+        return aliveAnimals;
+    }
     public LinkedList<Animal> getDeadAnimals() {
         return deadAnimals;
     }
@@ -72,6 +76,7 @@ public class WorldMap implements MoveValidator{
         return height;
     }
 
+    @Override
     public Vector2d newPosition(Vector2d position, MapDirection mapDirection)
     {
         int newX =(position.getX() + mapDirection.toUnitVector().getX()) >= 0 ?
@@ -84,7 +89,10 @@ public class WorldMap implements MoveValidator{
         else
         {
             return new Vector2d(newX, newY);
-
         }
+    }
+
+    public LinkedList<Vector2d> getLastDayDeadAnimalsPositions() {
+        return lastDayDeadAnimalsPositions;
     }
 }

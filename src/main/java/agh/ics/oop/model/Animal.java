@@ -27,32 +27,31 @@ public class Animal implements Comparable<Animal> {
     public Behavior behavior;
 
 
-    public Animal (Vector2d newPosition, int energy, int genomeLength, int behaviorVariant) {
+    public Animal (Vector2d newPosition, int energy, int genomeLength, BehaviorVariant behaviorVariant) {
         this.position = newPosition;
         this.energy = energy;
         this.genomeLength = genomeLength;
-
-        if (behaviorVariant == 0) {
-            behavior = new PredestinationBehavior();
-        } else {
-            behavior = new TraversalBehavior();
-        }
-
+        behavior = switch (behaviorVariant)
+        {
+            case TRAVERSAL_BEHAVIOR -> new TraversalBehavior();
+            case PREDESTINATION_BEHAVIOR -> new PredestinationBehavior();
+        };
         this.genome = new Genome(genomeLength);
     }
 
-    public Animal(Vector2d newPosition, int energy, Animal father, Animal mother, int behaviorVariant) {
+    public Animal(Vector2d newPosition, int energy, Animal father, Animal mother, BehaviorVariant behaviorVariant) {
         position = newPosition;
         this.energy = energy;
         this.father = father;
         this.mother = mother;
 
-        if (behaviorVariant == 0) {
-            behavior = new PredestinationBehavior();
-        } else {
-            behavior = new TraversalBehavior();
-        }
-        //updateChildren();
+        behavior = switch (behaviorVariant)
+        {
+            case TRAVERSAL_BEHAVIOR -> new TraversalBehavior();
+            case PREDESTINATION_BEHAVIOR -> new PredestinationBehavior();
+        };
+
+        updateChildren();
 
         this.genome = new Genome(father.getEnergy(), mother.getEnergy(), father.getGenome(), mother.getGenome());
     }
@@ -107,10 +106,6 @@ public class Animal implements Comparable<Animal> {
         return energy;
     }
 
-    public void setEnergy(int energy) {
-        this.energy = energy;
-    }
-
     public int getAge(){return age;}
 
     public Vector2d getPosition() {
@@ -126,8 +121,9 @@ public class Animal implements Comparable<Animal> {
         energy+=plantEnergy;
     }
 
-    public void move(MoveValidator moveValidator) {
+    public void move(MoveValidator moveValidator, int movingCost) {
         age++;
+        energy-=movingCost;
         position = moveValidator.newPosition(position, genome.getGene(activeGene));
         this.performGeneBehavior();
     }
@@ -139,5 +135,16 @@ public class Animal implements Comparable<Animal> {
                 .compare(this, other);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Animal animal = (Animal) o;
+        return energy == animal.energy && age == animal.age && birthDay == animal.birthDay && deathDay == animal.deathDay && isDead == animal.isDead && children == animal.children && offspring == animal.offspring && grassEaten == animal.grassEaten && genomeLength == animal.genomeLength && activeGene == animal.activeGene && Objects.equals(position, animal.position) && Objects.equals(father, animal.father) && Objects.equals(mother, animal.mother) && Objects.equals(genome, animal.genome) && Objects.equals(behavior, animal.behavior);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(position, father, mother, energy, age, birthDay, deathDay, isDead, children, offspring, grassEaten, genomeLength, activeGene, genome, behavior);
+    }
 }

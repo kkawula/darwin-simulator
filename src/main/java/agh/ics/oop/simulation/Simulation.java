@@ -14,8 +14,8 @@ public class Simulation implements Runnable {
 
     public Simulation(ConfigurationData config, SimulationLauncher observer) {
         worldMap = new WorldMap(config.getMapWidth(), config.getMapHeight());
-        dayManager = new DayManager(config);
-        dayManager.initializeFirstDay(worldMap);
+        dayManager = new DayManager(config,worldMap);
+        dayManager.initializeFirstDay();
         this.observer = observer;
     }
 
@@ -39,7 +39,7 @@ public class Simulation implements Runnable {
 
         while(!interrupted){
             Platform.runLater(()->{
-                dayManager.updateDay(worldMap);
+                dayManager.updateDay();
                 observer.updateGrid();
             });
             try {

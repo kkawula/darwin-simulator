@@ -1,12 +1,15 @@
 package agh.ics.oop.utils;
 
+import agh.ics.oop.model.BehaviorVariant;
+import agh.ics.oop.model.GrowthVariant;
+
 public class ConfigurationData {
     private final int mapHeight;
     private final int mapWidth;
     private final int initialPlants;
     private final int plantEnergy;
     private final int plantsPerDay;
-    private final int growthVariant;
+    private final GrowthVariant growthVariant;
     private final int initialAnimals;
     private final int initialAnimalEnergy;
     private final int minEnergyToReproduce;
@@ -14,10 +17,10 @@ public class ConfigurationData {
     private final int minMutations;
     private final int maxMutations;
     private final int genomeLength;
-    private final int behaviorVariant;
+    private final BehaviorVariant behaviorVariant;
     private final int movingCost;
 
-    public ConfigurationData(int mapHeight, int mapWidth, int initialPlants, int plantEnergy, int plantsPerDay, int growthVariant, int initialAnimals, int initialAnimalEnergy, int minEnergyToReproduce, int parentEnergyConsumption, int minMutations, int maxMutations, int genomeLength, int behaviorVariant, int movingCost) {
+    public ConfigurationData(int mapHeight, int mapWidth, int initialPlants, int plantEnergy, int plantsPerDay, GrowthVariant growthVariant, int initialAnimals, int initialAnimalEnergy, int minEnergyToReproduce, int parentEnergyConsumption, int minMutations, int maxMutations, int genomeLength, BehaviorVariant behaviorVariant, int movingCost) {
         this.mapHeight = mapHeight;
         this.mapWidth = mapWidth;
         this.initialPlants = initialPlants;
@@ -50,7 +53,7 @@ public class ConfigurationData {
         return plantsPerDay;
     }
 
-    public int getGrowthVariant() {
+    public GrowthVariant getGrowthVariant() {
         return growthVariant;
     }
 
@@ -82,7 +85,7 @@ public class ConfigurationData {
         return genomeLength;
     }
 
-    public int getBehaviorVariant() {
+    public BehaviorVariant getBehaviorVariant() {
         return behaviorVariant;
     }
 

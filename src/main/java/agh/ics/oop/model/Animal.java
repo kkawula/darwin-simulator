@@ -27,31 +27,30 @@ public class Animal implements Comparable<Animal> {
     public Behavior behavior;
 
 
-    public Animal (Vector2d newPosition, int energy, int genomeLength, int behaviorVariant) {
+    public Animal (Vector2d newPosition, int energy, int genomeLength, BehaviorVariant behaviorVariant) {
         this.position = newPosition;
         this.energy = energy;
         this.genomeLength = genomeLength;
-
-        if (behaviorVariant == 0) {
-            behavior = new PredestinationBehavior();
-        } else {
-            behavior = new TraversalBehavior();
-        }
-
+        behavior = switch (behaviorVariant)
+        {
+            case TRAVERSAL_BEHAVIOR -> new TraversalBehavior();
+            case PREDESTINATION_BEHAVIOR -> new PredestinationBehavior();
+        };
         this.genome = new Genome(genomeLength);
     }
 
-    public Animal(Vector2d newPosition, int energy, Animal father, Animal mother, int behaviorVariant) {
+    public Animal(Vector2d newPosition, int energy, Animal father, Animal mother, BehaviorVariant behaviorVariant) {
         position = newPosition;
         this.energy = energy;
         this.father = father;
         this.mother = mother;
 
-        if (behaviorVariant == 0) {
-            behavior = new PredestinationBehavior();
-        } else {
-            behavior = new TraversalBehavior();
-        }
+        behavior = switch (behaviorVariant)
+        {
+            case TRAVERSAL_BEHAVIOR -> new TraversalBehavior();
+            case PREDESTINATION_BEHAVIOR -> new PredestinationBehavior();
+        };
+
         updateChildren();
 
         this.genome = new Genome(father.getEnergy(), mother.getEnergy(), father.getGenome(), mother.getGenome());

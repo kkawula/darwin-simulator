@@ -1,5 +1,8 @@
 package agh.ics.oop.presenter;
 
+import agh.ics.oop.model.Behavior;
+import agh.ics.oop.model.BehaviorVariant;
+import agh.ics.oop.model.GrowthVariant;
 import agh.ics.oop.utils.ConfigurationData;
 import agh.ics.oop.utils.FileNameGenerator;
 import javafx.fxml.FXML;
@@ -99,11 +102,11 @@ public class SetupController {
             int plantEnergy = Integer.parseInt(plantEnergyField.getText());
             int plantsPerDay = Integer.parseInt(plantsPerDayField.getText());
 
-            int growthVariant;
+            GrowthVariant growthVariant;
             if (growVariant1.isSelected()) {
-                growthVariant = 1;
+                growthVariant = GrowthVariant.FORESTED_EQUATOR;
             } else {
-                growthVariant = 2;
+                growthVariant = GrowthVariant.LIFE_GIVING_CORPSES;
             }
 
             int initialAnimals = Integer.parseInt(initialAnimalsField.getText());
@@ -114,11 +117,11 @@ public class SetupController {
             int maxMutations = Integer.parseInt(maxMutationsField.getText());
             int genomeLength = Integer.parseInt(genomeLengthField.getText());
 
-            int behaviorVariant;
+            BehaviorVariant behaviorVariant;
             if (behaviorVariant1.isSelected()) {
-                behaviorVariant = 1;
+                behaviorVariant = BehaviorVariant.PREDESTINATION_BEHAVIOR;
             } else {
-                behaviorVariant = 2;
+                behaviorVariant = BehaviorVariant.TRAVERSAL_BEHAVIOR;
             }
             int movingCost = Integer.parseInt(movingCostField.getText());
 

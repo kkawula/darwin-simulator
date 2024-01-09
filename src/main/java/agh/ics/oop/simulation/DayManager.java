@@ -1,8 +1,6 @@
 package agh.ics.oop.simulation;
 
-import agh.ics.oop.model.Animal;
-import agh.ics.oop.model.Grass;
-import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.model.*;
 import agh.ics.oop.utils.ConfigurationData;
 import agh.ics.oop.utils.RandomPositionGenerator;
 
@@ -10,20 +8,19 @@ import java.util.*;
 
 public class DayManager {
 
-    private final GrassDealer grassDealer = null;
-    private final int initialPlants;
+    private final GrassDealer grassDealer;
+    private final AnimalGuardian animalGuardian;
     private final int initialAnimals;
     private final int initialAnimalEnergy;
     private final int parentEnergyConsumption;
     private final int genomeLength;
     private final int plantEnergy;
     private final int plantsPerDay;
-    private final int behaviorVariant;
+    private final BehaviorVariant behaviorVariant;
     private final int minEnergyToReproduce;
     private final int movingCost;
 
-    public DayManager(ConfigurationData config) {
-        this.initialPlants = config.getInitialPlants();
+    public DayManager(ConfigurationData config, WorldMap worldMap) {
         this.initialAnimals = config.getInitialAnimals();
         this.initialAnimalEnergy = config.getInitialAnimalEnergy();
         this.parentEnergyConsumption = config.getParentEnergyConsumption();
@@ -33,44 +30,38 @@ public class DayManager {
         this.behaviorVariant = config.getBehaviorVariant();
         this.minEnergyToReproduce = config.getMinEnergyToReproduce();
         this.movingCost = config.getMovingCost();
-        System.out.println((config.getGrowthVariant()));
-        System.out.println((config.getBehaviorVariant()));
+        this.grassDealer = switch (config.getGrowthVariant())
+        {
+            case FORESTED_EQUATOR -> new ForestedEquatorGrassDealer(worldMap,config.getPlantsPerDay(), config.getInitialPlants());
+            case LIFE_GIVING_CORPSES -> new LifeGivingCorpsesGrassDealer(worldMap,config.getPlantsPerDay(), config.getInitialPlants());
+        };
+        this.animalGuardian = new AnimalGuardian(worldMap);
     }
-    public void initializeFirstDay(WorldMap worldMap)
+    public void initializeFirstDay()
     {
-        int width = worldMap.getWidth();
-        int height = worldMap.getHeight();
-        placeAnimals(worldMap.getAnimals(), width, height);
-        placeGrasses(worldMap.getGrasses(), width, height);
+        grassDealer.initializeGrass();
+        //animalGuardian.initializeAnimals();
     }
 
     private void placeAnimals(HashMap<Vector2d,TreeSet<Animal>> animals, int width, int height) {
         RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(initialAnimals, width, height);
-
         for (Vector2d position : randomPositionGenerator) {
             Animal animal = new Animal(position, initialAnimalEnergy, genomeLength, behaviorVariant);
             animals.get(position).add(animal);
         }
     }
 
-    private void placeGrasses(LinkedList<Grass> grasses, int width, int height) {
-        RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(initialPlants, width, height);
+    public void updateDay() {
+        grassDealer.spawnGrass();
+        //animalGuardian.removeDeadAnimals();
+       // animalGuardian.moveAnimals();
+       // animalFeeder.eatGrass();
+       // animalGuardian.reproduceAnimals();
 
-        for (Vector2d position : randomPositionGenerator) {
-            grasses.add(new Grass(position));
-        }
-    }
-
-    public void updateDay(WorldMap map) {
-        HashMap<Vector2d, TreeSet<Animal>> animals = map.getAnimals();
-        LinkedList<Grass> grasses = map.getGrasses();
-        LinkedList<Animal> deadAnimals = map.getDeadAnimals();
-
-        growGrass(grasses, map.getWidth(), map.getHeight());
-        removeDeadAnimals(animals, deadAnimals);
+        /*removeDeadAnimals(animals, deadAnimals);
         moveAnimals(map, animals);
         eatGrass(grasses, animals);
-        reproduceAnimals(animals);
+        reproduceAnimals(animals);*/
     }
 
     private void removeDeadAnimals(HashMap<Vector2d, TreeSet<Animal>> animals, LinkedList<Animal> deadAnimals) {
@@ -102,14 +93,6 @@ public class DayManager {
         }
     }
 
-    private void growGrass(LinkedList<Grass> grasses, int width, int height)
-    {
-        RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(plantsPerDay, width, height, grasses);
-        for (Vector2d position : randomPositionGenerator)
-        {
-            grasses.add(new Grass(position));
-        }
-    }
     private void moveAnimals(MoveValidator moveValidator, HashMap<Vector2d, TreeSet<Animal>> animals)
     {
         LinkedList<Animal> copyOfValues = new LinkedList<>();
@@ -133,7 +116,6 @@ public class DayManager {
             Vector2d position = entry.getKey();
             LinkedList<Animal> newAnimals = new LinkedList<>();
             if(entry.getValue().size() >= 2) {
-
                 System.out.println(entry.getValue().size());
                 Animal father = entry.getValue().pollLast();
                 Animal mother = entry.getValue().pollLast();
@@ -144,8 +126,6 @@ public class DayManager {
                     mother.setEnergy(mother.getEnergy() - parentEnergyConsumption);
                     father.setEnergy(father.getEnergy() - parentEnergyConsumption);
                     newAnimals.add(child);
-
-
                 }
                 newAnimals.add(father);
                 newAnimals.add(mother);

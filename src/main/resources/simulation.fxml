@@ -3,6 +3,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.Button?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 
 <BorderPane fx:id="borderPane"
             xmlns="http://javafx.com/javafx"
@@ -13,17 +18,75 @@
     <top>
         <BorderPane styleClass="header-section">
             <center>
-                <Label id="header-text" text="Darwin's evolution simulator"/>
+                <HBox alignment="CENTER" spacing="5">
+    <!--                    <Label id="header-text" text="Darwin's evolution simulator"/>-->
+                    <Button fx:id="startButton" text="START" onAction="#startSimulation"/>
+                    <Button fx:id="pauseButton" text="PAUSE" onAction="#pauseSimulation"/>
+                    <Button fx:id="stopButton" text="STOP" onAction="#stopSimulation"/>
+                </HBox>
             </center>
         </BorderPane>
     </top>
     <left>
-        <VBox styleClass="sidebar-section">
-            <Label text="Map width: "/>
-            <Label text="Map height: "/>
+        <VBox styleClass="sidebar-section" spacing="40">
+            <GridPane gridLinesVisible="true">
+                <columnConstraints>
+                    <ColumnConstraints maxWidth="110" minWidth="110" prefWidth="110" />
+                    <ColumnConstraints maxWidth="70" minWidth="70" prefWidth="70" />
+                </columnConstraints>
+                <Label text="Map width: " GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <Label text="Map height: " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Label text="Animals alive: " GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label text="Animals dead: " GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <Label text="Plants: " GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <Label text="Free fields: " GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                <Label text="Average energy: " GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                <Label text="Average lifespan: " GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+                <Label text="Average children: " GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+
+                <Label fx:id="mapWidthValue" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <Label fx:id="mapHeightValue" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Label fx:id="animalsAliveValue" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <Label fx:id="animalsDeadValue" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                <Label fx:id="plantsValue" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                <Label fx:id="freeFieldsValue" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                <Label fx:id="averageEnergyValue" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                <Label fx:id="averageLifespanValue" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+                <Label fx:id="averageChildrenValue" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+
+            </GridPane>
+
+            <GridPane gridLinesVisible="true">
+                <columnConstraints>
+                    <ColumnConstraints maxWidth="110" minWidth="110" prefWidth="110" />
+                    <ColumnConstraints maxWidth="70" minWidth="70" prefWidth="70" />
+                </columnConstraints>
+                <Label text="Birthday: " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Label text="Genome: " GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label text="Active gene: " GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <Label text="Energy: " GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <Label text="Eaten plants: " GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                <Label text="Children: " GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+                <Label text="Descendants: " GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+                <Label text="Age: " GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+                <Label text="Direction: " GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+
+                <Label fx:id="birthdayValue" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Label fx:id="genomeValue" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <Label fx:id="activeGeneValue" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                <Label fx:id="energyValue" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                <Label fx:id="eatenPlantsValue" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                <Label fx:id="childrenValue" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                <Label fx:id="descendantsValue" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+                <Label fx:id="ageValue" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+                <Label fx:id="directionValue" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+
+            </GridPane>
+
         </VBox>
     </left>
     <center>
+
         <VBox fx:id="content" styleClass="content-section">
 
         </VBox>

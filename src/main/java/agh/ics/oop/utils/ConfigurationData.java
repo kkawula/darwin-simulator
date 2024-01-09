@@ -1,22 +1,26 @@
 package agh.ics.oop.utils;
 
+import agh.ics.oop.model.BehaviorVariant;
+import agh.ics.oop.model.GrowthVariant;
+
 public class ConfigurationData {
     private final int mapHeight;
     private final int mapWidth;
     private final int initialPlants;
     private final int plantEnergy;
     private final int plantsPerDay;
-    private final int growthVariant;
+    private final GrowthVariant growthVariant;
     private final int initialAnimals;
     private final int initialAnimalEnergy;
-    private final int fullnessThreshold;
+    private final int minEnergyToReproduce;
     private final int parentEnergyConsumption;
     private final int minMutations;
     private final int maxMutations;
     private final int genomeLength;
-    private final int behaviorVariant;
+    private final BehaviorVariant behaviorVariant;
+    private final int movingCost;
 
-    public ConfigurationData(int mapHeight, int mapWidth, int initialPlants, int plantEnergy, int plantsPerDay, int growthVariant, int initialAnimals, int initialAnimalEnergy, int fullnessThreshold, int parentEnergyConsumption, int minMutations, int maxMutations, int genomeLength, int behaviorVariant) {
+    public ConfigurationData(int mapHeight, int mapWidth, int initialPlants, int plantEnergy, int plantsPerDay, GrowthVariant growthVariant, int initialAnimals, int initialAnimalEnergy, int minEnergyToReproduce, int parentEnergyConsumption, int minMutations, int maxMutations, int genomeLength, BehaviorVariant behaviorVariant, int movingCost) {
         this.mapHeight = mapHeight;
         this.mapWidth = mapWidth;
         this.initialPlants = initialPlants;
@@ -25,12 +29,13 @@ public class ConfigurationData {
         this.growthVariant = growthVariant;
         this.initialAnimals = initialAnimals;
         this.initialAnimalEnergy = initialAnimalEnergy;
-        this.fullnessThreshold = fullnessThreshold;
+        this.minEnergyToReproduce = minEnergyToReproduce;
         this.parentEnergyConsumption = parentEnergyConsumption;
         this.minMutations = minMutations;
         this.maxMutations = maxMutations;
         this.genomeLength = genomeLength;
         this.behaviorVariant = behaviorVariant;
+        this.movingCost = movingCost;
     }
     public int getMapHeight() { return mapHeight; }
 
@@ -48,7 +53,7 @@ public class ConfigurationData {
         return plantsPerDay;
     }
 
-    public int getGrowthVariant() {
+    public GrowthVariant getGrowthVariant() {
         return growthVariant;
     }
 
@@ -60,8 +65,8 @@ public class ConfigurationData {
         return initialAnimalEnergy;
     }
 
-    public int getFullnessThreshold() {
-        return fullnessThreshold;
+    public int getMinEnergyToReproduce() {
+        return minEnergyToReproduce;
     }
 
     public int getParentEnergyConsumption() {
@@ -78,6 +83,14 @@ public class ConfigurationData {
 
     public int getGenomeLength() {
         return genomeLength;
+    }
+
+    public BehaviorVariant getBehaviorVariant() {
+        return behaviorVariant;
+    }
+
+    public int getMovingCost() {
+        return movingCost;
     }
 }
 

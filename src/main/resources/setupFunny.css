@@ -1,27 +1,35 @@
 .root {
     -fx-font-family: 'Comic Sans MS', cursive, sans-serif;
-    -fx-background-color: #FFFACD;
+    -fx-background-color: #f8f8f8;
 }
 
 VBox {
-    -fx-padding: 20;
-    -fx-background-color: #f8f8f8;
+    -fx-padding: 10;
     -fx-border-radius: 5;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 0, 0);
-    -fx-max-width: 500;
-    -fx-alignment: center;
 }
 
 HBox {
-    -fx-alignment: center;
     -fx-spacing: 10;
+}
+
+.text-field {
+    -fx-border-color: #20B2AA;
+    -fx-background-color: #E0FFFF;
+    -fx-border-radius: 5px;
+    -fx-max-width: 90px;
+    -fx-text-fill: #A52A2A;
+}
+
+.options {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
 }
 
 .button {
     -fx-background-color: #FF69B4;
     -fx-text-fill: #FFF8DC;
     -fx-font-size: 16px;
-    -fx-padding: 10px 20px;
     -fx-border-radius: 10px;
     -fx-font-weight: bold;
     -fx-cursor: hand;
@@ -34,22 +42,10 @@ HBox {
 }
 
 .label {
-    -fx-font-size: 14px;
     -fx-text-fill: #008B8B;
-    -fx-rotate: -10;
-}
-
-
-.text-field {
-    -fx-border-color: #20B2AA;
-    -fx-background-color: #E0FFFF;
-    -fx-padding: 5px;
-    -fx-border-radius: 5px;
-    -fx-text-fill: #A52A2A;
 }
 
 .radio-button {
-    -fx-padding: 5px 10px;
     -fx-text-fill: #8A2BE2;
 }
 
@@ -64,4 +60,10 @@ HBox {
 
 .radio-button .text {
     -fx-fill: #DC143C;
+}
+.bottom {
+    -fx-background-color: #FFFACD;
+    -fx-padding: 10;
+    -fx-spacing: 10;
+    -fx-alignment: center;
 }

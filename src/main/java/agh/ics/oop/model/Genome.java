@@ -31,11 +31,9 @@ public class Genome {
 
         Genome strongerGenome = fatherEnergy > motherEnergy ? fatherGenome : motherGenome;
         Genome weakerGenome = fatherEnergy > motherEnergy ? motherGenome : fatherGenome;
-
         double strongerRatio = max(fatherEnergy, motherEnergy)  / (motherEnergy + fatherEnergy);
         int strongerLength = (int) (strongerRatio * length);
         int weakerLength = length - strongerLength;
-
         boolean startFromLeft = new Random().nextBoolean();
 
         for (int i = 0; i < strongerLength; i++) {
@@ -58,8 +56,7 @@ public class Genome {
 
     public int getLength() { return length; }
 
-    public MapDirection getGene(int index)
-    {
+    public MapDirection getGene(int index)  {
         return genes[index];
     }
 

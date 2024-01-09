@@ -27,24 +27,30 @@ public class Animal implements Comparable<Animal> {
     public Behavior behavior;
 
 
-    public void setBehavior(Behavior behavior) {
-        this.behavior = behavior;
-    }
-
-
-
-    public Animal (Vector2d newPosition, int energy, int genomeLength) {
+    public Animal (Vector2d newPosition, int energy, int genomeLength, BehaviorVariant behaviorVariant) {
         this.position = newPosition;
         this.energy = energy;
         this.genomeLength = genomeLength;
+        behavior = switch (behaviorVariant)
+        {
+            case TRAVERSAL_BEHAVIOR -> new TraversalBehavior();
+            case PREDESTINATION_BEHAVIOR -> new PredestinationBehavior();
+        };
         this.genome = new Genome(genomeLength);
     }
 
-    public Animal(Vector2d newPosition, int energy, Animal father, Animal mother) {
+    public Animal(Vector2d newPosition, int energy, Animal father, Animal mother, BehaviorVariant behaviorVariant) {
         position = newPosition;
         this.energy = energy;
         this.father = father;
         this.mother = mother;
+
+        behavior = switch (behaviorVariant)
+        {
+            case TRAVERSAL_BEHAVIOR -> new TraversalBehavior();
+            case PREDESTINATION_BEHAVIOR -> new PredestinationBehavior();
+        };
+
         updateChildren();
 
         this.genome = new Genome(father.getEnergy(), mother.getEnergy(), father.getGenome(), mother.getGenome());
@@ -115,19 +121,11 @@ public class Animal implements Comparable<Animal> {
         energy+=plantEnergy;
     }
 
-    public void move(MoveValidator moveValidator) {
+    public void move(MoveValidator moveValidator, int movingCost) {
         age++;
-        position =moveValidator.newPosition(position, genome.getGene(activeGene));
-
-        updateGenome();
-    }
-    public void updateGenome() {//solution for the moment of testing this version
-         activeGene=(activeGene+1)%genomeLength;
-    }
-    public Animal reproduce(Animal mother, int initialAnimalEnergy) {
-        mother.energy-=initialAnimalEnergy/2;
-        father.energy-=initialAnimalEnergy/2;
-        return new Animal(position, initialAnimalEnergy, father, mother);
+        energy-=movingCost;
+        position = moveValidator.newPosition(position, genome.getGene(activeGene));
+        this.performGeneBehavior();
     }
     @Override
     public int compareTo(Animal other) {
@@ -142,11 +140,11 @@ public class Animal implements Comparable<Animal> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Animal animal = (Animal) o;
-        return birthDay == animal.birthDay && Objects.equals(position, animal.position) && Objects.equals(father, animal.father) && Objects.equals(mother, animal.mother);
+        return energy == animal.energy && age == animal.age && birthDay == animal.birthDay && deathDay == animal.deathDay && isDead == animal.isDead && children == animal.children && offspring == animal.offspring && grassEaten == animal.grassEaten && genomeLength == animal.genomeLength && activeGene == animal.activeGene && Objects.equals(position, animal.position) && Objects.equals(father, animal.father) && Objects.equals(mother, animal.mother) && Objects.equals(genome, animal.genome) && Objects.equals(behavior, animal.behavior);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(position, father, mother, birthDay);
+        return Objects.hash(position, father, mother, energy, age, birthDay, deathDay, isDead, children, offspring, grassEaten, genomeLength, activeGene, genome, behavior);
     }
 }

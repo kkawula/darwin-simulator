@@ -1,5 +1,8 @@
 package agh.ics.oop.presenter;
 
+import agh.ics.oop.model.Behavior;
+import agh.ics.oop.model.BehaviorVariant;
+import agh.ics.oop.model.GrowthVariant;
 import agh.ics.oop.utils.ConfigurationData;
 import agh.ics.oop.utils.FileNameGenerator;
 import javafx.fxml.FXML;
@@ -16,7 +19,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SetUpController {
+public class SetupController {
     @FXML
     private TextField heightField;
 
@@ -45,7 +48,7 @@ public class SetUpController {
     private TextField initialAnimalEnergyField;
 
     @FXML
-    private TextField fullnessThresholdField;
+    private TextField minEnergyToReproduceField;
 
     @FXML
     private TextField parentEnergyConsumptionField;
@@ -65,7 +68,8 @@ public class SetUpController {
     @FXML
     private RadioButton behaviorVariant2;
 
-    SimulationLauncher simulationLauncher = new SimulationLauncher();
+    @FXML
+    private TextField movingCostField;
 
     @FXML
     private void initialize() {
@@ -76,6 +80,16 @@ public class SetUpController {
         ToggleGroup group2 = new ToggleGroup();
         behaviorVariant1.setToggleGroup(group2);
         behaviorVariant2.setToggleGroup(group2);
+
+        Path resourcesPath = null;
+        try {
+            resourcesPath = Paths.get(getClass().getClassLoader().getResource("").toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        Path configFolder = resourcesPath.resolve("config");
+        Path filePath = configFolder.resolve("default.txt").normalize().toAbsolutePath();
+        loadConfigurationFromFile(String.valueOf(filePath));
 
     }
 
@@ -88,31 +102,32 @@ public class SetUpController {
             int plantEnergy = Integer.parseInt(plantEnergyField.getText());
             int plantsPerDay = Integer.parseInt(plantsPerDayField.getText());
 
-            int growthVariant;
+            GrowthVariant growthVariant;
             if (growVariant1.isSelected()) {
-                growthVariant = 1;
+                growthVariant = GrowthVariant.FORESTED_EQUATOR;
             } else {
-                growthVariant = 2;
+                growthVariant = GrowthVariant.LIFE_GIVING_CORPSES;
             }
 
             int initialAnimals = Integer.parseInt(initialAnimalsField.getText());
             int initialAnimalEnergy = Integer.parseInt(initialAnimalEnergyField.getText());
-            int fullnessThreshold = Integer.parseInt(fullnessThresholdField.getText());
+            int minEnergyToReproduce = Integer.parseInt(minEnergyToReproduceField.getText());
             int parentEnergyConsumption = Integer.parseInt(parentEnergyConsumptionField.getText());
             int minMutations = Integer.parseInt(minMutationsField.getText());
             int maxMutations = Integer.parseInt(maxMutationsField.getText());
             int genomeLength = Integer.parseInt(genomeLengthField.getText());
 
-            int behaviorVariant;
+            BehaviorVariant behaviorVariant;
             if (behaviorVariant1.isSelected()) {
-                behaviorVariant = 1;
+                behaviorVariant = BehaviorVariant.PREDESTINATION_BEHAVIOR;
             } else {
-                behaviorVariant = 2;
+                behaviorVariant = BehaviorVariant.TRAVERSAL_BEHAVIOR;
             }
+            int movingCost = Integer.parseInt(movingCostField.getText());
 
-            ConfigurationData configurationData = new ConfigurationData(height, width, initialPlants, plantEnergy, plantsPerDay, growthVariant, initialAnimals, initialAnimalEnergy, fullnessThreshold, parentEnergyConsumption, minMutations, maxMutations, genomeLength, behaviorVariant);
+            ConfigurationData configurationData = new ConfigurationData(height, width, initialPlants, plantEnergy, plantsPerDay, growthVariant, initialAnimals, initialAnimalEnergy, minEnergyToReproduce, parentEnergyConsumption, minMutations, maxMutations, genomeLength, behaviorVariant, movingCost);
 
-            simulationLauncher.openNewWindow(configurationData);
+            new SimulationLauncher().openNewWindow(configurationData);
 
             System.out.println("Map height: " + height);
             System.out.println("Map width: " + width);
@@ -122,12 +137,13 @@ public class SetUpController {
             System.out.println("Plant growth variant: " + growthVariant);
             System.out.println("Initial animal count: " + initialAnimals);
             System.out.println("Initial animal energy: " + initialAnimalEnergy);
-            System.out.println("Fullness threshold: " + fullnessThreshold);
+            System.out.println("Min energy to reproduce: " + minEnergyToReproduce);
             System.out.println("Parent energy consumption: " + parentEnergyConsumption);
             System.out.println("Min mutations in offspring: " + minMutations);
             System.out.println("Max mutations in offspring: " + maxMutations);
             System.out.println("Genome length: " + genomeLength);
             System.out.println("Animal behavior variant: " + behaviorVariant);
+            System.out.println("Moving cost: " + movingCost);
 
         } catch (NumberFormatException e) {
             System.out.println("The entered data is not an integer.");
@@ -193,16 +209,16 @@ public class SetUpController {
                 case "Initial energy of animals":
                     initialAnimalEnergyField.setText(value);
                     break;
-                case "Energy for well-fed animal":
-                    fullnessThresholdField.setText(value);
+                case "Min energy to reproduce":
+                    minEnergyToReproduceField.setText(value);
                     break;
-                case "Energy for parent-offspring":
+                case "Energy used for reproduction":
                     parentEnergyConsumptionField.setText(value);
                     break;
-                case "Min mutations in offspring":
+                case "Minimum mutations":
                     minMutationsField.setText(value);
                     break;
-                case "Max mutations in offspring":
+                case "Maximum mutations":
                     maxMutationsField.setText(value);
                     break;
                 case "Genome length":
@@ -216,6 +232,9 @@ public class SetUpController {
                         behaviorVariant1.setSelected(false);
                         behaviorVariant2.setSelected(true);
                     }
+                    break;
+                case "Moving cost":
+                    movingCostField.setText(value);
                     break;
 
             }
@@ -238,12 +257,13 @@ public class SetUpController {
             data.put("Plant growth variant", growVariant1.isSelected() ? "1" : "2");
             data.put("Initial number of animals", initialAnimalsField.getText());
             data.put("Initial energy of animals", initialAnimalEnergyField.getText());
-            data.put("Energy for well-fed animal", fullnessThresholdField.getText());
-            data.put("Energy for parent-offspring", parentEnergyConsumptionField.getText());
-            data.put("Min mutations in offspring", minMutationsField.getText());
-            data.put("Max mutations in offspring", maxMutationsField.getText());
+            data.put("Min energy to reproduce", minEnergyToReproduceField.getText());
+            data.put("Energy used for reproduction", parentEnergyConsumptionField.getText());
+            data.put("Minimum mutations", minMutationsField.getText());
+            data.put("Maximum mutations", maxMutationsField.getText());
             data.put("Genome length", genomeLengthField.getText());
             data.put("Animal behavior variant", behaviorVariant1.isSelected() ? "1" : "2");
+            data.put("Moving cost", movingCostField.getText());
 
 
             try (FileWriter writer = new FileWriter(filePath.toFile())) {

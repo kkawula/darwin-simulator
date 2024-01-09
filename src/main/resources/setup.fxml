@@ -6,42 +6,33 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
-
 <?import javafx.scene.control.RadioButton?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            minHeight="550.0" minWidth="850.0"
-            stylesheets="setUp.css"
-            fx:controller="agh.ics.oop.presenter.SetUpController">
-    <center>
-        <VBox alignment="CENTER" spacing="5">
-            <HBox>
-                <Button text="Load"/>
-            </HBox>
+            minHeight="450.0" minWidth="750.0"
+            stylesheets="setup.css"
+            fx:controller="agh.ics.oop.presenter.SetupController">
+    <left>
+        <VBox>
 
-            <HBox>
-                <Button text="Save"/>
-            </HBox>
+            <Label styleClass="options">Map options</Label>
 
             <HBox>
                 <Label text="Map height:"/>
                 <TextField fx:id="heightField"/>
-            </HBox>
 
-            <HBox>
                 <Label text="Map width:"/>
                 <TextField fx:id="widthField"/>
             </HBox>
 
-            <HBox>
-                <Label text="Initial number of plants:"/>
-                <TextField fx:id="initialPlantsField"/>
-            </HBox>
-
+            <Label styleClass="options">Plant options</Label>
             <HBox>
                 <Label text="Energy from eating one plant:"/>
                 <TextField fx:id="plantEnergyField"/>
+
+                <Label text="Initial number of plants:"/>
+                <TextField fx:id="initialPlantsField"/>
             </HBox>
 
             <HBox>
@@ -51,36 +42,31 @@
 
             <HBox>
                 <Label text="Plant growth variant:"/>
-                <RadioButton fx:id="growVariant1" text="1" />
-                <RadioButton fx:id="growVariant2" text="2" />
+                <RadioButton fx:id="growVariant1" text="Forested equators" />
+                <RadioButton fx:id="growVariant2" text="Life-giving carcasses" />
             </HBox>
 
+            <Label styleClass="options">Animal options</Label>
             <HBox>
                 <Label text="Initial number of animals:"/>
                 <TextField fx:id="initialAnimalsField"/>
-            </HBox>
 
-            <HBox>
-                <Label text="Initial animal anergy:"/>
+                <Label text="Initial animal energy:"/>
                 <TextField fx:id="initialAnimalEnergyField"/>
             </HBox>
 
             <HBox>
-                <Label text="Energy for well-fed animal:"/>
-                <TextField fx:id="fullnessThresholdField"/>
-            </HBox>
+                <Label text="Min energy to reproduce:"/>
+                <TextField fx:id="minEnergyToReproduceField"/>
 
-            <HBox>
-                <Label text="Energy for parent-offspring:"/>
+                <Label text="Energy used for reproduction:"/>
                 <TextField fx:id="parentEnergyConsumptionField"/>
             </HBox>
 
             <HBox>
                 <Label text="Minimum mutations:"/>
                 <TextField fx:id="minMutationsField"/>
-            </HBox>
 
-            <HBox>
                 <Label text="Maximum mutations:"/>
                 <TextField fx:id="maxMutationsField"/>
             </HBox>
@@ -88,16 +74,28 @@
             <HBox>
                 <Label text="Genome length:"/>
                 <TextField fx:id="genomeLengthField"/>
+
+                <Label text="Moving cost:"/>
+                <TextField fx:id="movingCostField"/>
             </HBox>
 
             <HBox>
                 <Label text="Animal behavior variant:"/>
-                <RadioButton fx:id="behaviorVariant1" text="1" />
-                <RadioButton fx:id="behaviorVariant2" text="2" />
+                <RadioButton fx:id="behaviorVariant1" text="Predestination" />
+                <RadioButton fx:id="behaviorVariant2" text="Traversal" />
             </HBox>
 
-
-            <Button text="Save" onAction="#saveData"/>
         </VBox>
-    </center>
+    </left>
+
+    <bottom>
+        <HBox styleClass="bottom">
+
+            <Button text="Start" onAction="#saveData"/>
+
+            <Button text="Load config" onAction="#loadDataFromFile"/>
+
+            <Button text="Save config" onAction="#saveDataToText"/>
+        </HBox>
+    </bottom>
 </BorderPane>

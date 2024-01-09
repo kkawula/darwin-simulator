@@ -1,11 +1,11 @@
 package agh.ics.oop.utils;
 
-import agh.ics.oop.model.Grass;
 import agh.ics.oop.model.Vector2d;
 
 import java.util.*;
 import java.util.stream.IntStream;
 
+import static java.lang.Math.min;
 
 public class RandomPositionGenerator implements Iterable<Vector2d>{
 
@@ -16,41 +16,31 @@ public class RandomPositionGenerator implements Iterable<Vector2d>{
         arrayOfPositions = new ArrayList<>();
         ArrayList<Integer> linearizedArrayOfPositions =
                 new ArrayList<>(IntStream.range(0, maxWidth * maxHeight).boxed().toList());
-
         Collections.shuffle(linearizedArrayOfPositions);
-
-        for(int i = 0; i < numberOfPositions; i++) {
-            arrayOfPositions.add(Vector2d.intToVector2d(linearizedArrayOfPositions.get(i), maxWidth));
-        }
+        for(int i = 0; i < min(maxHeight * maxWidth, numberOfPositions); i++)
+            arrayOfPositions.add(Vector2d.intToVector2d(linearizedArrayOfPositions.get(i),maxWidth));
     }
 
-    public RandomPositionGenerator(int numberOfPositions, int maxWidth, int maxHeight, LinkedList<Grass> grasses)
+    public RandomPositionGenerator(int numberOfPositions, int maxWidth, int maxHeight, LinkedList<Vector2d> preferredPositions, LinkedList<Vector2d> occupiedPositions)
     {
+        int arraySize = maxWidth * maxHeight;
         arrayOfPositions = new ArrayList<>();
-
-        ArrayList<Integer> linearizedArrayOfPositions =  new ArrayList<>(IntStream.range(0, maxWidth * maxHeight).boxed().toList());
-        Collections.shuffle(linearizedArrayOfPositions);
-
-        ArrayList<Boolean> areGrassAlreadyOnMap = new ArrayList<>(Collections.nCopies(maxWidth * maxHeight, false));
-
-        for(Grass grass : grasses)
-            areGrassAlreadyOnMap.set(grass.getPosition().linearizedVector2d(maxWidth), true);
-
-        int numberOfNewPositions = 0;
-        int i = 0;
-
-        while(numberOfNewPositions < numberOfPositions && i < maxWidth * maxHeight)
+        ArrayList<Vector2d> linearizedArrayOfPositions =  new ArrayList<>(IntStream.range(0, arraySize).mapToObj(i-> new Vector2d(i%maxWidth,i/maxWidth)).toList());
+        ArrayList<Vector2d> probPositions = new ArrayList<>(linearizedArrayOfPositions.stream().filter(index -> (!preferredPositions.contains(index) && !occupiedPositions.contains(index))).toList());
+        ArrayList<Vector2d> highProbPositions = new ArrayList<>(preferredPositions.stream().filter(index -> !(occupiedPositions.contains(index))).toList());
+        Collections.shuffle(probPositions);
+        Collections.shuffle(highProbPositions);
+        probPositions.addAll(highProbPositions);
+        int leftIterator=0;
+        int rightIterator=probPositions.size()-1;
+        Random random = new Random();
+        for(int i=0;i<min(numberOfPositions,probPositions.size());i++)
         {
-            int newPosition=linearizedArrayOfPositions.get(i);
-            if(!areGrassAlreadyOnMap.get(newPosition))
-            {
-                arrayOfPositions.add(Vector2d.intToVector2d(newPosition, maxWidth));
-                numberOfNewPositions++;
-            }
-            i++;
+            if(random.nextInt(5)==0)
+                arrayOfPositions.add(probPositions.get(leftIterator++));
+            else
+                arrayOfPositions.add(probPositions.get(rightIterator--));
         }
-
-
     }
 
     public Iterator<Vector2d> iterator() {

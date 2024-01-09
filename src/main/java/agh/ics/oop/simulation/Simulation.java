@@ -1,24 +1,58 @@
 package agh.ics.oop.simulation;
 
+import agh.ics.oop.presenter.SimulationLauncher;
 import agh.ics.oop.utils.ConfigurationData;
+import javafx.application.Platform;
 
-public class Simulation {
-
-    private int numberOfAnimals;
+public class Simulation implements Runnable {
 
     private final DayManager dayManager;
+    public final WorldMap worldMap;
+    private final SimulationLauncher observer;
+    private boolean threadSuspended = false;
+    private boolean interrupted = false;
 
-    private final WorldMap worldMap;
-
-    public Simulation(ConfigurationData cfg) {
-        worldMap = new WorldMap(cfg.getMapWidth(), cfg.getMapHeight());
-        dayManager = new DayManager(cfg.getInitialPlants(), cfg.getInitialAnimalEnergy(),
-                cfg.getInitialAnimalEnergy(), cfg.getParentEnergyConsumption(),
-                cfg.getGenomeLength(),cfg.getPlantEnergy(), cfg.getPlantsPerDay());
-        dayManager.initializeFirstDay(worldMap);
+    public Simulation(ConfigurationData config, SimulationLauncher observer) {
+        worldMap = new WorldMap(config.getMapWidth(), config.getMapHeight());
+        dayManager = new DayManager(config,worldMap);
+        dayManager.initializeFirstDay();
+        this.observer = observer;
     }
+
+    public void pause(){
+        threadSuspended=true;
+    }
+    public void start(){
+        if (threadSuspended) {
+            threadSuspended = false;
+            synchronized(this) {
+                notify();
+            }
+        }
+    }
+    public void stop(){
+        interrupted=true;
+    }
+
+    @Override
     public void run() {
-        dayManager.updateDay(worldMap);
+
+        while(!interrupted){
+            Platform.runLater(()->{
+                dayManager.updateDay();
+                observer.updateGrid();
+            });
+            try {
+                Thread.sleep(1000);
+                synchronized(this) {
+                    while (threadSuspended)
+                        wait();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
+
 
 }

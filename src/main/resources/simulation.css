@@ -20,14 +20,13 @@
     -fx-max-width: 200px;
     -fx-border-width: 1;
     -fx-border-color: transparent #E8E8E8 transparent transparent;
+    -fx-padding: 10px;
 }
 
 .sidebar-section Label {
     -fx-font-size: 12px;
     -fx-border-width: 1;
-    -fx-min-width: 200px;
-    -fx-pref-width: 200px;
-    -fx-max-width: 200px;
+    -fx-padding: 5px;
 }
 
 .content-section {
@@ -42,11 +41,3 @@
     -fx-font-weight: 700;
 }
 
-.grid-cell {
-    -fx-min-width: 50px;
-    -fx-min-height: 50px;
-    -fx-max-width: 50px;
-    -fx-max-height: 50px;
-    -fx-border-color: #000000;
-    -fx-border-width: 1;
-}

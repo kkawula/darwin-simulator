@@ -1,0 +1,45 @@
+.root {
+    -fx-font-family: Arial, sans-serif;
+}
+
+VBox {
+    -fx-padding: 10;
+    -fx-border-radius: 5;
+    -fx-spacing: 5;
+}
+
+HBox {
+    -fx-spacing: 10;
+}
+
+.text-field {
+    -fx-border-radius: 5;
+    -fx-max-width: 90px;
+}
+
+.options {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.button {
+    -fx-background-color: #008B8B;
+    -fx-padding: 7 16;
+    -fx-border-radius: 5;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #016060;
+}
+
+.radio-button {
+    -fx-spacing: 10;
+}
+
+.bottom {
+    -fx-padding: 10;
+    -fx-spacing: 10;
+    -fx-alignment: center;
+}
+

@@ -8,7 +8,6 @@ import agh.ics.oop.model.Vector2d;
 
 import java.util.*;
 
-import static java.lang.Math.max;
 
 public class WorldMap implements MoveValidator{
 
@@ -17,6 +16,8 @@ public class WorldMap implements MoveValidator{
     private final int height;
 
     private final HashMap<Vector2d, TreeSet<Animal>> animals = new HashMap<>();
+
+    private final LinkedList<Animal> aliveAnimals = new LinkedList<>();
 
     private final LinkedList<Animal> deadAnimals = new LinkedList<>();
 
@@ -33,7 +34,9 @@ public class WorldMap implements MoveValidator{
             animals.put(new Vector2d(i % width,i / width), new TreeSet<>());
         }
     }
-
+    public LinkedList<Animal> getAliveAnimals(){
+        return aliveAnimals;
+    }
     public LinkedList<Animal> getDeadAnimals() {
         return deadAnimals;
     }
@@ -86,7 +89,6 @@ public class WorldMap implements MoveValidator{
         else
         {
             return new Vector2d(newX, newY);
-
         }
     }
 

@@ -61,10 +61,7 @@ public class SimulationController {
         HashMap<Vector2d, Integer> animalsPositions = worldMap.getAnimalsPositions();
         List<Vector2d> grassesPositions = worldMap.getGrassesPositions();
 
-        animalsAlive = 0;
-        for (Vector2d position : animalsPositions.keySet()) {
-            animalsAlive += animalsPositions.get(position);
-        }
+        animalsAlive = worldMap.getAliveAnimals().size();
 
         ColumnConstraints width = new ColumnConstraints(size);
         RowConstraints height = new RowConstraints(size);

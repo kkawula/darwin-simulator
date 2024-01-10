@@ -15,11 +15,11 @@ public class Animal implements Comparable<Animal> {
     private int energy;
     private int age = 0;
     private final int birthDay = 0;
-    private final int deathDay = 0;
-    private final boolean isDead = false;
+    private int deathDay = 0;
+    private boolean isDead = false;
     private int children = 0;
     private int offspring = 0;
-    private final int grassEaten = 0;
+    private int grassEaten = 0;
     private int genomeLength;
     public int activeGene = 0;
     private final Genome genome;
@@ -106,7 +106,15 @@ public class Animal implements Comparable<Animal> {
         return energy;
     }
 
+    public String getActiveGene() {
+        return genome.getGene(activeGene).toString();
+    }
+
     public int getAge(){return age;}
+
+    public int getBirthDay(){return birthDay;}
+
+    public int getGrassEaten(){return grassEaten;}
 
     public int setEnergy(int energy) {
         this.energy = energy;
@@ -115,6 +123,15 @@ public class Animal implements Comparable<Animal> {
 
     public Vector2d getPosition() {
         return position;
+    }
+
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void kill() {
+        isDead = true;
     }
 
     @Override

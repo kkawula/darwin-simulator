@@ -5,6 +5,7 @@ import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.simulation.WorldMap;
 import agh.ics.oop.utils.ConfigurationData;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -41,13 +42,55 @@ public class SimulationController {
     @FXML
     private Label plantsValue;
 
-    private int animalsAlive = 0;
+    @FXML
+    private Label freeFieldsValue;
+
+    @FXML
+    private Label averageEnergyValue;
+
+    @FXML
+    private Label averageLifespanValue;
+
+    @FXML
+    private Label averageChildrenValue;
+
+    @FXML
+    private Label worldLifespanValue;
+
+    @FXML
+    private Label birthdayValue;
+
+    @FXML
+    private Label genomeValue;
+
+    @FXML
+    private Label activeGeneValue;
+
+    @FXML
+    private Label energyValue;
+
+    @FXML
+    private Label eatenPlantsValue;
+
+    @FXML
+    private Label childrenValue;
+
+    @FXML
+    private Label descendantsValue;
+
+    @FXML
+    private Label ageValue;
+
+    @FXML
+    private Label positionValue;
+    private StatsWriter statsWriter;
+
 
     public void wire(ConfigurationData config, Simulation simulation) {
         this.config = config;
         this.simulation = simulation;
         this.worldMap = simulation.worldMap;
-        animalsAlive = config.getInitialAnimals();
+        statsWriter = new StatsWriter(worldMap);
     }
 
     public void generateGrid() {
@@ -61,8 +104,6 @@ public class SimulationController {
         HashMap<Vector2d, Integer> animalsPositions = worldMap.getAnimalsPositions();
         List<Vector2d> grassesPositions = worldMap.getGrassesPositions();
 
-        animalsAlive = worldMap.getAliveAnimals().size();
-
         ColumnConstraints width = new ColumnConstraints(size);
         RowConstraints height = new RowConstraints(size);
 
@@ -74,6 +115,13 @@ public class SimulationController {
                 cell.setGridLinesVisible(true);
                 cell.getColumnConstraints().add(width);
                 cell.getRowConstraints().add(height);
+                cell.setOnMouseClicked(event -> {
+                    Node source = (Node)event.getSource();
+                    int rowIndex = GridPane.getRowIndex(source);
+                    int columnIndex = GridPane.getColumnIndex(source);
+                    System.out.println("Kliknięto GridPane w wierszu: " + rowIndex + ", kolumnie: " + columnIndex);
+                    statsWriter.setAnimal(worldMap.getAnimals().get(new Vector2d(columnIndex, rowIndex)).last());
+                });
 
                 if (animalsPositions.keySet().contains(new Vector2d(col, row))) {
                     Label animal = new Label(animalsPositions.get(new Vector2d(col, row)) + "");
@@ -86,21 +134,35 @@ public class SimulationController {
                 grid.add(cell, col, row);
             }
         }
+        if (statsWriter.isFollowed()) {
+            int rowIndex = statsWriter.getPosition().getY();
+            int columnIndex = statsWriter.getPosition().getX();
+            GridPane cell = (GridPane) grid.getChildren().get(rowIndex * columns + columnIndex + 1);
+            cell.setStyle("-fx-background-color: #c42828;");
+        }
 
-        setLabelValues();
         content.getChildren().add(grid);
     }
 
 
     @FXML
-    private void startSimulation(){
+    private void startSimulation() {
         simulation.start();
     }
-    @FXML void stopSimulation(){
+    @FXML void stopSimulation() {
         simulation.stop();
     }
-    @FXML void pauseSimulation(){
+    @FXML void pauseSimulation() {
         simulation.pause();
+    }
+    @FXML
+    void stopFollowingAnimal() {
+        statsWriter.unFollowAnimal();
+    }
+
+    public void updateStats() {
+        statsWriter.updateStats();
+        setLabelValues();
     }
 
 
@@ -108,23 +170,24 @@ public class SimulationController {
 
         mapWidthValue.setText(config.getMapWidth() + "");
         mapHeightValue.setText(config.getMapHeight() + "");
-        animalsAliveValue.setText(animalsAlive + "");
-        animalsDeadValue.setText(worldMap.getDeadAnimals().size() + "");
+        animalsAliveValue.setText(statsWriter.getAnimalsAlive() + "");
+        animalsDeadValue.setText(statsWriter.getAnimalsDead() + "");
         plantsValue.setText(worldMap.getGrasses().size() + "");
-//         freeFieldsValue.setText(freeFields);
-//         averageEnergyValue.setText(averageEnergy);
-//         averageLifespanValue.setText(averageLifespan);
-//         averageChildrenValue.setText(averageChildren);
+        freeFieldsValue.setText(statsWriter.getFreeFields() + "");
+        averageEnergyValue.setText(statsWriter.getAverageEnergy() + "");
+        averageLifespanValue.setText(statsWriter.getAverageLifeLength() + "");
+        averageChildrenValue.setText(statsWriter.getAverageChildrenNumber() + "");
+        worldLifespanValue.setText(statsWriter.getWorldLifespan() + "");
 
-//         birthdayValue.setText(birthday);
-//         genomeValue.setText(genome);
-//         activeGeneValue.setText(activeGene);
-//         energyValue.setText(energy);
-//         eatenPlantsValue.setText(eatenPlants);
-//         childrenValue.setText(children);
-//         descendantsValue.setText(descendants);
-//         ageValue.setText(age);
-//         directionValue.setText(direction);
+        birthdayValue.setText(statsWriter.getBrithday() + "");
+        genomeValue.setText(statsWriter.getGenome() + "");
+        activeGeneValue.setText(statsWriter.getActiveGene() + "");
+        energyValue.setText(statsWriter.getEnergy() + "");
+        eatenPlantsValue.setText(statsWriter.getEatenPlants() + "");
+        childrenValue.setText(statsWriter.getChildren() + "");
+        descendantsValue.setText(statsWriter.getDescendants() + "");
+        ageValue.setText(statsWriter.getAge() + "");
+        positionValue.setText(statsWriter.getPosition() + "");
     }
 
 }

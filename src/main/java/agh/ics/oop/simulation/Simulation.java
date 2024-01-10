@@ -40,7 +40,7 @@ public class Simulation implements Runnable {
         while(!interrupted){
             Platform.runLater(()->{
                 dayManager.updateDay();
-//                observer.updateStats();
+                observer.updateStats();
                 observer.updateGrid();
             });
             try {

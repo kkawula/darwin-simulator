@@ -7,10 +7,12 @@ import agh.ics.oop.model.Vector2d;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class WorldMap implements MoveValidator{
 
+    private int worldLifespan = 0;
     private final int width;
 
     private final int height;
@@ -30,7 +32,7 @@ public class WorldMap implements MoveValidator{
         initializeHashMap(width, height);
     }
     private void initializeHashMap(int width, int height) {
-        for (int i = 0; i < width*height; i++) {
+        for (int i = 0; i < width * height; i++) {
             animals.put(new Vector2d(i % width,i / width), new TreeSet<>());
         }
     }
@@ -64,12 +66,9 @@ public class WorldMap implements MoveValidator{
     }
 
     public LinkedList<Vector2d> getGrassesPositions() {
-        LinkedList<Vector2d> positions = new LinkedList<>();
-        for (Grass grass : grasses) {
-            positions.add(grass.getPosition());
-        }
-
-        return positions;
+        return grasses.stream()
+                .map(Grass::getPosition)
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
     public LinkedList<Vector2d> getLastDayDeadAnimalsPositions() {
@@ -82,6 +81,14 @@ public class WorldMap implements MoveValidator{
 
     public int getHeight() {
         return height;
+    }
+
+    public int getWorldLifespan() {
+        return worldLifespan;
+    }
+
+    public void increaseWorldLifespan() {
+        worldLifespan++;
     }
 
     @Override

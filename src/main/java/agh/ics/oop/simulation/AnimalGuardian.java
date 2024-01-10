@@ -48,8 +48,9 @@ public class AnimalGuardian {
         worldMap.clearLastDayDeadAnimalsPositions();
 
         for(Animal animal : worldMap.getAliveAnimals())
-            if(animal.getEnergy() < 0)
-            {
+            if(animal.getEnergy() <= 0) {
+
+                animal.kill();
                 worldMap.getLastDayDeadAnimalsPositions().add(animal.getPosition());
                 worldMap.getDeadAnimals().add(animal);
                 worldMap.getAnimals().get(animal.getPosition()).remove(animal);

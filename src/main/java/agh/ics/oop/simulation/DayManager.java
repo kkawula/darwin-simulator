@@ -9,7 +9,10 @@ public class DayManager {
     private final GrassDealer grassDealer;
     private final AnimalGuardian animalGuardian;
 
+    private final WorldMap worldMap;
+
     public DayManager(ConfigurationData config, WorldMap worldMap) {
+        this.worldMap = worldMap;
         this.grassDealer = switch (config.getGrowthVariant())
         {
             case FORESTED_EQUATOR -> new ForestedEquatorGrassDealer(worldMap, config.getPlantsPerDay(), config.getInitialPlants());
@@ -24,10 +27,11 @@ public class DayManager {
     }
 
     public void updateDay() {
-        grassDealer.spawnGrass();
-        animalGuardian.removeDeadAnimals();
         animalGuardian.moveAnimals();
         animalGuardian.eatGrass();
         animalGuardian.reproduceAnimals();
+        animalGuardian.removeDeadAnimals();
+        grassDealer.spawnGrass();
+        worldMap.increaseWorldLifespan();
     }
 }

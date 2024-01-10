@@ -30,7 +30,7 @@ public class Simulation implements Runnable {
             }
         }
     }
-    public void stop(){
+    public void shutDown(){
         interrupted=true;
     }
 

@@ -12,13 +12,14 @@ public class SimulationLauncher extends Application {
     private ConfigurationData config;
     private Simulation simulation;
     private SimulationController controller;
+    Thread simulationThread;
 
     public void openNewWindow(ConfigurationData config) {
         this.config = config;
 
         try {
             simulation = new Simulation(config, this);
-            Thread simulationThread = new Thread(simulation);
+            simulationThread = new Thread(simulation);
             start(new Stage());
             simulationThread.start();
         }

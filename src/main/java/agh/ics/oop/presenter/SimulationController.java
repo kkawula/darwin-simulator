@@ -83,6 +83,10 @@ public class SimulationController {
 
     @FXML
     private Label positionValue;
+
+    @FXML
+    private VBox animalStats;
+
     private StatsWriter statsWriter;
 
 
@@ -92,6 +96,8 @@ public class SimulationController {
         this.worldMap = simulation.worldMap;
         statsWriter = new StatsWriter(worldMap);
     }
+
+
 
     public void generateGrid() {
         content.getChildren().clear();
@@ -119,8 +125,12 @@ public class SimulationController {
                     Node source = (Node)event.getSource();
                     int rowIndex = GridPane.getRowIndex(source);
                     int columnIndex = GridPane.getColumnIndex(source);
-                    System.out.println("Kliknięto GridPane w wierszu: " + rowIndex + ", kolumnie: " + columnIndex);
-                    statsWriter.setAnimal(worldMap.getAnimals().get(new Vector2d(columnIndex, rowIndex)).last());
+
+                    if (!worldMap.getAnimals().get(new Vector2d(columnIndex, rowIndex)).isEmpty()) {
+                        statsWriter.setAnimal(worldMap.getAnimals().get(new Vector2d(columnIndex, rowIndex)).last());
+                        animalStats.setVisible(true);
+                        cell.setStyle("-fx-background-color: #c42828;");
+                    }
                 });
 
                 if (animalsPositions.keySet().contains(new Vector2d(col, row))) {
@@ -149,8 +159,8 @@ public class SimulationController {
     private void startSimulation() {
         simulation.start();
     }
-    @FXML void stopSimulation() {
-        simulation.stop();
+    @FXML void shutDownSimulation() {
+        simulation.shutDown();
     }
     @FXML void pauseSimulation() {
         simulation.pause();
@@ -158,13 +168,14 @@ public class SimulationController {
     @FXML
     void stopFollowingAnimal() {
         statsWriter.unFollowAnimal();
+        animalStats.setVisible(false);
+
     }
 
     public void updateStats() {
         statsWriter.updateStats();
         setLabelValues();
     }
-
 
     public void setLabelValues() {
 

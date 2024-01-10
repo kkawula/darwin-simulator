@@ -102,16 +102,17 @@ public class SimulationController {
         this.worldMap = simulation.worldMap;
         statsWriter = new StatsWriter(worldMap);
 
-
+        generateGrid();
     }
 
     private void fillCell(int col, int row) {
-        GridPane cell = (GridPane) grid.getChildren().get(row * config.getMapWidth() + col + 1);
+        GridPane cell = (GridPane) grid.getChildren().get(row * config.getMapWidth() + col);
+        cell.getChildren().clear();
+        cell.setStyle("-fx-background-color: #FFFFFF;");
 
         if (animalsPositions.keySet().contains(new Vector2d(col, row))) {
             Label animal = new Label(animalsPositions.get(new Vector2d(col, row)) + "");
             cell.add(animal, 0, 0);
-            cell.setStyle("-fx-background-color: #FFFFFF;");
 
         }
         if (grassesPositions.contains(new Vector2d(col, row))) {
@@ -130,10 +131,24 @@ public class SimulationController {
         animalStats.setVisible(true);
         int row = newFollowedAnimalPosition.getY();
         int col = newFollowedAnimalPosition.getX();
-        GridPane cell = (GridPane) grid.getChildren().get(row * config.getMapWidth() + col + 1);
+        GridPane cell = (GridPane) grid.getChildren().get(row * config.getMapWidth() + col);
         cell.setStyle("-fx-background-color: #c42828;");
         updateStats();
-        followedAnimalPosition = newFollowedAnimalPosition;
+        followedAnimalPosition = newFollowedAnimalPosition;cell.setGridLinesVisible(true);
+
+    }
+
+    public void fillCells() {
+        animalsPositions = worldMap.getAnimalsPositions();
+        grassesPositions = worldMap.getGrassesPositions();
+
+        for (int row = 0; row < config.getMapHeight(); row++)
+            for (int col = 0; col < config.getMapWidth(); col++)
+                fillCell(col, row);
+
+        if (statsWriter.isFollowed()) {
+            setNewFollowedAnimalPosition(statsWriter.getPosition());
+        }
     }
 
     public void generateGrid() {
@@ -150,7 +165,6 @@ public class SimulationController {
         ColumnConstraints width = new ColumnConstraints(size);
         RowConstraints height = new RowConstraints(size);
 
-        grid.setGridLinesVisible(true);
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < columns; col++) {
@@ -173,10 +187,7 @@ public class SimulationController {
                 fillCell(col, row);
             }
         }
-        if (statsWriter.isFollowed()) {
-            setNewFollowedAnimalPosition(statsWriter.getPosition());
-        }
-
+        grid.setGridLinesVisible(true);
         content.getChildren().add(grid);
     }
 

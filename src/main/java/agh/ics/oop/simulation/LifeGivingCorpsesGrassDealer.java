@@ -26,7 +26,7 @@ public class LifeGivingCorpsesGrassDealer implements GrassDealer{
     }
     @Override
     public void initializeGrass() {
-        RandomPositionGenerator grassPositions = new RandomPositionGenerator(initialPlants, worldMap.getWidth(),worldMap.getHeight());
+        RandomPositionGenerator grassPositions = new RandomPositionGenerator(initialPlants, worldMap.getWidth(), worldMap.getHeight());
         for (Vector2d position : grassPositions) {
             worldMap.getGrasses().add(new Grass(position));
         }

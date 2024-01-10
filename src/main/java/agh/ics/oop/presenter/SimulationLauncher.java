@@ -9,8 +9,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class SimulationLauncher extends Application {
-    private static final int WIDTH = 600;
-    private static final int HEIGHT = 600;
     private ConfigurationData config;
     private Simulation simulation;
     private SimulationController controller;

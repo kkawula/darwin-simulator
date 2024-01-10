@@ -108,6 +108,11 @@ public class Animal implements Comparable<Animal> {
 
     public int getAge(){return age;}
 
+    public int setEnergy(int energy) {
+        this.energy = energy;
+        return energy;
+    }
+
     public Vector2d getPosition() {
         return position;
     }
@@ -123,7 +128,7 @@ public class Animal implements Comparable<Animal> {
 
     public void move(MoveValidator moveValidator, int movingCost) {
         age++;
-        energy-=movingCost;
+        energy -= movingCost;
         position = moveValidator.newPosition(position, genome.getGene(activeGene));
         this.performGeneBehavior();
     }

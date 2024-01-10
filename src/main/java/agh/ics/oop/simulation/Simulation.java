@@ -14,13 +14,13 @@ public class Simulation implements Runnable {
 
     public Simulation(ConfigurationData config, SimulationLauncher observer) {
         worldMap = new WorldMap(config.getMapWidth(), config.getMapHeight());
-        dayManager = new DayManager(config,worldMap);
+        dayManager = new DayManager(config, worldMap);
         dayManager.initializeFirstDay();
         this.observer = observer;
     }
 
     public void pause(){
-        threadSuspended=true;
+        threadSuspended = true;
     }
     public void start(){
         if (threadSuspended) {
@@ -40,6 +40,7 @@ public class Simulation implements Runnable {
         while(!interrupted){
             Platform.runLater(()->{
                 dayManager.updateDay();
+//                observer.updateStats();
                 observer.updateGrid();
             });
             try {

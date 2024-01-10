@@ -34,6 +34,10 @@ public class WorldMap implements MoveValidator{
             animals.put(new Vector2d(i % width,i / width), new TreeSet<>());
         }
     }
+
+    public void clearLastDayDeadAnimalsPositions() {
+        lastDayDeadAnimalsPositions.clear();
+    }
     public LinkedList<Animal> getAliveAnimals(){
         return aliveAnimals;
     }
@@ -68,6 +72,10 @@ public class WorldMap implements MoveValidator{
         return positions;
     }
 
+    public LinkedList<Vector2d> getLastDayDeadAnimalsPositions() {
+        return lastDayDeadAnimalsPositions;
+    }
+
     public int getWidth() {
         return width;
     }
@@ -90,9 +98,5 @@ public class WorldMap implements MoveValidator{
         {
             return new Vector2d(newX, newY);
         }
-    }
-
-    public LinkedList<Vector2d> getLastDayDeadAnimalsPositions() {
-        return lastDayDeadAnimalsPositions;
     }
 }

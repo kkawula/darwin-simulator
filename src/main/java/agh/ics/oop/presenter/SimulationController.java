@@ -103,6 +103,7 @@ public class SimulationController {
         simulation.pause();
     }
 
+
     public void setLabelValues() {
 
         mapWidthValue.setText(config.getMapWidth() + "");

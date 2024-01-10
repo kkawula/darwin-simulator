@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 
 public class SimulationController {
@@ -23,6 +24,8 @@ public class SimulationController {
     private ConfigurationData config;
     private WorldMap worldMap;
     private Simulation simulation;
+
+    private Vector2d followedAnimalPosition;
 
     @FXML
     private VBox content;
@@ -87,28 +90,62 @@ public class SimulationController {
     @FXML
     private VBox animalStats;
 
-    private StatsWriter statsWriter;
+    private GridPane grid;
 
+    private StatsWriter statsWriter;
+    private List<Vector2d> grassesPositions;
+    private HashMap<Vector2d, Integer> animalsPositions;
 
     public void wire(ConfigurationData config, Simulation simulation) {
         this.config = config;
         this.simulation = simulation;
         this.worldMap = simulation.worldMap;
         statsWriter = new StatsWriter(worldMap);
+
+
     }
 
+    private void fillCell(int col, int row) {
+        GridPane cell = (GridPane) grid.getChildren().get(row * config.getMapWidth() + col + 1);
 
+        if (animalsPositions.keySet().contains(new Vector2d(col, row))) {
+            Label animal = new Label(animalsPositions.get(new Vector2d(col, row)) + "");
+            cell.add(animal, 0, 0);
+            cell.setStyle("-fx-background-color: #FFFFFF;");
+
+        }
+        if (grassesPositions.contains(new Vector2d(col, row))) {
+            cell.setStyle("-fx-background-color: #7CFC00;");
+        }
+    }
+
+    private void setNewFollowedAnimalPosition(Vector2d newFollowedAnimalPosition){
+        if (Objects.nonNull(followedAnimalPosition)) {
+            int row = followedAnimalPosition.getY();
+            int col = followedAnimalPosition.getX();
+            fillCell(col, row);
+        }
+
+        statsWriter.setAnimal(worldMap.getAnimals().get(newFollowedAnimalPosition).last());
+        animalStats.setVisible(true);
+        int row = newFollowedAnimalPosition.getY();
+        int col = newFollowedAnimalPosition.getX();
+        GridPane cell = (GridPane) grid.getChildren().get(row * config.getMapWidth() + col + 1);
+        cell.setStyle("-fx-background-color: #c42828;");
+        updateStats();
+        followedAnimalPosition = newFollowedAnimalPosition;
+    }
 
     public void generateGrid() {
         content.getChildren().clear();
 
         int rows = config.getMapHeight();
         int columns = config.getMapWidth();
-        GridPane grid = new GridPane();
+        grid = new GridPane();
         int size = Math.min(WIDTH/columns, HEIGHT/rows);
 
-        HashMap<Vector2d, Integer> animalsPositions = worldMap.getAnimalsPositions();
-        List<Vector2d> grassesPositions = worldMap.getGrassesPositions();
+        animalsPositions = worldMap.getAnimalsPositions();
+        grassesPositions = worldMap.getGrassesPositions();
 
         ColumnConstraints width = new ColumnConstraints(size);
         RowConstraints height = new RowConstraints(size);
@@ -125,30 +162,19 @@ public class SimulationController {
                     Node source = (Node)event.getSource();
                     int rowIndex = GridPane.getRowIndex(source);
                     int columnIndex = GridPane.getColumnIndex(source);
+                    Vector2d newFollowedAnimalPosition = new Vector2d(columnIndex, rowIndex);
 
-                    if (!worldMap.getAnimals().get(new Vector2d(columnIndex, rowIndex)).isEmpty()) {
-                        statsWriter.setAnimal(worldMap.getAnimals().get(new Vector2d(columnIndex, rowIndex)).last());
-                        animalStats.setVisible(true);
-                        cell.setStyle("-fx-background-color: #c42828;");
+                    if (!worldMap.getAnimals().get(newFollowedAnimalPosition).isEmpty() && newFollowedAnimalPosition != followedAnimalPosition) {
+                        setNewFollowedAnimalPosition(newFollowedAnimalPosition);
                     }
                 });
 
-                if (animalsPositions.keySet().contains(new Vector2d(col, row))) {
-                    Label animal = new Label(animalsPositions.get(new Vector2d(col, row)) + "");
-                    cell.add(animal, 0, 0);
-                }
-                if (grassesPositions.contains(new Vector2d(col, row))) {
-                    cell.setStyle("-fx-background-color: #7CFC00;");
-                }
-
                 grid.add(cell, col, row);
+                fillCell(col, row);
             }
         }
         if (statsWriter.isFollowed()) {
-            int rowIndex = statsWriter.getPosition().getY();
-            int columnIndex = statsWriter.getPosition().getX();
-            GridPane cell = (GridPane) grid.getChildren().get(rowIndex * columns + columnIndex + 1);
-            cell.setStyle("-fx-background-color: #c42828;");
+            setNewFollowedAnimalPosition(statsWriter.getPosition());
         }
 
         content.getChildren().add(grid);
@@ -168,6 +194,7 @@ public class SimulationController {
     @FXML
     void stopFollowingAnimal() {
         statsWriter.unFollowAnimal();
+        fillCell(followedAnimalPosition.getX(), followedAnimalPosition.getY());
         animalStats.setVisible(false);
 
     }

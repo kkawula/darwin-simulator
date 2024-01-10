@@ -59,8 +59,8 @@
             <VBox fx:id="animalStats" visible="false" alignment="CENTER" spacing="10">
                 <GridPane gridLinesVisible="true">
                     <columnConstraints>
-                        <ColumnConstraints maxWidth="90" minWidth="80" prefWidth="80" />
-                        <ColumnConstraints maxWidth="100" minWidth="100" prefWidth="100" />
+                        <ColumnConstraints maxWidth="90" minWidth="90" prefWidth="90" />
+                        <ColumnConstraints maxWidth="90" minWidth="90" prefWidth="90" />
                     </columnConstraints>
                     <Label text="Birthday: " GridPane.columnIndex="0" GridPane.rowIndex="1"/>
                     <Label text="Genome: " GridPane.columnIndex="0" GridPane.rowIndex="2"/>

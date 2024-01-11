@@ -19,9 +19,9 @@
         <BorderPane styleClass="header-section">
             <center>
                 <HBox alignment="CENTER" spacing="5">
-                    <Button fx:id="startButton" text="START" onAction="#startSimulation"/>
+                    <Button fx:id="startButton" text="START" onAction="#startSimulation" disable="true"/>
                     <Button fx:id="pauseButton" text="PAUSE" onAction="#pauseSimulation"/>
-                    <Button fx:id="stopButton" text="SHUT DOWN" onAction="#shutDownSimulation"/>
+                    <Button fx:id="shutDownButton" text="SHUT DOWN" onAction="#shutDownSimulation"/>
                 </HBox>
             </center>
         </BorderPane>

@@ -6,6 +6,7 @@ import agh.ics.oop.simulation.WorldMap;
 import agh.ics.oop.utils.ConfigurationData;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -21,6 +22,11 @@ public class SimulationController {
 
     private static final int WIDTH = 600;
     private static final int HEIGHT = 600;
+
+    @FXML
+    private Button startButton;
+    @FXML
+    private Button pauseButton;
     private ConfigurationData config;
     private WorldMap worldMap;
     private Simulation simulation;
@@ -195,12 +201,17 @@ public class SimulationController {
     @FXML
     private void startSimulation() {
         simulation.start();
-    }
-    @FXML void shutDownSimulation() {
-        simulation.shutDown();
+        startButton.disableProperty().setValue(true);
+        pauseButton.disableProperty().setValue(false);
     }
     @FXML void pauseSimulation() {
         simulation.pause();
+        startButton.disableProperty().setValue(false);
+        pauseButton.disableProperty().setValue(true);
+
+    }
+    @FXML void shutDownSimulation() {
+        simulation.shutDown();
     }
     @FXML
     void stopFollowingAnimal() {

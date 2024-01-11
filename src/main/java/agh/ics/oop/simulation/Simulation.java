@@ -31,15 +31,15 @@ public class Simulation implements Runnable {
         }
     }
     public void shutDown(){
-        interrupted=true;
+        interrupted = true;
     }
 
     @Override
     public void run() {
 
         while(!interrupted){
+            dayManager.updateDay();
             Platform.runLater(()->{
-                dayManager.updateDay();
                 observer.updateStats();
                 observer.updateGrid();
             });

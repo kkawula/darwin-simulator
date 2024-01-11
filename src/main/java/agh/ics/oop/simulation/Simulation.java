@@ -1,6 +1,7 @@
 package agh.ics.oop.simulation;
 
 import agh.ics.oop.presenter.SimulationLauncher;
+import agh.ics.oop.presenter.StatsWriter;
 import agh.ics.oop.utils.ConfigurationData;
 import javafx.application.Platform;
 
@@ -8,14 +9,19 @@ public class Simulation implements Runnable {
 
     private final DayManager dayManager;
     public final WorldMap worldMap;
+    public final StatsWriter statsWriter;
+
+    public final ConfigurationData config;
     private final SimulationLauncher observer;
     private boolean threadSuspended = false;
     private boolean interrupted = false;
 
     public Simulation(ConfigurationData config, SimulationLauncher observer) {
+        this.config = config;
         worldMap = new WorldMap(config.getMapWidth(), config.getMapHeight());
         dayManager = new DayManager(config, worldMap);
         dayManager.initializeFirstDay();
+        statsWriter = new StatsWriter(worldMap);
         this.observer = observer;
     }
 
@@ -39,10 +45,9 @@ public class Simulation implements Runnable {
 
         while(!interrupted){
             dayManager.updateDay();
-            Platform.runLater(()->{
-                observer.updateStats();
-                observer.updateGrid();
-            });
+            statsWriter.updateStats();
+            Platform.runLater(observer::updateStats);
+            Platform.runLater(observer::updateGrid);
             try {
                 Thread.sleep(1000);
                 synchronized(this) {
@@ -50,7 +55,7 @@ public class Simulation implements Runnable {
                         wait();
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                shutDown();
             }
         }
     }

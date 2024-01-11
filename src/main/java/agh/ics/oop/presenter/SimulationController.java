@@ -1,5 +1,8 @@
 package agh.ics.oop.presenter;
 
+import agh.ics.oop.model.GrowthVariant;
+import agh.ics.oop.model.PredestinationBehavior;
+import agh.ics.oop.model.TraversalBehavior;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.simulation.WorldMap;
@@ -14,6 +17,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -101,12 +105,13 @@ public class SimulationController {
     private StatsWriter statsWriter;
     private List<Vector2d> grassesPositions;
     private HashMap<Vector2d, Integer> animalsPositions;
+    private LinkedList<Vector2d> deadanimalsPositions = new LinkedList<>();
 
-    public void wire(ConfigurationData config, Simulation simulation) {
-        this.config = config;
+    public void init(Simulation simulation) {
         this.simulation = simulation;
+        this.config = simulation.config;
         this.worldMap = simulation.worldMap;
-        statsWriter = new StatsWriter(worldMap);
+        this.statsWriter = simulation.statsWriter;
 
         generateGrid();
     }
@@ -114,7 +119,25 @@ public class SimulationController {
     private void fillCell(int col, int row) {
         GridPane cell = (GridPane) grid.getChildren().get(row * config.getMapWidth() + col);
         cell.getChildren().clear();
-        cell.setStyle("-fx-background-color: #FFFFFF;");
+
+        switch (config.getGrowthVariant()) {
+            case FORESTED_EQUATOR -> {
+                if (row >= config.getMapHeight() * 0.4 && row <= config.getMapHeight() * 0.6) {
+                    cell.setStyle("-fx-background-color: #228B22;");
+                }
+                else{
+                    cell.setStyle("-fx-background-color: #8B4513;");
+                }
+            }
+            case LIFE_GIVING_CORPSES -> {
+                if (deadanimalsPositions.contains(new Vector2d(col, row))) {
+                    cell.setStyle("-fx-background-color: #654321;");
+                }
+                else{
+                    cell.setStyle("-fx-background-color: #A0522D;");
+                }
+            }
+        };
 
         if (animalsPositions.keySet().contains(new Vector2d(col, row))) {
             Label animal = new Label(animalsPositions.get(new Vector2d(col, row)) + "");
@@ -122,7 +145,7 @@ public class SimulationController {
 
         }
         if (grassesPositions.contains(new Vector2d(col, row))) {
-            cell.setStyle("-fx-background-color: #7CFC00;");
+            cell.setStyle("-fx-background-color: #006400;");
         }
     }
 
@@ -140,11 +163,12 @@ public class SimulationController {
         GridPane cell = (GridPane) grid.getChildren().get(row * config.getMapWidth() + col);
         cell.setStyle("-fx-background-color: #c42828;");
         updateStats();
-        followedAnimalPosition = newFollowedAnimalPosition;cell.setGridLinesVisible(true);
+        followedAnimalPosition = newFollowedAnimalPosition;
 
     }
 
     public void fillCells() {
+        deadanimalsPositions = worldMap.getLastDayDeadAnimalsPositions();
         animalsPositions = worldMap.getAnimalsPositions();
         grassesPositions = worldMap.getGrassesPositions();
 
@@ -222,7 +246,6 @@ public class SimulationController {
     }
 
     public void updateStats() {
-        statsWriter.updateStats();
         setLabelValues();
     }
 
@@ -232,7 +255,7 @@ public class SimulationController {
         mapHeightValue.setText(config.getMapHeight() + "");
         animalsAliveValue.setText(statsWriter.getAnimalsAlive() + "");
         animalsDeadValue.setText(statsWriter.getAnimalsDead() + "");
-        plantsValue.setText(worldMap.getGrasses().size() + "");
+        plantsValue.setText(statsWriter.getGrass() + "");
         freeFieldsValue.setText(statsWriter.getFreeFields() + "");
         averageEnergyValue.setText(statsWriter.getAverageEnergy() + "");
         averageLifespanValue.setText(statsWriter.getAverageLifeLength() + "");

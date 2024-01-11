@@ -1,6 +1,5 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.model.Behavior;
 import agh.ics.oop.model.BehaviorVariant;
 import agh.ics.oop.model.GrowthVariant;
 import agh.ics.oop.utils.ConfigurationData;
@@ -128,22 +127,6 @@ public class SetupController {
             ConfigurationData configurationData = new ConfigurationData(height, width, initialPlants, plantEnergy, plantsPerDay, growthVariant, initialAnimals, initialAnimalEnergy, minEnergyToReproduce, parentEnergyConsumption, minMutations, maxMutations, genomeLength, behaviorVariant, movingCost);
 
             new SimulationLauncher().openNewWindow(configurationData);
-
-            System.out.println("Map height: " + height);
-            System.out.println("Map width: " + width);
-            System.out.println("Initial plant count: " + initialPlants);
-            System.out.println("Plant energy gain: " + plantEnergy);
-            System.out.println("Plants per day: " + plantsPerDay);
-            System.out.println("Plant growth variant: " + growthVariant);
-            System.out.println("Initial animal count: " + initialAnimals);
-            System.out.println("Initial animal energy: " + initialAnimalEnergy);
-            System.out.println("Min energy to reproduce: " + minEnergyToReproduce);
-            System.out.println("Parent energy consumption: " + parentEnergyConsumption);
-            System.out.println("Min mutations in offspring: " + minMutations);
-            System.out.println("Max mutations in offspring: " + maxMutations);
-            System.out.println("Genome length: " + genomeLength);
-            System.out.println("Animal behavior variant: " + behaviorVariant);
-            System.out.println("Moving cost: " + movingCost);
 
         } catch (NumberFormatException e) {
             System.out.println("The entered data is not an integer.");

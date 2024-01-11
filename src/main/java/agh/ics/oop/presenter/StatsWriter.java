@@ -21,6 +21,8 @@ public class StatsWriter {
     private int averageLifeLength;
     private int averageChildrenNumber;
 
+    private int grass;
+
     // data for tracking exact animal
 
     private Animal animal;
@@ -49,10 +51,15 @@ public class StatsWriter {
         updateAverageLifeLength();
         updateAverageChildrenNumber();
         updateWorldLifespan();
+        updateGrass();
 
         if (isFollowed) {
             updateFollowedAnimalStats();
         }
+    }
+
+    private void updateGrass() {
+        grass = worldMap.getGrasses().size();
     }
 
     private void updateFreeFields() {
@@ -98,11 +105,12 @@ public class StatsWriter {
     }
 
     private void updateAverageChildrenNumber() {
-        if (worldMap.getDeadAnimals().size() == 0) {
-            averageChildrenNumber = 0;
+        averageChildrenNumber = 0;
+        if (worldMap.getDeadAnimals().size() != 0) {
+            averageChildrenNumber = worldMap.getDeadAnimals().stream().mapToInt(animal -> animal.getChildren()).sum();
         }
-        else{
-            averageChildrenNumber = worldMap.getDeadAnimals().stream().mapToInt(animal -> animal.getChildren()).sum() / worldMap.getDeadAnimals().size();
+        if (worldMap.getAliveAnimals().size() != 0) {
+            averageChildrenNumber += worldMap.getAliveAnimals().stream().mapToInt(animal -> animal.getChildren()).sum();
         }
     }
 
@@ -205,5 +213,9 @@ public class StatsWriter {
 
     public Vector2d getPosition() {
         return position;
+    }
+
+    public int getGrass() {
+        return grass;
     }
 }

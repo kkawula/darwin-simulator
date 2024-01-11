@@ -15,6 +15,7 @@ public class Animal implements Comparable<Animal> {
     private int energy;
     private int age = 0;
     private final int birthDay = 0;
+
     private int deathDay = 0;
     private boolean isDead = false;
     private int children = 0;
@@ -23,7 +24,6 @@ public class Animal implements Comparable<Animal> {
     private int genomeLength;
     public int activeGene = 0;
     private final Genome genome;
-
     public Behavior behavior;
 
 
@@ -132,6 +132,14 @@ public class Animal implements Comparable<Animal> {
 
     public void kill() {
         isDead = true;
+    }
+
+    public int getDeathDay() {
+        return deathDay;
+    }
+
+    public void setDeathDay(int deathDay) {
+        this.deathDay = deathDay;
     }
 
     @Override

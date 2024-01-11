@@ -74,6 +74,7 @@
                                     <Label text="Descendants: " GridPane.columnIndex="0" GridPane.rowIndex="7"/>
                                     <Label text="Age: " GridPane.columnIndex="0" GridPane.rowIndex="8"/>
                                     <Label text="Position: " GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+                                    <Label text="Death day: " GridPane.columnIndex="0" GridPane.rowIndex="10"/>
 
                                     <Label fx:id="birthdayValue" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                                     <Label fx:id="genomeValue" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
@@ -84,6 +85,7 @@
                                     <Label fx:id="descendantsValue" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
                                     <Label fx:id="ageValue" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
                                     <Label fx:id="positionValue" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+                                    <Label fx:id="deathDayValue" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
 
                                 </GridPane>
 

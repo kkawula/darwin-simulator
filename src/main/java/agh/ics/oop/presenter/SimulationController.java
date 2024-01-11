@@ -1,8 +1,5 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.model.GrowthVariant;
-import agh.ics.oop.model.PredestinationBehavior;
-import agh.ics.oop.model.TraversalBehavior;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.simulation.WorldMap;
@@ -100,6 +97,9 @@ public class SimulationController {
     @FXML
     private VBox animalStats;
 
+    @FXML
+    private Label deathDayValue;
+
     private GridPane grid;
 
     private StatsWriter statsWriter;
@@ -179,6 +179,7 @@ public class SimulationController {
         if (statsWriter.isFollowed()) {
             setNewFollowedAnimalPosition(statsWriter.getPosition());
         }
+
     }
 
     public void generateGrid() {
@@ -264,6 +265,12 @@ public class SimulationController {
         averageChildrenValue.setText(statsWriter.getAverageChildrenNumber() + "");
         worldLifespanValue.setText(statsWriter.getWorldLifespan() + "");
 
+        updateFollowedAnimalStats();
+
+
+    }
+
+    private void updateFollowedAnimalStats() {
         birthdayValue.setText(statsWriter.getBrithday() + "");
         genomeValue.setText(statsWriter.getGenome() + "");
         activeGeneValue.setText(statsWriter.getActiveGene() + "");
@@ -273,6 +280,7 @@ public class SimulationController {
         descendantsValue.setText(statsWriter.getDescendants() + "");
         ageValue.setText(statsWriter.getAge() + "");
         positionValue.setText(statsWriter.getPosition() + "");
+        deathDayValue.setText(statsWriter.isDead ? statsWriter.getDeathDay() + "" : "");
     }
 
 }

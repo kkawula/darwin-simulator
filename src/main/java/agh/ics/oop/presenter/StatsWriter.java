@@ -36,6 +36,8 @@ public class StatsWriter {
     private int eatenPlants;
     private int children;
     private int descendants;
+    public boolean isDead;
+    private int deathDay;
     private Vector2d position;
 
     public StatsWriter(WorldMap worldMap) {
@@ -142,7 +144,9 @@ public class StatsWriter {
         descendants = animal.getOffspring();
         position = animal.getPosition();
         children = animal.getChildren();
+        isDead = animal.isDead();
         if (animal.isDead()) {
+            deathDay = animal.getDeathDay();
             isFollowed = false;
         }
     }
@@ -217,5 +221,9 @@ public class StatsWriter {
 
     public int getGrass() {
         return grass;
+    }
+
+    public int getDeathDay() {
+        return deathDay;
     }
 }

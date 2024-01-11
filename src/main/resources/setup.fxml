@@ -85,6 +85,13 @@
                 <RadioButton fx:id="behaviorVariant2" text="Traversal" />
             </HBox>
 
+            <Label styleClass="options">Utilities</Label>
+            <HBox>
+                <Label text="Write data to csv?"/>
+                <RadioButton fx:id="csv1" text="Yes" />
+                <RadioButton fx:id="csv0" text="No" />
+            </HBox>
+
         </VBox>
     </left>
 

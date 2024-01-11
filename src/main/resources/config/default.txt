@@ -13,3 +13,4 @@ Minimum mutations: 1
 Maximum mutations: 5
 Genome length: 4
 Animal behavior variant: 2
+Csv writing: 0

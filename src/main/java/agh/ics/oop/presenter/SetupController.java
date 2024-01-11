@@ -20,6 +20,11 @@ import java.util.Map;
 
 public class SetupController {
     @FXML
+    public RadioButton csv1;
+    @FXML
+    public RadioButton csv0;
+
+    @FXML
     private TextField heightField;
 
     @FXML
@@ -80,6 +85,10 @@ public class SetupController {
         behaviorVariant1.setToggleGroup(group2);
         behaviorVariant2.setToggleGroup(group2);
 
+        ToggleGroup group3 = new ToggleGroup();
+        csv1.setToggleGroup(group3);
+        csv0.setToggleGroup(group3);
+
         Path resourcesPath = null;
         try {
             resourcesPath = Paths.get(getClass().getClassLoader().getResource("").toURI());
@@ -123,8 +132,14 @@ public class SetupController {
                 behaviorVariant = BehaviorVariant.TRAVERSAL_BEHAVIOR;
             }
             int movingCost = Integer.parseInt(movingCostField.getText());
+            int writeCsv;
+            if (csv1.isSelected()) {
+                writeCsv = 1;
+            } else {
+                writeCsv = 0;
+            }
 
-            ConfigurationData configurationData = new ConfigurationData(height, width, initialPlants, plantEnergy, plantsPerDay, growthVariant, initialAnimals, initialAnimalEnergy, minEnergyToReproduce, parentEnergyConsumption, minMutations, maxMutations, genomeLength, behaviorVariant, movingCost);
+            ConfigurationData configurationData = new ConfigurationData(height, width, initialPlants, plantEnergy, plantsPerDay, growthVariant, initialAnimals, initialAnimalEnergy, minEnergyToReproduce, parentEnergyConsumption, minMutations, maxMutations, genomeLength, behaviorVariant, movingCost, writeCsv);
 
             new SimulationLauncher().openNewWindow(configurationData);
 
@@ -219,6 +234,14 @@ public class SetupController {
                 case "Moving cost":
                     movingCostField.setText(value);
                     break;
+                case "Csv writing":
+                    if (value.equals("1")) {
+                        csv1.setSelected(true);
+                        csv0.setSelected(false);
+                    } else if (value.equals("0")) {
+                        csv1.setSelected(false);
+                        csv0.setSelected(true);
+                    }
 
             }
         }
@@ -226,7 +249,7 @@ public class SetupController {
 
     @FXML
     private void saveDataToText() {
-        String fileName = FileNameGenerator.generateFileName();
+        String fileName = FileNameGenerator.generateFileName() + ".txt";
 
         try {
             Path resourcesPath = Paths.get(getClass().getClassLoader().getResource("").toURI());
@@ -247,6 +270,7 @@ public class SetupController {
             data.put("Genome length", genomeLengthField.getText());
             data.put("Animal behavior variant", behaviorVariant1.isSelected() ? "1" : "2");
             data.put("Moving cost", movingCostField.getText());
+            data.put("Csv writing", csv1.isSelected() ? "1" : "0");
 
 
             try (FileWriter writer = new FileWriter(filePath.toFile())) {

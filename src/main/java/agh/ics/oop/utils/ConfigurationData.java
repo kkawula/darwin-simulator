@@ -19,8 +19,9 @@ public class ConfigurationData {
     private final int genomeLength;
     private final BehaviorVariant behaviorVariant;
     private final int movingCost;
+    private final int csvWriting;
 
-    public ConfigurationData(int mapHeight, int mapWidth, int initialPlants, int plantEnergy, int plantsPerDay, GrowthVariant growthVariant, int initialAnimals, int initialAnimalEnergy, int minEnergyToReproduce, int parentEnergyConsumption, int minMutations, int maxMutations, int genomeLength, BehaviorVariant behaviorVariant, int movingCost) {
+    public ConfigurationData(int mapHeight, int mapWidth, int initialPlants, int plantEnergy, int plantsPerDay, GrowthVariant growthVariant, int initialAnimals, int initialAnimalEnergy, int minEnergyToReproduce, int parentEnergyConsumption, int minMutations, int maxMutations, int genomeLength, BehaviorVariant behaviorVariant, int movingCost, int csvWriting) {
         this.mapHeight = mapHeight;
         this.mapWidth = mapWidth;
         this.initialPlants = initialPlants;
@@ -36,6 +37,7 @@ public class ConfigurationData {
         this.genomeLength = genomeLength;
         this.behaviorVariant = behaviorVariant;
         this.movingCost = movingCost;
+        this.csvWriting = csvWriting;
     }
     public int getMapHeight() { return mapHeight; }
 
@@ -92,5 +94,7 @@ public class ConfigurationData {
     public int getMovingCost() {
         return movingCost;
     }
+
+    public int getCsvWriting() { return csvWriting; }
 }
 

@@ -123,7 +123,7 @@ public class SimulationController {
         switch (config.getGrowthVariant()) {
             case FORESTED_EQUATOR -> {
                 if (row >= config.getMapHeight() * 0.4 && row <= config.getMapHeight() * 0.6) {
-                    cell.setStyle("-fx-background-color: #228B22;");
+                    cell.setStyle("-fx-background-color: #006400;");
                 }
                 else{
                     cell.setStyle("-fx-background-color: #8B4513;");
@@ -145,7 +145,7 @@ public class SimulationController {
 
         }
         if (grassesPositions.contains(new Vector2d(col, row))) {
-            cell.setStyle("-fx-background-color: #006400;");
+            cell.setStyle("-fx-background-color: #228B22;");
         }
     }
 
@@ -236,6 +236,8 @@ public class SimulationController {
     }
     @FXML void shutDownSimulation() {
         simulation.shutDown();
+        startButton.disableProperty().setValue(true);
+        pauseButton.disableProperty().setValue(true);
     }
     @FXML
     void stopFollowingAnimal() {

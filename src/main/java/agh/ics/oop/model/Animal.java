@@ -149,6 +149,10 @@ public class Animal implements Comparable<Animal> {
         position = moveValidator.newPosition(position, genome.getGene(activeGene));
         this.performGeneBehavior();
     }
+
+    public void subtractEnergy(int energy) {
+        this.energy -= energy;
+    }
     @Override
     public int compareTo(Animal other) {
         return Comparator.comparing(Animal::getEnergy)

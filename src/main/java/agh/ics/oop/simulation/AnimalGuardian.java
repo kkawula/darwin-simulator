@@ -89,9 +89,8 @@ public class AnimalGuardian {
                 if(mother.getEnergy() >= minEnergyToReproduce && father.getEnergy() >= minEnergyToReproduce)
                 {
                     Animal child = new Animal(position, initialAnimalEnergy, father, mother, behaviorVariant);
-                    // TODO : put it in Animal constructor and update tests
-                    father.setEnergy(father.getEnergy() - parentEnergyConsumption);
-                    mother.setEnergy(mother.getEnergy() - parentEnergyConsumption);
+                    father.subtractEnergy(parentEnergyConsumption);
+                    mother.subtractEnergy(parentEnergyConsumption);
                     worldMap.getAnimals().get(position).add(child);
                     worldMap.getAliveAnimals().add(child);
                 }

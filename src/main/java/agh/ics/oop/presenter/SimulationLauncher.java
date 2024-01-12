@@ -9,19 +9,20 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class SimulationLauncher extends Application {
-    private static final int WIDTH = 600;
-    private static final int HEIGHT = 600;
     private ConfigurationData config;
     private Simulation simulation;
     private SimulationController controller;
+    Thread simulationThread;
 
     public void openNewWindow(ConfigurationData config) {
         this.config = config;
+        simulation = new Simulation(config, this);
+        simulationThread = new Thread(simulation);
+        Stage stage = new Stage();
+        stage.setOnCloseRequest(event -> simulation.shutDown());
 
         try {
-            simulation = new Simulation(config, this);
-            Thread simulationThread = new Thread(simulation);
-            start(new Stage());
+            start(stage);
             simulationThread.start();
         }
         catch (Exception e) {
@@ -35,7 +36,7 @@ public class SimulationLauncher extends Application {
         loader.setLocation(getClass().getClassLoader().getResource("simulation.fxml"));
         Scene scene = new Scene(loader.load());
         controller = loader.getController();
-        controller.wire(config, simulation);
+        controller.init(simulation);
         updateGrid();
 
         primaryStage.setTitle("Simulation");
@@ -44,6 +45,10 @@ public class SimulationLauncher extends Application {
     }
 
     public void updateGrid() {
-        controller.generateGrid();
+        controller.fillCells();
+    }
+
+    public void updateStats() {
+        controller.updateStats();
     }
 }

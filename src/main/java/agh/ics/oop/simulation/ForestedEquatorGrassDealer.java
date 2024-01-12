@@ -37,12 +37,15 @@ public class ForestedEquatorGrassDealer implements GrassDealer{
         LinkedList<Vector2d> occupiedPositions = new LinkedList<>(worldMap.getGrassesPositions());
         int mapWidth = worldMap.getWidth();
         int mapHeight = worldMap.getHeight();
-        int minHeight=max((int)(0.4* mapWidth),0);
-        int maxHeight=min((int)(0.6* mapHeight),worldMap.getHeight());
+        int minHeight = max((int)(0.4 * mapWidth), 0);
+        int maxHeight = min((int)(0.6 * mapHeight), worldMap.getHeight());
 
-        LinkedList<Vector2d> preferredPositions =  new LinkedList<>(IntStream.range(minHeight*mapWidth,maxHeight*mapWidth).mapToObj(i-> new Vector2d(i%mapWidth,i/mapWidth)).toList());
+        LinkedList<Vector2d> preferredPositions =
+                new LinkedList<>(IntStream
+                        .range(minHeight * mapWidth, maxHeight * mapWidth)
+                        .mapToObj(i-> new Vector2d(i % mapWidth,i / mapWidth)).toList());
 
-        RandomPositionGenerator grassPositions = new RandomPositionGenerator(plantsPerDay, worldMap.getWidth(),worldMap.getHeight(), preferredPositions, occupiedPositions);
+        RandomPositionGenerator grassPositions = new RandomPositionGenerator(plantsPerDay, worldMap.getWidth(), worldMap.getHeight(), preferredPositions, occupiedPositions);
         for (Vector2d position : grassPositions) {
             worldMap.getGrasses().add(new Grass(position));
         }

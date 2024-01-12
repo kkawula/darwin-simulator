@@ -23,14 +23,15 @@ HBox {
 }
 
 .button {
-    -fx-background-color: #008B8B;
+    -fx-border-color: black;
+    -fx-background-color: white;
     -fx-padding: 7 16;
     -fx-border-radius: 5;
     -fx-cursor: hand;
 }
 
 .button:hover {
-    -fx-background-color: #016060;
+    -fx-background-color: grey;
 }
 
 .radio-button {

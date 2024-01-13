@@ -5,9 +5,7 @@ import agh.ics.oop.model.Genome;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.simulation.WorldMap;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class StatsWriter {
 
@@ -17,9 +15,9 @@ public class StatsWriter {
     private int animalsAlive;
     private int animalsDead;
     private int plants;
-    private int averageEnergy;
-    private int averageLifeLength;
-    private int averageChildrenNumber;
+    private double averageEnergy;
+    private double averageLifeLength;
+    private double averageChildrenNumber;
 
     private int grass;
 
@@ -45,7 +43,7 @@ public class StatsWriter {
     }
 
     public void updateStats() {
-        updateFreeFields();
+        updateFreeFieldsNumber();
         updateAnimalsAlive();
         updateAnimalsDead();
         updatePlants();
@@ -64,18 +62,6 @@ public class StatsWriter {
         grass = worldMap.getGrasses().size();
     }
 
-    private void updateFreeFields() {
-        Set<Vector2d> occupiedFields = new HashSet<>(Collections.emptySet());
-
-        Set<Vector2d> animalsPositions = worldMap.getAnimals().keySet();
-        Set<Vector2d> grassPositions = new HashSet<>(worldMap.getGrassesPositions());
-
-        occupiedFields.addAll(animalsPositions);
-        occupiedFields.addAll(grassPositions);
-
-        freeFields = worldMap.getWidth() * worldMap.getHeight() - occupiedFields.size();
-    }
-
     private void updateAnimalsAlive() {
         animalsAlive = worldMap.getAliveAnimals().size();
     }
@@ -89,33 +75,32 @@ public class StatsWriter {
     }
 
     private void updateAverageEnergy() {
-        if (worldMap.getAliveAnimals().size() == 0) {
-            averageEnergy = 0;
-        }
-        else{
-            averageEnergy = worldMap.getAliveAnimals().stream().mapToInt(animal -> animal.getEnergy()).sum() / worldMap.getAliveAnimals().size();
-        }
+        if (worldMap.getAliveAnimals().isEmpty())
+            averageEnergy = 0.0;
+        else
+            averageEnergy = worldMap.getAliveAnimals().stream().mapToInt(Animal::getEnergy).average().getAsDouble();
     }
-
+    public Animal getAnimal()
+    {
+        return animal;
+    }
     private void updateAverageLifeLength() {
-        if (worldMap.getDeadAnimals().size() == 0) {
+        if (worldMap.getDeadAnimals().isEmpty())
             averageLifeLength = 0;
-        }
-        else {
-            averageLifeLength = worldMap.getDeadAnimals().stream().mapToInt(animal -> animal.getAge()).sum() / worldMap.getDeadAnimals().size();
-        }
+        else
+            averageLifeLength = worldMap.getDeadAnimals().stream().mapToInt(Animal::getAge).average().getAsDouble();
     }
 
     private void updateAverageChildrenNumber() {
-        averageChildrenNumber = 0;
-        if (worldMap.getDeadAnimals().size() != 0) {
-            averageChildrenNumber = worldMap.getDeadAnimals().stream().mapToInt(animal -> animal.getChildren()).sum();
-        }
-        if (worldMap.getAliveAnimals().size() != 0) {
-            averageChildrenNumber += worldMap.getAliveAnimals().stream().mapToInt(animal -> animal.getChildren()).sum();
-        }
+        if (worldMap.getAliveAnimals().isEmpty())
+            averageChildrenNumber = 0;
+        else averageChildrenNumber = worldMap.getAliveAnimals().stream().mapToInt(Animal::getChildren).average().getAsDouble();
     }
-
+    private void updateFreeFieldsNumber()
+    {
+        List<Vector2d> aloneGrassPositions = worldMap.getGrassesPositions().stream().filter(Vector2d -> worldMap.animalsOccupiedPositions().contains(Vector2d)).toList();
+        freeFields = worldMap.getHeight()*worldMap.getHeight()-(aloneGrassPositions.size()+worldMap.animalsOccupiedPositions().size());
+    }
     private void updateWorldLifespan() {
         worldLifespan = worldMap.getWorldLifespan();
     }
@@ -171,19 +156,19 @@ public class StatsWriter {
         return plants;
     }
 
-    public int getAverageEnergy() {
+    public double getAverageEnergy() {
         return averageEnergy;
     }
 
-    public int getAverageLifeLength() {
+    public double getAverageLifeLength() {
         return averageLifeLength;
     }
 
-    public int getAverageChildrenNumber() {
+    public double getAverageChildrenNumber() {
         return averageChildrenNumber;
     }
 
-    public int getBrithday() {
+    public int getBirthday() {
         return brithday;
     }
 

@@ -4,6 +4,7 @@ import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.simulation.WorldMap;
 import agh.ics.oop.utils.ConfigurationData;
+import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -264,19 +265,17 @@ public class SimulationController {
         averageLifespanValue.setText(statsWriter.getAverageLifeLength() + "");
         averageChildrenValue.setText(statsWriter.getAverageChildrenNumber() + "");
         worldLifespanValue.setText(statsWriter.getWorldLifespan() + "");
-
-        updateFollowedAnimalStats();
-
-
+        if(animalStats.visibleProperty().get())
+            updateFollowedAnimalStats();
     }
 
     private void updateFollowedAnimalStats() {
-        birthdayValue.setText(statsWriter.getBrithday() + "");
+        birthdayValue.setText(statsWriter.getBirthday() + "");
         genomeValue.setText(statsWriter.getGenome() + "");
         activeGeneValue.setText(statsWriter.getActiveGene() + "");
         energyValue.setText(statsWriter.getEnergy() + "");
         eatenPlantsValue.setText(statsWriter.getEatenPlants() + "");
-        childrenValue.setText(statsWriter.getChildren() + "");
+        childrenValue.setText(statsWriter.getAnimal().getChildren() + "");
         descendantsValue.setText(statsWriter.getDescendants() + "");
         ageValue.setText(statsWriter.getAge() + "");
         positionValue.setText(statsWriter.getPosition() + "");

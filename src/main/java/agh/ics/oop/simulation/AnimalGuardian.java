@@ -46,16 +46,14 @@ public class AnimalGuardian {
 
         for(Animal animal : worldMap.getAliveAnimals())
             if(animal.getEnergy() <= 0) {
-
                 animal.kill();
                 animal.setDeathDay(worldMap.getWorldLifespan() + 1);
                 worldMap.getLastDayDeadAnimalsPositions().add(animal.getPosition());
                 worldMap.getDeadAnimals().add(animal);
                 worldMap.getAnimals().get(animal.getPosition()).remove(animal);
-
             }
 
-        worldMap.getAliveAnimals().removeIf(animal -> animal.getEnergy() < 0);
+        worldMap.getAliveAnimals().removeIf(animal -> animal.getEnergy() <= 0);
     }
     public void moveAnimals() {
         for(Animal animal : worldMap.getAliveAnimals()) {

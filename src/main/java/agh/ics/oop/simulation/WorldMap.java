@@ -91,6 +91,13 @@ public class WorldMap implements MoveValidator{
         worldLifespan++;
     }
 
+    public Set<Vector2d> animalsOccupiedPositions(){
+        return getAliveAnimals()
+                .stream()
+                .map(Animal::getPosition)
+                .collect(Collectors.toSet());
+    }
+
     @Override
     public Vector2d newPosition(Vector2d position, MapDirection mapDirection)
     {

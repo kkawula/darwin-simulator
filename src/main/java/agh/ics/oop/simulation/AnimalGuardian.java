@@ -6,9 +6,6 @@ import agh.ics.oop.model.Grass;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.utils.RandomPositionGenerator;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 public class AnimalGuardian {
 
     private final WorldMap worldMap;
@@ -75,23 +72,15 @@ public class AnimalGuardian {
     }
     public void reproduceAnimals()
     {
-        Set<Vector2d> potentialPositions = worldMap
-                .getAliveAnimals()
-                .stream()
-                .map(Animal::getPosition)
-                .collect(Collectors.toSet());
-
-        for(Vector2d position : potentialPositions)
+        for(Vector2d position : worldMap.animalsOccupiedPositions())
         {
             if(worldMap.getAnimals().get(position).size() >= 2)
             {
                 Animal father = worldMap.getAnimals().get(position).pollLast();
                 Animal mother = worldMap.getAnimals().get(position).pollLast();
-                if(mother.getEnergy() >= minEnergyToReproduce && father.getEnergy() >= minEnergyToReproduce)
+                if(father.getEnergy()>=minEnergyToReproduce && mother.getEnergy()>=minEnergyToReproduce)
                 {
-                    Animal child = new Animal(position, initialAnimalEnergy, father, mother, behaviorVariant);
-                    father.subtractEnergy(parentEnergyConsumption);
-                    mother.subtractEnergy(parentEnergyConsumption);
+                    Animal child = Animal.reproduce(father,mother,parentEnergyConsumption);
                     worldMap.getAnimals().get(position).add(child);
                     worldMap.getAliveAnimals().add(child);
                 }

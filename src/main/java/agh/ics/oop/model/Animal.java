@@ -38,22 +38,25 @@ public class Animal implements Comparable<Animal> {
         this.genome = new Genome(genomeLength);
     }
 
-    public Animal(Vector2d newPosition, int energy, Animal father, Animal mother, BehaviorVariant behaviorVariant) {
+    public Animal(Vector2d newPosition, int energy, Animal father, Animal mother, Behavior behaviorVariant) {
         position = newPosition;
         this.energy = energy;
         this.father = father;
         this.mother = mother;
 
-        behavior = switch (behaviorVariant)
-        {
-            case TRAVERSAL_BEHAVIOR -> new TraversalBehavior();
-            case PREDESTINATION_BEHAVIOR -> new PredestinationBehavior();
-        };
-        father.children.add(this);
-        mother.children.add(this);
+        behavior = behaviorVariant;
         this.genome = new Genome(father.getEnergy(), mother.getEnergy(), father.getGenome(), mother.getGenome());
     }
+    public static Animal reproduce(Animal father, Animal mother, int parentEnergyConsumption)
+    {
 
+        Animal child = new Animal(father.position, parentEnergyConsumption, father, mother, father.behavior);
+        father.children.add(child);
+        mother.children.add(child);
+        father.energy-=parentEnergyConsumption;
+        mother.energy-=parentEnergyConsumption;
+        return child;
+    }
     public void performGeneBehavior() {
         behavior.geneBehavior(this);
     }
@@ -140,9 +143,6 @@ public class Animal implements Comparable<Animal> {
         this.performGeneBehavior();
     }
 
-    public void subtractEnergy(int energy) {
-        this.energy -= energy;
-    }
     @Override
     public int compareTo(Animal other) {
         return Comparator.comparing(Animal::getEnergy)

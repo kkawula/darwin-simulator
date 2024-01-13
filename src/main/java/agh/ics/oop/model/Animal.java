@@ -51,7 +51,7 @@ public class Animal implements Comparable<Animal> {
             case PREDESTINATION_BEHAVIOR -> new PredestinationBehavior();
         };
 
-        updateChildren();
+        //updateChildren();
 
         this.genome = new Genome(father.getEnergy(), mother.getEnergy(), father.getGenome(), mother.getGenome());
     }
@@ -174,11 +174,11 @@ public class Animal implements Comparable<Animal> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Animal animal = (Animal) o;
-        return energy == animal.energy && age == animal.age && birthDay == animal.birthDay && deathDay == animal.deathDay && isDead == animal.isDead && children == animal.children && offspring == animal.offspring && grassEaten == animal.grassEaten && genomeLength == animal.genomeLength && activeGene == animal.activeGene && Objects.equals(position, animal.position) && Objects.equals(father, animal.father) && Objects.equals(mother, animal.mother) && Objects.equals(genome, animal.genome) && Objects.equals(behavior, animal.behavior);
+        return Objects.equals(mother, animal.mother) && Objects.equals(father, animal.father) && Objects.equals(age,animal.age);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(position, father, mother, energy, age, birthDay, deathDay, isDead, children, offspring, grassEaten, genomeLength, activeGene, genome, behavior);
+        return Objects.hash(father, mother, age);
     }
 }

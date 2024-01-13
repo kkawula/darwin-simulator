@@ -105,7 +105,7 @@ public class SimulationController {
     private StatsWriter statsWriter;
     private List<Vector2d> grassesPositions;
     private HashMap<Vector2d, Integer> animalsPositions;
-    private LinkedList<Vector2d> deadanimalsPositions = new LinkedList<>();
+    private LinkedList<Vector2d> deadAnimalsPositions = new LinkedList<>();
 
     public void init(Simulation simulation) {
         this.simulation = simulation;
@@ -130,17 +130,17 @@ public class SimulationController {
                 }
             }
             case LIFE_GIVING_CORPSES -> {
-                if (deadanimalsPositions.contains(new Vector2d(col, row))) {
+                if (deadAnimalsPositions.contains(new Vector2d(col, row))) {
                     cell.setStyle("-fx-background-color: #654321;");
                 }
                 else{
                     cell.setStyle("-fx-background-color: #A0522D;");
                 }
             }
-        };
+        }
 
-        if (animalsPositions.keySet().contains(new Vector2d(col, row))) {
-            Label animal = new Label(animalsPositions.get(new Vector2d(col, row)) + "");
+        if (animalsPositions.containsKey(new Vector2d(col, row))) {
+            Label animal = new Label(animalsPositions.get(new Vector2d(col, row)) + " ");
             cell.add(animal, 0, 0);
 
         }
@@ -168,7 +168,7 @@ public class SimulationController {
     }
 
     public void fillCells() {
-        deadanimalsPositions = worldMap.getLastDayDeadAnimalsPositions();
+        deadAnimalsPositions = worldMap.getLastDayDeadAnimalsPositions();
         animalsPositions = worldMap.getAnimalsPositions();
         grassesPositions = worldMap.getGrassesPositions();
 

@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class StatsWriter {
 
-    private WorldMap worldMap;
+    private final WorldMap worldMap;
     private int worldLifespan;
     private int freeFields;
     private int animalsAlive;

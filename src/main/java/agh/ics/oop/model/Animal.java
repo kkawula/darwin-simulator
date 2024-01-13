@@ -3,12 +3,12 @@ package agh.ics.oop.model;
 import agh.ics.oop.simulation.MoveValidator;
 
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.*;
 
 
 public class Animal implements Comparable<Animal> {
+
+    public UUID ID = UUID.randomUUID();
     private Vector2d position;
     private Animal father;
     private Animal mother;
@@ -18,8 +18,7 @@ public class Animal implements Comparable<Animal> {
 
     private int deathDay = 0;
     private boolean isDead = false;
-    private int children = 0;
-    private int offspring = 0;
+    private final LinkedList<Animal> children = new LinkedList<>();
     private int grassEaten = 0;
     private int genomeLength;
     public int activeGene = 0;
@@ -50,32 +49,9 @@ public class Animal implements Comparable<Animal> {
             case TRAVERSAL_BEHAVIOR -> new TraversalBehavior();
             case PREDESTINATION_BEHAVIOR -> new PredestinationBehavior();
         };
-
-        //updateChildren();
-
+        father.children.add(this);
+        mother.children.add(this);
         this.genome = new Genome(father.getEnergy(), mother.getEnergy(), father.getGenome(), mother.getGenome());
-    }
-
-    public void updateChildren() {
-        father.setChildren(father.getChildren() + 1);
-        mother.setChildren(mother.getChildren() + 1);
-
-        HashSet<Animal> visitedParents = new HashSet<>();
-        updateOffspring(visitedParents);
-    }
-
-    public void updateOffspring(HashSet<Animal> visitedParents) {
-
-        if (father != null && !visitedParents.contains(father)) {
-            father.setOffspring(father.getOffspring() + 1);
-            visitedParents.add(father);
-            father.updateOffspring(visitedParents);
-        }
-        if (mother != null && !visitedParents.contains(mother)) {
-            mother.setOffspring(mother.getOffspring() + 1);
-            visitedParents.add(mother);
-            mother.updateOffspring(visitedParents);
-        }
     }
 
     public void performGeneBehavior() {
@@ -83,19 +59,25 @@ public class Animal implements Comparable<Animal> {
     }
 
     public int getChildren() {
-        return children;
+        return children.size();
     }
 
     public int getOffspring() {
-        return offspring;
+        HashSet<Animal> visitedAnimals = new HashSet<>();
+        return getOffspringHelper(visitedAnimals);
     }
-
-    public void setChildren(int children) {
-        this.children = children;
-    }
-
-    public void setOffspring(int offspring) {
-        this.offspring = offspring;
+    public int getOffspringHelper(HashSet<Animal> visitedAnimals)
+    {
+        int numberOfChild=0;
+        for(Animal animal : children)
+        {
+            if(!visitedAnimals.contains(animal))
+            {
+                visitedAnimals.add(animal);
+                numberOfChild+=(animal.getOffspringHelper(visitedAnimals)+1);
+            }
+        }
+        return numberOfChild;
     }
 
     public Genome getGenome() {
@@ -165,7 +147,7 @@ public class Animal implements Comparable<Animal> {
     public int compareTo(Animal other) {
         return Comparator.comparing(Animal::getEnergy)
                 .thenComparing(Animal::getAge)
-                .thenComparing(Animal::getOffspring)
+                .thenComparing(Animal::getChildren)
                 .compare(this, other);
     }
 
@@ -174,11 +156,11 @@ public class Animal implements Comparable<Animal> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Animal animal = (Animal) o;
-        return Objects.equals(mother, animal.mother) && Objects.equals(father, animal.father) && Objects.equals(age,animal.age);
+        return Objects.equals(mother, animal.mother) && Objects.equals(father, animal.father) && Objects.equals(age,animal.age) && Objects.equals(ID, animal.ID);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(father, mother, age);
+        return Objects.hash(father, mother, age, ID);
     }
 }

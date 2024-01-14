@@ -54,6 +54,7 @@ public class StatsWriter {
         updateAverageChildrenNumber();
         updateWorldLifespan();
         updateGrass();
+        updateBestGenes();
         if (isFollowed) {
             updateFollowedAnimalStats();
         }
@@ -63,22 +64,26 @@ public class StatsWriter {
         grass = worldMap.getGrasses().size();
     }
 
-    private Genome getBestGenes()
-    {
+    private void updateBestGenes() { // TODO: Ravens
         Map<Genome, Integer> counterMap = new HashMap<>();
         worldMap.getAliveAnimals().forEach(animal1 -> counterMap.put(animal1.getGenome(),0));
-        worldMap.getAliveAnimals().forEach(animal1 -> counterMap.put(animal1.getGenome(),counterMap.get(animal1.getGenome())+1));
+        worldMap.getAliveAnimals().forEach(animal1 -> counterMap.put(animal1.getGenome(), counterMap.get(animal1.getGenome())+1));
         int maximum = 0;
-        Genome bestGenome;
+        Genome bestGenome = null;
         for(Map.Entry<Genome, Integer>  map : counterMap.entrySet())
         {
-            if(map.getValue()>maximum)
+            if(map.getValue() > maximum)
             {
                 maximum = map.getValue();
                 bestGenome = map.getKey();
             }
         }
-        return bestGenes;
+        this.bestGenes = bestGenome;
+    }
+
+    public String getBestGenes() {
+        if (bestGenes == null) return "";
+        return bestGenes.toString();
     }
 
     private void updateAnimalsAlive() {
@@ -115,10 +120,9 @@ public class StatsWriter {
             averageChildrenNumber = 0;
         else averageChildrenNumber = worldMap.getAliveAnimals().stream().mapToInt(Animal::getChildren).average().getAsDouble();
     }
-    private void updateFreeFieldsNumber()
-    {
+    private void updateFreeFieldsNumber() {
         List<Vector2d> aloneGrassPositions = worldMap.getGrassesPositions().stream().filter(Vector2d -> !worldMap.animalsOccupiedPositions().contains(Vector2d)).toList();
-        freeFields = worldMap.getHeight()*worldMap.getHeight()-(aloneGrassPositions.size()+worldMap.animalsOccupiedPositions().size());
+        freeFields = Math.max(worldMap.getHeight() * worldMap.getHeight()-(aloneGrassPositions.size() + worldMap.animalsOccupiedPositions().size()), 0);
     }
     private void updateWorldLifespan() {
         worldLifespan = worldMap.getWorldLifespan();

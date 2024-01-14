@@ -91,6 +91,10 @@
                 <RadioButton fx:id="csv1" text="Yes" />
                 <RadioButton fx:id="csv0" text="No" />
             </HBox>
+            <HBox>
+                <Label text="Refresh time (millis): "/>
+                <TextField fx:id="refreshTimeField"/>
+            </HBox>
 
         </VBox>
     </left>

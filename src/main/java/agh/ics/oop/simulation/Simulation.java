@@ -16,7 +16,8 @@ public class Simulation implements Runnable {
     private final SimulationLauncher observer;
     private boolean threadSuspended = false;
     private boolean interrupted = false;
-    CsvWriter csvWriter= new CsvWriter();
+    CsvWriter csvWriter = new CsvWriter();
+    private final long refreshTime;
 
     public Simulation(ConfigurationData config, SimulationLauncher observer) {
         this.config = config;
@@ -25,6 +26,7 @@ public class Simulation implements Runnable {
         dayManager.initializeFirstDay();
         statsWriter = new StatsWriter(worldMap);
         this.observer = observer;
+        this.refreshTime = config.getRefreshTime();
     }
 
     public void pause(){
@@ -59,7 +61,7 @@ public class Simulation implements Runnable {
             });
 
             try {
-                Thread.sleep(100);
+                Thread.sleep(refreshTime);
                 synchronized(this) {
                     while (threadSuspended)
                         wait();

@@ -13,6 +13,8 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -22,8 +24,8 @@ import java.util.Objects;
 
 public class SimulationController {
 
-    private static final int WIDTH = 600;
-    private static final int HEIGHT = 600;
+    private static final int WIDTH = 700;
+    private static final int HEIGHT = 700;
 
     @FXML
     private Button startButton;
@@ -39,74 +41,23 @@ public class SimulationController {
     private VBox content;
 
     @FXML
-    private Label mapWidthValue;
-
-    @FXML
-    private Label mapHeightValue;
-
-    @FXML
-    private Label animalsAliveValue;
-
-    @FXML
-    private Label animalsDeadValue;
-
-    @FXML
-    private Label plantsValue;
-
-    @FXML
-    private Label freeFieldsValue;
-
-    @FXML
-    private Label averageEnergyValue;
-
-    @FXML
-    private Label averageLifespanValue;
-
-    @FXML
-    private Label averageChildrenValue;
-
-    @FXML
-    private Label worldLifespanValue;
-
-    @FXML
-    private Label birthdayValue;
-
-    @FXML
-    private Label genomeValue;
-
-    @FXML
-    private Label activeGeneValue;
-
-    @FXML
-    private Label energyValue;
-
-    @FXML
-    private Label eatenPlantsValue;
-
-    @FXML
-    private Label childrenValue;
-
-    @FXML
-    private Label descendantsValue;
-
-    @FXML
-    private Label ageValue;
-
-    @FXML
-    private Label positionValue;
+    private Label mapWidthValue, mapHeightValue, animalsAliveValue,
+            animalsDeadValue, plantsValue, freeFieldsValue,
+            averageEnergyValue, averageLifespanValue,
+            averageChildrenValue, worldLifespanValue, birthdayValue,
+            genomeValue, activeGeneValue,energyValue, eatenPlantsValue,
+            childrenValue, descendantsValue, ageValue,
+            positionValue, bestGenesValue, deathDayValue;
 
     @FXML
     private VBox animalStats;
-
-    @FXML
-    private Label deathDayValue;
-
     private GridPane grid;
 
     private StatsWriter statsWriter;
     private List<Vector2d> grassesPositions;
     private HashMap<Vector2d, Integer> animalsPositions;
     private LinkedList<Vector2d> deadAnimalsPositions = new LinkedList<>();
+    private int cellSize;
 
     public void init(Simulation simulation) {
         this.simulation = simulation;
@@ -117,7 +68,18 @@ public class SimulationController {
         generateGrid();
     }
 
+    public Circle createEnergyCircle(double energy, double maxEnergy) {
+        double saturation = Math.max(0.0, Math.min(1.0, energy / maxEnergy));
+        Color color = Color.hsb(0, saturation, 1.0);
+
+        Circle circle = new Circle((cellSize / 2) * 0.7);
+        circle.setFill(color);
+
+        return circle;
+    }
+
     private void fillCell(int col, int row) {
+        Vector2d vector = new Vector2d(col, row);
         GridPane cell = (GridPane) grid.getChildren().get(row * config.getMapWidth() + col);
         cell.getChildren().clear();
 
@@ -135,17 +97,19 @@ public class SimulationController {
                     cell.setStyle("-fx-background-color: #654321;");
                 }
                 else{
-                    cell.setStyle("-fx-background-color: #A0522D;");
+                    cell.setStyle("-fx-background-color: #8B4513;");
                 }
             }
         }
 
-        if (animalsPositions.containsKey(new Vector2d(col, row))) {
-            Label animal = new Label(animalsPositions.get(new Vector2d(col, row)) + " ");
+        if (animalsPositions.containsKey(vector)) {
+            Circle animal = createEnergyCircle(animalsPositions.get(vector), 100);
             cell.add(animal, 0, 0);
+            GridPane.setHalignment(animal, javafx.geometry.HPos.CENTER);
+            GridPane.setValignment(animal, javafx.geometry.VPos.CENTER);
 
         }
-        if (grassesPositions.contains(new Vector2d(col, row))) {
+        if (grassesPositions.contains(vector)) {
             cell.setStyle("-fx-background-color: #228B22;");
         }
     }
@@ -162,7 +126,8 @@ public class SimulationController {
         int row = newFollowedAnimalPosition.getY();
         int col = newFollowedAnimalPosition.getX();
         GridPane cell = (GridPane) grid.getChildren().get(row * config.getMapWidth() + col);
-        cell.setStyle("-fx-background-color: #c42828;");
+        Circle animal = (Circle) cell.getChildren().get(0);
+        animal.setFill(Color.PURPLE);
         updateStats();
         followedAnimalPosition = newFollowedAnimalPosition;
 
@@ -189,13 +154,13 @@ public class SimulationController {
         int rows = config.getMapHeight();
         int columns = config.getMapWidth();
         grid = new GridPane();
-        int size = Math.min(WIDTH/columns, HEIGHT/rows);
+        cellSize = Math.min(WIDTH/columns, HEIGHT/rows);
 
         animalsPositions = worldMap.getAnimalsPositions();
         grassesPositions = worldMap.getGrassesPositions();
 
-        ColumnConstraints width = new ColumnConstraints(size);
-        RowConstraints height = new RowConstraints(size);
+        ColumnConstraints width = new ColumnConstraints(cellSize);
+        RowConstraints height = new RowConstraints(cellSize);
 
 
         for (int row = 0; row < rows; row++) {
@@ -265,6 +230,7 @@ public class SimulationController {
         averageLifespanValue.setText(statsWriter.getAverageLifeLength() + "");
         averageChildrenValue.setText(statsWriter.getAverageChildrenNumber() + "");
         worldLifespanValue.setText(statsWriter.getWorldLifespan() + "");
+        bestGenesValue.setText(statsWriter.getBestGenes() + "");
         if(animalStats.visibleProperty().get())
             updateFollowedAnimalStats();
     }

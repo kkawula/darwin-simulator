@@ -52,10 +52,14 @@ public class Simulation implements Runnable {
             dayManager.updateDay();
             statsWriter.updateStats();
             csvWriter.addDayToCsv(statsWriter);
-            Platform.runLater(observer::updateStats);
-            Platform.runLater(observer::updateGrid);
+            Platform.runLater(()->
+            {
+                observer.updateStats();
+                observer.updateGrid();
+            });
+
             try {
-                Thread.sleep(1000);
+                Thread.sleep(100);
                 synchronized(this) {
                     while (threadSuspended)
                         wait();

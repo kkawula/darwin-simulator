@@ -60,7 +60,12 @@ public class WorldMap implements MoveValidator{
         }
         return positions;
     }
-
+    public Set<Vector2d> animalsOccupiedPositions(){
+        return getAliveAnimals()
+                .stream()
+                .map(Animal::getPosition)
+                .collect(Collectors.toSet());
+    }
     public LinkedList<Grass> getGrasses() {
         return grasses;
     }

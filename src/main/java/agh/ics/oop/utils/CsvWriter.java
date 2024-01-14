@@ -104,10 +104,7 @@ public class CsvWriter {
                 String.valueOf(stats.getGrass()), String.valueOf(stats.getAnimalsDead()),
                 String.valueOf(stats.getAge()), String.valueOf(stats.getEnergy()),
                 String.valueOf(stats.getChildren()), String.valueOf(stats.getFreeFields())};
-        for (String s : record) {
-            System.out.print(s+',');
-        }
-        System.out.println();
+
         list.add(record);
     }
 }

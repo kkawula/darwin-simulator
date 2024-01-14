@@ -4,6 +4,7 @@ import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.simulation.WorldMap;
 import agh.ics.oop.utils.ConfigurationData;
+
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -105,7 +106,7 @@ public class SimulationController {
     private StatsWriter statsWriter;
     private List<Vector2d> grassesPositions;
     private HashMap<Vector2d, Integer> animalsPositions;
-    private LinkedList<Vector2d> deadanimalsPositions = new LinkedList<>();
+    private LinkedList<Vector2d> deadAnimalsPositions = new LinkedList<>();
 
     public void init(Simulation simulation) {
         this.simulation = simulation;
@@ -130,17 +131,17 @@ public class SimulationController {
                 }
             }
             case LIFE_GIVING_CORPSES -> {
-                if (deadanimalsPositions.contains(new Vector2d(col, row))) {
+                if (deadAnimalsPositions.contains(new Vector2d(col, row))) {
                     cell.setStyle("-fx-background-color: #654321;");
                 }
                 else{
                     cell.setStyle("-fx-background-color: #A0522D;");
                 }
             }
-        };
+        }
 
-        if (animalsPositions.keySet().contains(new Vector2d(col, row))) {
-            Label animal = new Label(animalsPositions.get(new Vector2d(col, row)) + "");
+        if (animalsPositions.containsKey(new Vector2d(col, row))) {
+            Label animal = new Label(animalsPositions.get(new Vector2d(col, row)) + " ");
             cell.add(animal, 0, 0);
 
         }
@@ -168,7 +169,7 @@ public class SimulationController {
     }
 
     public void fillCells() {
-        deadanimalsPositions = worldMap.getLastDayDeadAnimalsPositions();
+        deadAnimalsPositions = worldMap.getLastDayDeadAnimalsPositions();
         animalsPositions = worldMap.getAnimalsPositions();
         grassesPositions = worldMap.getGrassesPositions();
 
@@ -241,7 +242,7 @@ public class SimulationController {
         pauseButton.disableProperty().setValue(true);
     }
     @FXML
-    void stopFollowingAnimal() {
+    synchronized void stopFollowingAnimal() {
         statsWriter.unFollowAnimal();
         fillCell(followedAnimalPosition.getX(), followedAnimalPosition.getY());
         animalStats.setVisible(false);
@@ -264,23 +265,21 @@ public class SimulationController {
         averageLifespanValue.setText(statsWriter.getAverageLifeLength() + "");
         averageChildrenValue.setText(statsWriter.getAverageChildrenNumber() + "");
         worldLifespanValue.setText(statsWriter.getWorldLifespan() + "");
-
-        updateFollowedAnimalStats();
-
-
+        if(animalStats.visibleProperty().get())
+            updateFollowedAnimalStats();
     }
 
     private void updateFollowedAnimalStats() {
-        birthdayValue.setText(statsWriter.getBrithday() + "");
-        genomeValue.setText(statsWriter.getGenome() + "");
-        activeGeneValue.setText(statsWriter.getActiveGene() + "");
-        energyValue.setText(statsWriter.getEnergy() + "");
-        eatenPlantsValue.setText(statsWriter.getEatenPlants() + "");
-        childrenValue.setText(statsWriter.getChildren() + "");
-        descendantsValue.setText(statsWriter.getDescendants() + "");
-        ageValue.setText(statsWriter.getAge() + "");
-        positionValue.setText(statsWriter.getPosition() + "");
-        deathDayValue.setText(statsWriter.isDead ? statsWriter.getDeathDay() + "" : "");
+        birthdayValue.setText(statsWriter.getAnimal().getBirthday() + "");
+        genomeValue.setText(statsWriter.getAnimal().getGenome() + "");
+        activeGeneValue.setText(statsWriter.getAnimal().getActiveGene() + "");
+        energyValue.setText(statsWriter.getAnimal().getEnergy() + "");
+        eatenPlantsValue.setText(statsWriter.getAnimal().getEatenPlants() + "");
+        childrenValue.setText(statsWriter.getAnimal().getChildren() + "");
+        descendantsValue.setText(statsWriter.getAnimal().getOffspring() + "");
+        ageValue.setText(statsWriter.getAnimal().getAge() + "");
+        positionValue.setText(statsWriter.getAnimal().getPosition() + "");
+        deathDayValue.setText(statsWriter.getAnimal().isDead() ? statsWriter.getAnimal().getDeathDay() + "" : "");
     }
 
 }

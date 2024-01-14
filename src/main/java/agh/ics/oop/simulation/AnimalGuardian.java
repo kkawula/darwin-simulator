@@ -6,9 +6,6 @@ import agh.ics.oop.model.Grass;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.utils.RandomPositionGenerator;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 public class AnimalGuardian {
 
     private final WorldMap worldMap;
@@ -19,9 +16,13 @@ public class AnimalGuardian {
     private final int movingCost;
     private final int minEnergyToReproduce;
     private final int parentEnergyConsumption;
+    private final int minimalMutations;
+    private final int maximalMutations;
     private final BehaviorVariant behaviorVariant;
 
-    public AnimalGuardian(WorldMap worldMap,int initialAnimals,int initialAnimalEnergy, int genomeLength,BehaviorVariant behaviorVariant,int movingCost,int plantEnergy,int minEnergyToReproduce,int parentEnergyConsumption)
+    public AnimalGuardian(WorldMap worldMap,int initialAnimals,int initialAnimalEnergy, int genomeLength,
+                          BehaviorVariant behaviorVariant,int movingCost,int plantEnergy,int minEnergyToReproduce,
+                          int parentEnergyConsumption, int minimalMutations, int maximalMutations)
     {
         this.worldMap = worldMap;
         this.initialAnimals = initialAnimals;
@@ -32,6 +33,8 @@ public class AnimalGuardian {
         this.plantEnergy = plantEnergy;
         this.minEnergyToReproduce = minEnergyToReproduce;
         this.parentEnergyConsumption = parentEnergyConsumption;
+        this.minimalMutations = minimalMutations;
+        this.maximalMutations = maximalMutations;
     }
     public void initializeAnimals()
     {
@@ -43,22 +46,20 @@ public class AnimalGuardian {
             worldMap.getAliveAnimals().add(animal);
         }
     }
-    public void removeDeadAnimals() {
+     public void removeDeadAnimals() {
 
         worldMap.clearLastDayDeadAnimalsPositions();
 
         for(Animal animal : worldMap.getAliveAnimals())
             if(animal.getEnergy() <= 0) {
-
                 animal.kill();
                 animal.setDeathDay(worldMap.getWorldLifespan() + 1);
                 worldMap.getLastDayDeadAnimalsPositions().add(animal.getPosition());
                 worldMap.getDeadAnimals().add(animal);
                 worldMap.getAnimals().get(animal.getPosition()).remove(animal);
-
             }
 
-        worldMap.getAliveAnimals().removeIf(animal -> animal.getEnergy() < 0);
+        worldMap.getAliveAnimals().removeIf(animal -> animal.getEnergy() <= 0);
     }
     public void moveAnimals() {
         for(Animal animal : worldMap.getAliveAnimals()) {
@@ -70,28 +71,24 @@ public class AnimalGuardian {
     public void eatGrass() {
         for (Grass grass : worldMap.getGrasses())
             if (!worldMap.getAnimals().get(grass.getPosition()).isEmpty())
-                worldMap.getAnimals().get(grass.getPosition()).first().eatGrass(plantEnergy);
+            {
+                Animal animal = worldMap.getAnimals().get(grass.getPosition()).pollLast();
+                animal.eatGrass(plantEnergy);
+                worldMap.getAnimals().get(grass.getPosition()).add(animal);
+            }
         worldMap.getGrasses().removeIf(grass -> !worldMap.getAnimals().get(grass.getPosition()).isEmpty());
     }
     public void reproduceAnimals()
     {
-        Set<Vector2d> potentialPositions = worldMap
-                .getAliveAnimals()
-                .stream()
-                .map(Animal::getPosition)
-                .collect(Collectors.toSet());
-
-        for(Vector2d position : potentialPositions)
+        for(Vector2d position : worldMap.animalsOccupiedPositions())
         {
             if(worldMap.getAnimals().get(position).size() >= 2)
             {
                 Animal father = worldMap.getAnimals().get(position).pollLast();
                 Animal mother = worldMap.getAnimals().get(position).pollLast();
-                if(mother.getEnergy() >= minEnergyToReproduce && father.getEnergy() >= minEnergyToReproduce)
+                if(father.getEnergy()>=minEnergyToReproduce && mother.getEnergy()>=minEnergyToReproduce)
                 {
-                    Animal child = new Animal(position, initialAnimalEnergy, father, mother, behaviorVariant);
-                    father.subtractEnergy(parentEnergyConsumption);
-                    mother.subtractEnergy(parentEnergyConsumption);
+                    Animal child = Animal.reproduce(father,mother,parentEnergyConsumption,(worldMap.getWorldLifespan() + 1),minimalMutations,maximalMutations);
                     worldMap.getAnimals().get(position).add(child);
                     worldMap.getAliveAnimals().add(child);
                 }

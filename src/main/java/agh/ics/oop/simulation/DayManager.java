@@ -8,7 +8,6 @@ public class DayManager {
 
     private final GrassDealer grassDealer;
     private final AnimalGuardian animalGuardian;
-
     private final WorldMap worldMap;
 
     public DayManager(ConfigurationData config, WorldMap worldMap) {
@@ -18,7 +17,10 @@ public class DayManager {
             case FORESTED_EQUATOR -> new ForestedEquatorGrassDealer(worldMap, config.getPlantsPerDay(), config.getInitialPlants());
             case LIFE_GIVING_CORPSES -> new LifeGivingCorpsesGrassDealer(worldMap, config.getPlantsPerDay(), config.getInitialPlants());
         };
-        this.animalGuardian = new AnimalGuardian(worldMap, config.getInitialAnimals(), config.getInitialAnimalEnergy(), config.getGenomeLength(), config.getBehaviorVariant(), config.getMovingCost(), config.getPlantEnergy(), config.getMinEnergyToReproduce(), config.getParentEnergyConsumption());
+        this.animalGuardian = new AnimalGuardian(worldMap, config.getInitialAnimals(), config.getInitialAnimalEnergy(),
+                config.getGenomeLength(), config.getBehaviorVariant(), config.getMovingCost(),
+                config.getPlantEnergy(), config.getMinEnergyToReproduce(), config.getParentEnergyConsumption(),
+                config.getMinMutations(), config.getMaxMutations());
     }
 
     public void initializeFirstDay() {

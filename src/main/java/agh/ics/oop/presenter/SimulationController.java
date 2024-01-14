@@ -125,7 +125,7 @@ public class SimulationController {
             fillCell(col, row);
         }
 
-        statsWriter.setAnimal(worldMap.getAnimals().get(newFollowedAnimalPosition).last());
+        statsWriter.setAnimal(newFollowedAnimalPosition);
         animalStats.setVisible(true);
         int row = newFollowedAnimalPosition.getY();
         int col = newFollowedAnimalPosition.getX();

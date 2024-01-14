@@ -98,7 +98,7 @@ public class CsvWriter {
     public void addDayToCsv(StatsWriter stats) {
         String[] record = {String.valueOf(stats.getWorldLifespan()), String.valueOf(stats.getAnimalsAlive()),
                 String.valueOf(stats.getGrass()), String.valueOf(stats.getAnimalsDead()),
-                String.valueOf(stats.getAge()), String.valueOf(stats.getEnergy()),
+                String.valueOf(stats.getAverageLifeLength()), String.valueOf(stats.getAverageEnergy()),
                 String.valueOf(stats.getAverageChildrenNumber()), String.valueOf(stats.getFreeFields()), String.valueOf(stats.getBestGenes())};
 
         list.add(record);

@@ -14,7 +14,6 @@ public class StatsWriter {
     private int freeFields;
     private int animalsAlive;
     private int animalsDead;
-    private int plants;
     private double averageEnergy;
     private double averageLifeLength;
     private double averageChildrenNumber;
@@ -22,25 +21,12 @@ public class StatsWriter {
     private Genome bestGenes;
 
     private int grass;
+    private int maximumAnimalEnergy;
 
     // data for tracking exact animal
-
-    private Animal animal;
-
-    private boolean isFollowed = false;
-    private int brithday;
-    private int age;
-    private Genome genome;
-    private String activeGene;
-    private int energy;
-    private int eatenPlants;
-    private int children;
-    private int descendants;
-    public boolean isDead;
-    private int deathDay;
-
-    private int maximumAnimalEnergy;
     private Vector2d position;
+    private Animal animal;
+    private boolean isFollowed = false;
 
     public StatsWriter(WorldMap worldMap) {
         this.worldMap = worldMap;
@@ -50,16 +36,15 @@ public class StatsWriter {
         updateFreeFieldsNumber();
         updateAnimalsAlive();
         updateAnimalsDead();
-        updatePlants();
         updateAverageEnergy();
         updateAverageLifeLength();
         updateAverageChildrenNumber();
         updateWorldLifespan();
         updateGrass();
         updateBestGenes();
-        updateMaximumAnimalEnergy();
+
         if (isFollowed) {
-            updateFollowedAnimalStats();
+            updatePosition();
         }
     }
 
@@ -72,6 +57,13 @@ public class StatsWriter {
 
     public int getMaximumAnimalEnergy() {
         return maximumAnimalEnergy;
+    }
+
+    public Vector2d getPosition() {
+        return position;
+    }
+    private void updatePosition() {
+        position = animal.getPosition();
     }
 
     private void updateGrass() {
@@ -108,10 +100,6 @@ public class StatsWriter {
         animalsDead = worldMap.getDeadAnimals().size();
     }
 
-    private void updatePlants() {
-        plants = worldMap.getGrasses().size();
-    }
-
     private void updateAverageEnergy() {
         if (worldMap.getAliveAnimals().isEmpty())
             averageEnergy = 0.0;
@@ -142,10 +130,13 @@ public class StatsWriter {
         worldLifespan = worldMap.getWorldLifespan();
     }
 
-    public void setAnimal (Animal animal) {
-        this.animal = animal;
+    public void setAnimal (Vector2d vector) {
+
+        this.animal = worldMap.getAnimals().get(vector).last();
         isFollowed = true;
     }
+
+
 
     public void unFollowAnimal() {
         this.animal = null;
@@ -157,29 +148,13 @@ public class StatsWriter {
     }
 
     public void updateFollowedAnimalStats() {
-        energy = animal.getEnergy();
-        brithday = animal.getBirthDay();
-        age = animal.getAge();
-        genome = animal.getGenome();
-        activeGene = animal.getActiveGene();
-        eatenPlants = animal.getGrassEaten();
-        descendants = animal.getOffspring();
-        position = animal.getPosition();
-        children = animal.getChildren();
-        isDead = animal.isDead();
-        if (animal.isDead()) {
-            deathDay = animal.getDeathDay();
-            unFollowAnimal();
-        }
+
     }
 
     public int getFreeFields() {
         return freeFields;
     }
 
-    public int getChildren() {
-        return children;
-    }
 
     public int getAnimalsAlive() {
         return animalsAlive;
@@ -187,10 +162,6 @@ public class StatsWriter {
 
     public int getAnimalsDead() {
         return animalsDead;
-    }
-
-    public int getPlants() {
-        return plants;
     }
 
     public double getAverageEnergy() {
@@ -205,40 +176,8 @@ public class StatsWriter {
         return averageChildrenNumber;
     }
 
-    public int getBirthday() {
-        return brithday;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public Genome getGenome() {
-        return genome;
-    }
-
-    public String getActiveGene() {
-        return activeGene;
-    }
-
-    public int getEnergy() {
-        return energy;
-    }
-
-    public int getEatenPlants() {
-        return eatenPlants;
-    }
-
-    public int getDescendants() {
-        return descendants;
-    }
-
     public int getWorldLifespan() {
         return worldLifespan;
-    }
-
-    public Vector2d getPosition() {
-        return position;
     }
 
     public int getGrass() {

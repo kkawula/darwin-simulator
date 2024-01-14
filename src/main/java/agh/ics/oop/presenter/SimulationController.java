@@ -84,12 +84,12 @@ public class SimulationController {
 
     private void fillCell(int col, int row) {
         Vector2d vector = new Vector2d(col, row);
-        GridPane cell = (GridPane) grid.getChildren().get(row * config.getMapWidth() + col);
+        GridPane cell = (GridPane) grid.getChildren().get(row * config.mapWidth() + col);
         cell.getChildren().clear();
 
-        switch (config.getGrowthVariant()) {
+        switch (config.growthVariant()) {
             case FORESTED_EQUATOR -> {
-                if (row >= config.getMapHeight() * 0.4 && row <= config.getMapHeight() * 0.6) {
+                if (row >= config.mapHeight() * 0.4 && row <= config.mapHeight() * 0.6) {
                     cell.setStyle("-fx-background-color: #006400;");
                 }
                 else{
@@ -129,7 +129,7 @@ public class SimulationController {
         animalStats.setVisible(true);
         int row = newFollowedAnimalPosition.getY();
         int col = newFollowedAnimalPosition.getX();
-        GridPane cell = (GridPane) grid.getChildren().get(row * config.getMapWidth() + col);
+        GridPane cell = (GridPane) grid.getChildren().get(row * config.mapWidth() + col);
         Circle animal = (Circle) cell.getChildren().get(0);
         animal.setFill(Color.PURPLE);
         updateStats();
@@ -142,8 +142,8 @@ public class SimulationController {
         animalsPositions = worldMap.getAnimalsPositions();
         grassesPositions = worldMap.getGrassesPositions();
 
-        for (int row = 0; row < config.getMapHeight(); row++)
-            for (int col = 0; col < config.getMapWidth(); col++)
+        for (int row = 0; row < config.mapHeight(); row++)
+            for (int col = 0; col < config.mapWidth(); col++)
                 fillCell(col, row);
 
         if (statsWriter.isFollowed()) {
@@ -155,8 +155,8 @@ public class SimulationController {
     public void generateGrid() {
         content.getChildren().clear();
 
-        int rows = config.getMapHeight();
-        int columns = config.getMapWidth();
+        int rows = config.mapHeight();
+        int columns = config.mapWidth();
         grid = new GridPane();
         cellSize = Math.min(WIDTH/columns, HEIGHT/rows);
 
@@ -224,15 +224,15 @@ public class SimulationController {
 
     public void setLabelValues() {
 
-        mapWidthValue.setText(config.getMapWidth() + "");
-        mapHeightValue.setText(config.getMapHeight() + "");
+        mapWidthValue.setText(config.mapWidth() + "");
+        mapHeightValue.setText(config.mapHeight() + "");
         animalsAliveValue.setText(statsWriter.getAnimalsAlive() + "");
         animalsDeadValue.setText(statsWriter.getAnimalsDead() + "");
         plantsValue.setText(statsWriter.getGrass() + "");
         freeFieldsValue.setText(statsWriter.getFreeFields() + "");
-        averageEnergyValue.setText(statsWriter.getAverageEnergy() + "");
-        averageLifespanValue.setText(statsWriter.getAverageLifeLength() + "");
-        averageChildrenValue.setText(statsWriter.getAverageChildrenNumber() + "");
+        averageEnergyValue.setText(String.format("%.2f", statsWriter.getAverageEnergy()));
+        averageLifespanValue.setText(String.format("%.2f", statsWriter.getAverageLifeLength()));
+        averageChildrenValue.setText(String.format("%.2f", statsWriter.getAverageChildrenNumber()));
         worldLifespanValue.setText(statsWriter.getWorldLifespan() + "");
         bestGenesValue.setText(statsWriter.getBestGenes() + "");
         if(animalStats.visibleProperty().get())

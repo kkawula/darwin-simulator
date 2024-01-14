@@ -17,9 +17,7 @@ public class StatsWriter {
     private double averageEnergy;
     private double averageLifeLength;
     private double averageChildrenNumber;
-
     private Genome bestGenes;
-
     private int grass;
     private int maximumAnimalEnergy;
 
@@ -136,8 +134,6 @@ public class StatsWriter {
         isFollowed = true;
     }
 
-
-
     public void unFollowAnimal() {
         this.animal = null;
         isFollowed = false;
@@ -147,14 +143,9 @@ public class StatsWriter {
         return isFollowed;
     }
 
-    public void updateFollowedAnimalStats() {
-
-    }
-
     public int getFreeFields() {
         return freeFields;
     }
-
 
     public int getAnimalsAlive() {
         return animalsAlive;

@@ -20,12 +20,12 @@ public class Simulation implements Runnable {
 
     public Simulation(ConfigurationData config, SimulationLauncher observer) {
         this.config = config;
-        worldMap = new WorldMap(config.getMapWidth(), config.getMapHeight());
+        worldMap = new WorldMap(config.mapWidth(), config.mapHeight());
         dayManager = new DayManager(config, worldMap);
         dayManager.initializeFirstDay();
         statsWriter = new StatsWriter(worldMap);
         this.observer = observer;
-        this.refreshTime = config.getRefreshTime();
+        this.refreshTime = config.refreshTime();
     }
 
     public void pause(){
@@ -40,7 +40,7 @@ public class Simulation implements Runnable {
         }
     }
     public void shutDown(){
-        if (config.getCsvWriting() == 1) {
+        if (config.csvWriting() == 1) {
             csvWriter.saveFile();
         }
         interrupted = true;

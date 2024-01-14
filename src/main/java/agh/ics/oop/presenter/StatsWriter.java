@@ -38,6 +38,8 @@ public class StatsWriter {
     private int descendants;
     public boolean isDead;
     private int deathDay;
+
+    private int maximumAnimalEnergy;
     private Vector2d position;
 
     public StatsWriter(WorldMap worldMap) {
@@ -55,9 +57,21 @@ public class StatsWriter {
         updateWorldLifespan();
         updateGrass();
         updateBestGenes();
+        updateMaximumAnimalEnergy();
         if (isFollowed) {
             updateFollowedAnimalStats();
         }
+    }
+
+    private void updateMaximumAnimalEnergy() {
+        if (worldMap.getAliveAnimals().isEmpty())
+            maximumAnimalEnergy = 0;
+        else
+            maximumAnimalEnergy = worldMap.getAliveAnimals().stream().mapToInt(Animal::getEnergy).max().getAsInt();
+    }
+
+    public int getMaximumAnimalEnergy() {
+        return maximumAnimalEnergy;
     }
 
     private void updateGrass() {
@@ -155,7 +169,7 @@ public class StatsWriter {
         isDead = animal.isDead();
         if (animal.isDead()) {
             deathDay = animal.getDeathDay();
-            isFollowed = false;
+            unFollowAnimal();
         }
     }
 

@@ -1,5 +1,6 @@
 package agh.ics.oop.presenter;
 
+import agh.ics.oop.model.Grass;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.simulation.WorldMap;
@@ -68,8 +69,11 @@ public class SimulationController {
         generateGrid();
     }
 
-    public Circle createEnergyCircle(double energy, double maxEnergy) {
-        double saturation = Math.max(0.0, Math.min(1.0, energy / maxEnergy));
+    public Circle createEnergyCircle(double energy) {
+        double averageEnergy = statsWriter.getAverageEnergy();
+        double distanceFromAverage = energy - averageEnergy;
+        double shift = distanceFromAverage / averageEnergy;
+        double saturation = Math.max(0.0, Math.min(1.0, 0.5 + shift));
         Color color = Color.hsb(0, saturation, 1.0);
 
         Circle circle = new Circle((cellSize / 2) * 0.7);
@@ -103,7 +107,7 @@ public class SimulationController {
         }
 
         if (animalsPositions.containsKey(vector)) {
-            Circle animal = createEnergyCircle(animalsPositions.get(vector), 100);
+            Circle animal = createEnergyCircle(animalsPositions.get(vector));
             cell.add(animal, 0, 0);
             GridPane.setHalignment(animal, javafx.geometry.HPos.CENTER);
             GridPane.setValignment(animal, javafx.geometry.VPos.CENTER);

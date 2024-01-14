@@ -11,7 +11,6 @@ public class Simulation implements Runnable {
     private final DayManager dayManager;
     public final WorldMap worldMap;
     public final StatsWriter statsWriter;
-
     public final ConfigurationData config;
     private final SimulationLauncher observer;
     private boolean threadSuspended = false;

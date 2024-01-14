@@ -40,7 +40,7 @@ public class AnimalGuardian {
             worldMap.getAliveAnimals().add(animal);
         }
     }
-    public void removeDeadAnimals() {
+     public void removeDeadAnimals() {
 
         worldMap.clearLastDayDeadAnimalsPositions();
 
@@ -78,7 +78,7 @@ public class AnimalGuardian {
                 Animal mother = worldMap.getAnimals().get(position).pollLast();
                 if(father.getEnergy()>=minEnergyToReproduce && mother.getEnergy()>=minEnergyToReproduce)
                 {
-                    Animal child = Animal.reproduce(father,mother,parentEnergyConsumption);
+                    Animal child = Animal.reproduce(father,mother,parentEnergyConsumption,(worldMap.getWorldLifespan() + 1));
                     worldMap.getAnimals().get(position).add(child);
                     worldMap.getAliveAnimals().add(child);
                 }

@@ -4,7 +4,7 @@ import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.simulation.WorldMap;
 import agh.ics.oop.utils.ConfigurationData;
-import javafx.beans.property.BooleanProperty;
+
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -242,7 +242,7 @@ public class SimulationController {
         pauseButton.disableProperty().setValue(true);
     }
     @FXML
-    void stopFollowingAnimal() {
+    synchronized void stopFollowingAnimal() {
         statsWriter.unFollowAnimal();
         fillCell(followedAnimalPosition.getX(), followedAnimalPosition.getY());
         animalStats.setVisible(false);
@@ -270,16 +270,16 @@ public class SimulationController {
     }
 
     private void updateFollowedAnimalStats() {
-        birthdayValue.setText(statsWriter.getBirthday() + "");
-        genomeValue.setText(statsWriter.getGenome() + "");
-        activeGeneValue.setText(statsWriter.getActiveGene() + "");
-        energyValue.setText(statsWriter.getEnergy() + "");
-        eatenPlantsValue.setText(statsWriter.getEatenPlants() + "");
+        birthdayValue.setText(statsWriter.getAnimal().getBirthday() + "");
+        genomeValue.setText(statsWriter.getAnimal().getGenome() + "");
+        activeGeneValue.setText(statsWriter.getAnimal().getActiveGene() + "");
+        energyValue.setText(statsWriter.getAnimal().getEnergy() + "");
+        eatenPlantsValue.setText(statsWriter.getAnimal().getEatenPlants() + "");
         childrenValue.setText(statsWriter.getAnimal().getChildren() + "");
-        descendantsValue.setText(statsWriter.getDescendants() + "");
-        ageValue.setText(statsWriter.getAge() + "");
-        positionValue.setText(statsWriter.getPosition() + "");
-        deathDayValue.setText(statsWriter.isDead ? statsWriter.getDeathDay() + "" : "");
+        descendantsValue.setText(statsWriter.getAnimal().getOffspring() + "");
+        ageValue.setText(statsWriter.getAnimal().getAge() + "");
+        positionValue.setText(statsWriter.getAnimal().getPosition() + "");
+        deathDayValue.setText(statsWriter.getAnimal().isDead() ? statsWriter.getAnimal().getDeathDay() + "" : "");
     }
 
 }

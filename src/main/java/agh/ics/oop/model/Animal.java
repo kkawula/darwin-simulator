@@ -14,8 +14,7 @@ public class Animal implements Comparable<Animal> {
     private Animal mother;
     private int energy;
     private int age = 0;
-    private final int birthDay = 0;
-
+    private final int birthDay;
     private int deathDay = 0;
     private boolean isDead = false;
     private final LinkedList<Animal> children = new LinkedList<>();
@@ -26,10 +25,11 @@ public class Animal implements Comparable<Animal> {
     public Behavior behavior;
 
 
-    public Animal (Vector2d newPosition, int energy, int genomeLength, BehaviorVariant behaviorVariant) {
-        this.position = newPosition;
-        this.energy = energy;
+    public Animal (Vector2d newPosition, int initialEnergy, int genomeLength, BehaviorVariant behaviorVariant) {
+        position = newPosition;
+        energy = initialEnergy;
         this.genomeLength = genomeLength;
+        birthDay = 0;
         behavior = switch (behaviorVariant)
         {
             case TRAVERSAL_BEHAVIOR -> new TraversalBehavior();
@@ -38,19 +38,19 @@ public class Animal implements Comparable<Animal> {
         this.genome = new Genome(genomeLength);
     }
 
-    public Animal(Vector2d newPosition, int energy, Animal father, Animal mother, Behavior behaviorVariant) {
+    public Animal(Vector2d newPosition, int energy, int birthDay, Animal father, Animal mother, Behavior behaviorVariant) {
         position = newPosition;
         this.energy = energy;
         this.father = father;
         this.mother = mother;
-
+        this.birthDay = birthDay;
         behavior = behaviorVariant;
         this.genome = new Genome(father.getEnergy(), mother.getEnergy(), father.getGenome(), mother.getGenome());
     }
-    public static Animal reproduce(Animal father, Animal mother, int parentEnergyConsumption)
+    public static Animal reproduce(Animal father, Animal mother, int parentEnergyConsumption, int birthDay)
     {
 
-        Animal child = new Animal(father.position, parentEnergyConsumption, father, mother, father.behavior);
+        Animal child = new Animal(father.position, parentEnergyConsumption, birthDay, father, mother, father.behavior);
         father.children.add(child);
         mother.children.add(child);
         father.energy-=parentEnergyConsumption;
@@ -65,22 +65,27 @@ public class Animal implements Comparable<Animal> {
         return children.size();
     }
 
-    public int getOffspring() {
+    synchronized public int getOffspring() {
         HashSet<Animal> visitedAnimals = new HashSet<>();
-        return getOffspringHelper(visitedAnimals);
-    }
-    public int getOffspringHelper(HashSet<Animal> visitedAnimals)
-    {
-        int numberOfChild=0;
+        LinkedList<Animal> stack = new LinkedList<>();
         for(Animal animal : children)
         {
-            if(!visitedAnimals.contains(animal))
+            stack.push(animal);
+            visitedAnimals.add(animal);
+        }
+        int numberOfOffspring = 0;
+        while(!stack.isEmpty())
+        {
+            Animal animal = stack.pop();
+            visitedAnimals.add(animal);
+            numberOfOffspring += 1;
+            for(Animal hisChild : animal.children)
             {
-                visitedAnimals.add(animal);
-                numberOfChild+=(animal.getOffspringHelper(visitedAnimals)+1);
+                if(!visitedAnimals.contains(hisChild))
+                    stack.push(hisChild);
             }
         }
-        return numberOfChild;
+        return numberOfOffspring;
     }
 
     public Genome getGenome() {
@@ -134,6 +139,7 @@ public class Animal implements Comparable<Animal> {
 
     public void eatGrass(int plantEnergy) {
         energy+=plantEnergy;
+        grassEaten++;
     }
 
     public void move(MoveValidator moveValidator, int movingCost) {
@@ -162,5 +168,13 @@ public class Animal implements Comparable<Animal> {
     @Override
     public int hashCode() {
         return Objects.hash(father, mother, age, ID);
+    }
+
+    public int getBirthday() {
+        return birthDay;
+    }
+
+    public int getEatenPlants() {
+        return grassEaten;
     }
 }

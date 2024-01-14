@@ -16,9 +16,13 @@ public class AnimalGuardian {
     private final int movingCost;
     private final int minEnergyToReproduce;
     private final int parentEnergyConsumption;
+    private final int minimalMutations;
+    private final int maximalMutations;
     private final BehaviorVariant behaviorVariant;
 
-    public AnimalGuardian(WorldMap worldMap,int initialAnimals,int initialAnimalEnergy, int genomeLength,BehaviorVariant behaviorVariant,int movingCost,int plantEnergy,int minEnergyToReproduce,int parentEnergyConsumption)
+    public AnimalGuardian(WorldMap worldMap,int initialAnimals,int initialAnimalEnergy, int genomeLength,
+                          BehaviorVariant behaviorVariant,int movingCost,int plantEnergy,int minEnergyToReproduce,
+                          int parentEnergyConsumption, int minimalMutations, int maximalMutations)
     {
         this.worldMap = worldMap;
         this.initialAnimals = initialAnimals;
@@ -29,6 +33,8 @@ public class AnimalGuardian {
         this.plantEnergy = plantEnergy;
         this.minEnergyToReproduce = minEnergyToReproduce;
         this.parentEnergyConsumption = parentEnergyConsumption;
+        this.minimalMutations = minimalMutations;
+        this.maximalMutations = maximalMutations;
     }
     public void initializeAnimals()
     {
@@ -82,7 +88,7 @@ public class AnimalGuardian {
                 Animal mother = worldMap.getAnimals().get(position).pollLast();
                 if(father.getEnergy()>=minEnergyToReproduce && mother.getEnergy()>=minEnergyToReproduce)
                 {
-                    Animal child = Animal.reproduce(father,mother,parentEnergyConsumption,(worldMap.getWorldLifespan() + 1));
+                    Animal child = Animal.reproduce(father,mother,parentEnergyConsumption,(worldMap.getWorldLifespan() + 1),minimalMutations,maximalMutations);
                     worldMap.getAnimals().get(position).add(child);
                     worldMap.getAliveAnimals().add(child);
                 }

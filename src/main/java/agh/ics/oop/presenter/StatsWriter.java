@@ -19,6 +19,8 @@ public class StatsWriter {
     private double averageLifeLength;
     private double averageChildrenNumber;
 
+    private Genome bestGenes;
+
     private int grass;
 
     // data for tracking exact animal
@@ -52,7 +54,6 @@ public class StatsWriter {
         updateAverageChildrenNumber();
         updateWorldLifespan();
         updateGrass();
-
         if (isFollowed) {
             updateFollowedAnimalStats();
         }
@@ -60,6 +61,24 @@ public class StatsWriter {
 
     private void updateGrass() {
         grass = worldMap.getGrasses().size();
+    }
+
+    private Genome getBestGenes()
+    {
+        Map<Genome, Integer> counterMap = new HashMap<>();
+        worldMap.getAliveAnimals().forEach(animal1 -> counterMap.put(animal1.getGenome(),0));
+        worldMap.getAliveAnimals().forEach(animal1 -> counterMap.put(animal1.getGenome(),counterMap.get(animal1.getGenome())+1));
+        int maximum = 0;
+        Genome bestGenome;
+        for(Map.Entry<Genome, Integer>  map : counterMap.entrySet())
+        {
+            if(map.getValue()>maximum)
+            {
+                maximum = map.getValue();
+                bestGenome = map.getKey();
+            }
+        }
+        return bestGenes;
     }
 
     private void updateAnimalsAlive() {
@@ -98,7 +117,7 @@ public class StatsWriter {
     }
     private void updateFreeFieldsNumber()
     {
-        List<Vector2d> aloneGrassPositions = worldMap.getGrassesPositions().stream().filter(Vector2d -> worldMap.animalsOccupiedPositions().contains(Vector2d)).toList();
+        List<Vector2d> aloneGrassPositions = worldMap.getGrassesPositions().stream().filter(Vector2d -> !worldMap.animalsOccupiedPositions().contains(Vector2d)).toList();
         freeFields = worldMap.getHeight()*worldMap.getHeight()-(aloneGrassPositions.size()+worldMap.animalsOccupiedPositions().size());
     }
     private void updateWorldLifespan() {
@@ -206,9 +225,5 @@ public class StatsWriter {
 
     public int getGrass() {
         return grass;
-    }
-
-    public int getDeathDay() {
-        return deathDay;
     }
 }

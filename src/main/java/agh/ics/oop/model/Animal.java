@@ -19,7 +19,6 @@ public class Animal implements Comparable<Animal> {
     private boolean isDead = false;
     private final LinkedList<Animal> children = new LinkedList<>();
     private int grassEaten = 0;
-    private int genomeLength;
     public int activeGene = 0;
     private final Genome genome;
     public Behavior behavior;
@@ -28,7 +27,6 @@ public class Animal implements Comparable<Animal> {
     public Animal (Vector2d newPosition, int initialEnergy, int genomeLength, BehaviorVariant behaviorVariant) {
         position = newPosition;
         energy = initialEnergy;
-        this.genomeLength = genomeLength;
         birthDay = 0;
         behavior = switch (behaviorVariant)
         {
@@ -38,7 +36,7 @@ public class Animal implements Comparable<Animal> {
         this.genome = new Genome(genomeLength);
     }
 
-    public Animal(Vector2d newPosition, int energy, int birthDay, Animal father, Animal mother, Behavior behaviorVariant) {
+    public Animal(Vector2d newPosition, int energy, int birthDay, Animal father, Animal mother, Behavior behaviorVariant, int minimalMutations, int maximalMutations) {
         position = newPosition;
         this.energy = energy;
         this.father = father;
@@ -46,11 +44,12 @@ public class Animal implements Comparable<Animal> {
         this.birthDay = birthDay;
         behavior = behaviorVariant;
         this.genome = new Genome(father.getEnergy(), mother.getEnergy(), father.getGenome(), mother.getGenome());
+        RandomMutation.mutate(this.genome,minimalMutations,maximalMutations);
     }
-    public static Animal reproduce(Animal father, Animal mother, int parentEnergyConsumption, int birthDay)
+    public static Animal reproduce(Animal father, Animal mother, int parentEnergyConsumption, int birthDay, int minimalMutations, int maximalMutations)
     {
 
-        Animal child = new Animal(father.position, parentEnergyConsumption, birthDay, father, mother, father.behavior);
+        Animal child = new Animal(father.position, parentEnergyConsumption, birthDay, father, mother, father.behavior, minimalMutations, maximalMutations);
         father.children.add(child);
         mother.children.add(child);
         father.energy-=parentEnergyConsumption;

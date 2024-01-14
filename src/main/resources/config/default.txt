@@ -7,7 +7,7 @@ Plant growth variant: 1
 Moving cost: 10
 Initial number of animals: 200
 Initial energy of animals: 80
-Min energy to reproduce: 30
+Min energy to reproduce: 40
 Energy used for reproduction: 30
 Minimum mutations: 1
 Maximum mutations: 5

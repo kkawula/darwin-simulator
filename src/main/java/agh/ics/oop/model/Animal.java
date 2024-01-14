@@ -149,11 +149,17 @@ public class Animal implements Comparable<Animal> {
         this.performGeneBehavior();
     }
 
+    public UUID getID() {
+        return ID;
+    }
+
     @Override
     public int compareTo(Animal other) {
         return Comparator.comparing(Animal::getEnergy)
                 .thenComparing(Animal::getAge)
                 .thenComparing(Animal::getChildren)
+                .thenComparing(Animal::getBirthday)
+                .thenComparing(Animal::getID)
                 .compare(this, other);
     }
 

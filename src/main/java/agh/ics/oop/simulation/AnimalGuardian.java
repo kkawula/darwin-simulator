@@ -65,7 +65,11 @@ public class AnimalGuardian {
     public void eatGrass() {
         for (Grass grass : worldMap.getGrasses())
             if (!worldMap.getAnimals().get(grass.getPosition()).isEmpty())
-                worldMap.getAnimals().get(grass.getPosition()).first().eatGrass(plantEnergy);
+            {
+                Animal animal = worldMap.getAnimals().get(grass.getPosition()).pollLast();
+                animal.eatGrass(plantEnergy);
+                worldMap.getAnimals().get(grass.getPosition()).add(animal);
+            }
         worldMap.getGrasses().removeIf(grass -> !worldMap.getAnimals().get(grass.getPosition()).isEmpty());
     }
     public void reproduceAnimals()

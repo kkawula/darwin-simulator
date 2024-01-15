@@ -42,7 +42,8 @@
                     <Label text="Average energy: " GridPane.columnIndex="0" GridPane.rowIndex="6"/>
                     <Label text="Average lifespan: " GridPane.columnIndex="0" GridPane.rowIndex="7"/>
                     <Label text="Average children: " GridPane.columnIndex="0" GridPane.rowIndex="8"/>
-                    <Label text="World lifespan: " GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+                    <Label text="Best genes: " GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+                    <Label text="World lifespan: " GridPane.columnIndex="0" GridPane.rowIndex="10"/>
 
                     <Label fx:id="mapWidthValue" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
                     <Label fx:id="mapHeightValue" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
@@ -53,7 +54,8 @@
                     <Label fx:id="averageEnergyValue" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
                     <Label fx:id="averageLifespanValue" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
                     <Label fx:id="averageChildrenValue" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
-                    <Label fx:id="worldLifespanValue" GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+                    <Label fx:id="bestGenesValue" GridPane.columnIndex="1"  GridPane.rowIndex="9"/>
+                    <Label fx:id="worldLifespanValue" GridPane.columnIndex="1" GridPane.rowIndex="10"/>
 
                 </GridPane>
                 <BorderPane>

@@ -10,7 +10,8 @@ Initial energy of animals: 80
 Min energy to reproduce: 40
 Energy used for reproduction: 30
 Minimum mutations: 1
-Maximum mutations: 5
-Genome length: 8
+Maximum mutations: 3
+Genome length: 4
 Animal behavior variant: 2
 Csv writing: 0
+Refresh time: 100

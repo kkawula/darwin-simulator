@@ -24,12 +24,8 @@ public class CsvWriter {
 
     public CsvWriter() {
         String[] header = {"Day", "Animal alive", "Plants", "Dead animals", "Average age of deaths",
-                "Average energy", "Average quantity of kids", "Free fileds"};
+                "Average energy", "Average quantity of kids", "Free fileds", "Best genes"};
         list.add(header);
-        for (String s : header) {
-            System.out.print(s+',');
-        }
-        System.out.println();
     }
 
     public void saveFile() {
@@ -102,8 +98,8 @@ public class CsvWriter {
     public void addDayToCsv(StatsWriter stats) {
         String[] record = {String.valueOf(stats.getWorldLifespan()), String.valueOf(stats.getAnimalsAlive()),
                 String.valueOf(stats.getGrass()), String.valueOf(stats.getAnimalsDead()),
-                String.valueOf(stats.getAge()), String.valueOf(stats.getEnergy()),
-                String.valueOf(stats.getChildren()), String.valueOf(stats.getFreeFields())};
+                String.valueOf(stats.getAverageLifeLength()), String.valueOf(stats.getAverageEnergy()),
+                String.valueOf(stats.getAverageChildrenNumber()), String.valueOf(stats.getFreeFields()), String.valueOf(stats.getBestGenes())};
 
         list.add(record);
     }

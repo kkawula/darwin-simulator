@@ -11,20 +11,21 @@ public class Simulation implements Runnable {
     private final DayManager dayManager;
     public final WorldMap worldMap;
     public final StatsWriter statsWriter;
-
     public final ConfigurationData config;
     private final SimulationLauncher observer;
     private boolean threadSuspended = false;
     private boolean interrupted = false;
-    CsvWriter csvWriter= new CsvWriter();
+    CsvWriter csvWriter = new CsvWriter();
+    private final long refreshTime;
 
     public Simulation(ConfigurationData config, SimulationLauncher observer) {
         this.config = config;
-        worldMap = new WorldMap(config.getMapWidth(), config.getMapHeight());
+        worldMap = new WorldMap(config.mapWidth(), config.mapHeight());
         dayManager = new DayManager(config, worldMap);
         dayManager.initializeFirstDay();
         statsWriter = new StatsWriter(worldMap);
         this.observer = observer;
+        this.refreshTime = config.refreshTime();
     }
 
     public void pause(){
@@ -39,7 +40,7 @@ public class Simulation implements Runnable {
         }
     }
     public void shutDown(){
-        if (config.getCsvWriting() == 1) {
+        if (config.csvWriting() == 1) {
             csvWriter.saveFile();
         }
         interrupted = true;
@@ -59,7 +60,7 @@ public class Simulation implements Runnable {
             });
 
             try {
-                Thread.sleep(100);
+                Thread.sleep(refreshTime);
                 synchronized(this) {
                     while (threadSuspended)
                         wait();

@@ -1,0 +1,17 @@
+Refresh time: 500
+Initial energy of animals: 120
+Map height: 80
+Plants growing each day: 30
+Initial number of plants: 800
+Animal behavior variant: 2
+Initial number of animals: 200
+Energy used for reproduction: 30
+Minimum mutations: 1
+Moving cost: 10
+Genome length: 4
+Csv writing: 0
+Map width: 80
+Min energy to reproduce: 40
+Energy from eating one plant: 30
+Maximum mutations: 3
+Plant growth variant: 1

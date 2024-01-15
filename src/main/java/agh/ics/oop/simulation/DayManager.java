@@ -12,15 +12,15 @@ public class DayManager {
 
     public DayManager(ConfigurationData config, WorldMap worldMap) {
         this.worldMap = worldMap;
-        this.grassDealer = switch (config.getGrowthVariant())
+        this.grassDealer = switch (config.growthVariant())
         {
-            case FORESTED_EQUATOR -> new ForestedEquatorGrassDealer(worldMap, config.getPlantsPerDay(), config.getInitialPlants());
-            case LIFE_GIVING_CORPSES -> new LifeGivingCorpsesGrassDealer(worldMap, config.getPlantsPerDay(), config.getInitialPlants());
+            case FORESTED_EQUATOR -> new ForestedEquatorGrassDealer(worldMap, config.plantsPerDay(), config.initialPlants());
+            case LIFE_GIVING_CORPSES -> new LifeGivingCorpsesGrassDealer(worldMap, config.plantsPerDay(), config.initialPlants());
         };
-        this.animalGuardian = new AnimalGuardian(worldMap, config.getInitialAnimals(), config.getInitialAnimalEnergy(),
-                config.getGenomeLength(), config.getBehaviorVariant(), config.getMovingCost(),
-                config.getPlantEnergy(), config.getMinEnergyToReproduce(), config.getParentEnergyConsumption(),
-                config.getMinMutations(), config.getMaxMutations());
+        this.animalGuardian = new AnimalGuardian(worldMap, config.initialAnimals(), config.initialAnimalEnergy(),
+                config.genomeLength(), config.behaviorVariant(), config.movingCost(),
+                config.plantEnergy(), config.minEnergyToReproduce(), config.parentEnergyConsumption(),
+                config.minMutations(), config.maxMutations());
     }
 
     public void initializeFirstDay() {

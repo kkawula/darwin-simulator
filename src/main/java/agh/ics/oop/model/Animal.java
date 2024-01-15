@@ -44,7 +44,9 @@ public class Animal implements Comparable<Animal> {
         this.birthDay = birthDay;
         behavior = behaviorVariant;
         this.genome = new Genome(father.getEnergy(), mother.getEnergy(), father.getGenome(), mother.getGenome());
-        RandomMutation.mutate(this.genome,minimalMutations,maximalMutations);
+
+        RandomMutation randomMutation = new RandomMutation();
+        randomMutation.mutate(this.genome,minimalMutations,maximalMutations);
     }
     public static Animal reproduce(Animal father, Animal mother, int parentEnergyConsumption, int birthDay, int minimalMutations, int maximalMutations)
     {

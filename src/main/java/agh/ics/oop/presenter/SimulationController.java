@@ -119,16 +119,18 @@ public class SimulationController {
     }
 
     private void setNewFollowedAnimalPosition(Vector2d newFollowedAnimalPosition){
+
         if (Objects.nonNull(followedAnimalPosition)) {
             int row = followedAnimalPosition.getY();
             int col = followedAnimalPosition.getX();
             fillCell(col, row);
         }
-
-        statsWriter.setAnimal(newFollowedAnimalPosition);
-        animalStats.setVisible(true);
         int row = newFollowedAnimalPosition.getY();
         int col = newFollowedAnimalPosition.getX();
+
+        statsWriter.setAnimal(new Vector2d(col, row));
+        animalStats.setVisible(true);
+
         GridPane cell = (GridPane) grid.getChildren().get(row * config.mapWidth() + col);
         Circle animal = (Circle) cell.getChildren().get(0);
         animal.setFill(Color.PURPLE);
@@ -240,15 +242,15 @@ public class SimulationController {
     }
 
     private void updateFollowedAnimalStats() {
-        birthdayValue.setText(statsWriter.getAnimal().getBirthday() + "");
-        genomeValue.setText(statsWriter.getAnimal().getGenome() + "");
-        activeGeneValue.setText(statsWriter.getAnimal().getActiveGene() + "");
-        energyValue.setText(statsWriter.getAnimal().getEnergy() + "");
-        eatenPlantsValue.setText(statsWriter.getAnimal().getEatenPlants() + "");
-        childrenValue.setText(statsWriter.getAnimal().getChildren() + "");
-        descendantsValue.setText(statsWriter.getAnimal().getOffspring() + "");
-        ageValue.setText(statsWriter.getAnimal().getAge() + "");
-        positionValue.setText(statsWriter.getAnimal().getPosition() + "");
+        birthdayValue.setText(statsWriter.getBirthday() + "");
+        genomeValue.setText(statsWriter.getGenome() + "");
+        activeGeneValue.setText(statsWriter.getActiveGene() + "");
+        energyValue.setText(statsWriter.getEnergy() + "");
+        eatenPlantsValue.setText(statsWriter.getEatenPlants() + "");
+        childrenValue.setText(statsWriter.getChildren() + "");
+        descendantsValue.setText(statsWriter.getDescendants() + "");
+        ageValue.setText(statsWriter.getAge() + "");
+        positionValue.setText(statsWriter.getPositionString() + "");
         deathDayValue.setText(statsWriter.getAnimal().isDead() ? statsWriter.getAnimal().getDeathDay() + "" : "");
     }
 

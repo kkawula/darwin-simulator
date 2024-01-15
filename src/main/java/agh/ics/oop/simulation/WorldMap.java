@@ -47,7 +47,7 @@ public class WorldMap implements MoveValidator{
         return deadAnimals;
     }
 
-    public HashMap<Vector2d, TreeSet<Animal>> getAnimals() {
+    synchronized public HashMap<Vector2d, TreeSet<Animal>> getAnimals() {
         return animals;
     }
 
@@ -94,6 +94,10 @@ public class WorldMap implements MoveValidator{
 
     public void increaseWorldLifespan() {
         worldLifespan++;
+    }
+
+    public Animal getLastAnimal(Vector2d position) {
+        return animals.get(position).last();
     }
 
     @Override

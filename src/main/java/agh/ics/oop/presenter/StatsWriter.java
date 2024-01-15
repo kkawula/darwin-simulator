@@ -22,9 +22,55 @@ public class StatsWriter {
     private int maximumAnimalEnergy;
 
     // data for tracking exact animal
-    private Vector2d position;
+
     private Animal animal;
+
+    private int birthday;
+    private String activeGene ="";
+
+    private String genome = "";
+    private int energy;
+    private int eatenPlants;
+    private int children;
+    private int descendants;
+    private int age;
+    private Vector2d position;
+    private String positionString = "";
+
     private boolean isFollowed = false;
+
+    public int getBirthday() {
+        return birthday;
+    }
+    public String getGenome() {
+        return genome;
+    }
+    public String getActiveGene() {
+        return activeGene;
+    }
+    public int getEnergy() {
+        return energy;
+    }
+
+    public int getEatenPlants() {
+        return eatenPlants;
+    }
+
+    public int getChildren() {
+        return children;
+    }
+
+    public int getDescendants() {
+        return descendants;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getPositionString() {
+        return positionString;
+    }
 
     public StatsWriter(WorldMap worldMap) {
         this.worldMap = worldMap;
@@ -42,8 +88,20 @@ public class StatsWriter {
         updateBestGenes();
 
         if (isFollowed) {
+            updateFollowedAnimalStats();
             updatePosition();
         }
+    }
+    private void updateFollowedAnimalStats() {
+        birthday = animal.getBirthDay();
+        activeGene = animal.getGenome().getGene(animal.activeGene).toString();
+        genome = animal.getGenome().toString();
+        energy = animal.getEnergy();
+        eatenPlants = animal.getGrassEaten();
+        children = animal.getChildren();
+        descendants = animal.getOffspring();
+        age = animal.getAge();
+        positionString = animal.getPosition().toString();
     }
 
     private void updateMaximumAnimalEnergy() {
@@ -68,7 +126,8 @@ public class StatsWriter {
         grass = worldMap.getGrasses().size();
     }
 
-    private void updateBestGenes() { // TODO: Ravens
+    private void updateBestGenes() {
+
         Map<Genome, Integer> counterMap = new HashMap<>();
         worldMap.getAliveAnimals().forEach(animal1 -> counterMap.put(animal1.getGenome(),0));
         worldMap.getAliveAnimals().forEach(animal1 -> counterMap.put(animal1.getGenome(), counterMap.get(animal1.getGenome())+1));
@@ -129,8 +188,7 @@ public class StatsWriter {
     }
 
     public void setAnimal (Vector2d vector) {
-
-        this.animal = worldMap.getAnimals().get(vector).last();
+        this.animal = worldMap.getLastAnimal(vector);
         isFollowed = true;
     }
 

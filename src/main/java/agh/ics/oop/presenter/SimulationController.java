@@ -1,6 +1,6 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.model.Grass;
+import agh.ics.oop.model.Animal;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.simulation.WorldMap;

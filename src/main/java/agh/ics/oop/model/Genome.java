@@ -1,8 +1,9 @@
 package agh.ics.oop.model;
 
-import java.util.Random;
+import java.util.*;
 
 import static java.lang.Math.max;
+import static java.util.Arrays.stream;
 
 public class Genome {
     private final int length;
@@ -68,5 +69,20 @@ public class Genome {
             genomeString.append(" ");
         }
         return genomeString.toString().trim();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Genome genome = (Genome) o;
+        return length == genome.length && Arrays.equals(genes, genome.genes);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(length);
+        result = 31 * result + Arrays.hashCode(genes);
+        return result;
     }
 }

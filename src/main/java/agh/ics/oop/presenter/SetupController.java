@@ -1,75 +1,38 @@
 package agh.ics.oop.presenter;
 
-import agh.ics.oop.model.Behavior;
 import agh.ics.oop.model.BehaviorVariant;
 import agh.ics.oop.model.GrowthVariant;
 import agh.ics.oop.utils.ConfigurationData;
 import agh.ics.oop.utils.FileNameGenerator;
 import javafx.fxml.FXML;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SetupController {
-    @FXML
-    private TextField heightField;
 
     @FXML
-    private TextField widthField;
+    private TextField heightField, widthField, initialPlantsField, plantEnergyField, plantsPerDayField, initialAnimalsField, initialAnimalEnergyField, minEnergyToReproduceField, parentEnergyConsumptionField, minMutationsField, maxMutationsField, genomeLengthField, movingCostField, refreshTimeField;
 
     @FXML
-    private TextField initialPlantsField;
+    public RadioButton csv0, csv1;
 
     @FXML
-    private TextField plantEnergyField;
+    private RadioButton growVariant1, growVariant2;
 
     @FXML
-    private TextField plantsPerDayField;
+    private RadioButton behaviorVariant1, behaviorVariant2;
 
-    @FXML
-    private RadioButton growVariant1;
-
-    @FXML
-    private RadioButton growVariant2;
-
-    @FXML
-    private TextField initialAnimalsField;
-
-    @FXML
-    private TextField initialAnimalEnergyField;
-
-    @FXML
-    private TextField minEnergyToReproduceField;
-
-    @FXML
-    private TextField parentEnergyConsumptionField;
-
-    @FXML
-    private TextField minMutationsField;
-
-    @FXML
-    private TextField maxMutationsField;
-
-    @FXML
-    private TextField genomeLengthField;
-
-    @FXML
-    private RadioButton behaviorVariant1;
-
-    @FXML
-    private RadioButton behaviorVariant2;
-
-    @FXML
-    private TextField movingCostField;
 
     @FXML
     private void initialize() {
@@ -81,20 +44,52 @@ public class SetupController {
         behaviorVariant1.setToggleGroup(group2);
         behaviorVariant2.setToggleGroup(group2);
 
-        Path resourcesPath = null;
-        try {
-            resourcesPath = Paths.get(getClass().getClassLoader().getResource("").toURI());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        Path configFolder = resourcesPath.resolve("config");
-        Path filePath = configFolder.resolve("default.txt").normalize().toAbsolutePath();
-        loadConfigurationFromFile(String.valueOf(filePath));
+        ToggleGroup group3 = new ToggleGroup();
+        csv1.setToggleGroup(group3);
+        csv0.setToggleGroup(group3);
+        addValidationListener(heightField, 1, 150);
+        addValidationListener(widthField, 1, 150);
+        addValidationListener(initialPlantsField, 0, 1000);
+        addValidationListener(plantEnergyField, 0, 10000);
+        addValidationListener(plantsPerDayField, 1, 10000);
+        addValidationListener(initialAnimalsField, 1, 1000);
+        addValidationListener(initialAnimalEnergyField, 1, 10000);
+        addValidationListener(minEnergyToReproduceField, 0, 10000);
+        addValidationListener(parentEnergyConsumptionField, 0, 10000);
+        addValidationListener(minMutationsField, 0, 32);
+        addValidationListener(maxMutationsField, 0, 32);
+        addValidationListener(genomeLengthField, 1, 32);
+        addValidationListener(movingCostField, 0, 10000);
+        addValidationListener(refreshTimeField, 0, 10000);
 
+        loadConfigurationFromFile("Jungle.txt");
+
+    }
+
+    private void addValidationListener(TextField field, int min, int max) {
+        field.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty() && !isValidIntegerInput(newValue, min, max)) {
+                field.setText(oldValue);
+            }
+        });
+    }
+
+    private void showAlert() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Validation error");
+        alert.setHeaderText(null);
+        alert.setContentText("Each field must be filled with a valid integer value.");
+        alert.showAndWait();
     }
 
     @FXML
     private void saveData() {
+
+        if (heightField.getText().isEmpty() || widthField.getText().isEmpty() || initialPlantsField.getText().isEmpty() || plantEnergyField.getText().isEmpty() || plantsPerDayField.getText().isEmpty() || initialAnimalsField.getText().isEmpty() || initialAnimalEnergyField.getText().isEmpty() || minEnergyToReproduceField.getText().isEmpty() || parentEnergyConsumptionField.getText().isEmpty() || minMutationsField.getText().isEmpty() || maxMutationsField.getText().isEmpty() || genomeLengthField.getText().isEmpty() || movingCostField.getText().isEmpty() || refreshTimeField.getText().isEmpty()) {
+            showAlert();
+            return;
+        }
+
         try {
             int height = Integer.parseInt(heightField.getText());
             int width = Integer.parseInt(widthField.getText());
@@ -124,26 +119,17 @@ public class SetupController {
                 behaviorVariant = BehaviorVariant.TRAVERSAL_BEHAVIOR;
             }
             int movingCost = Integer.parseInt(movingCostField.getText());
+            int writeCsv;
+            if (csv1.isSelected()) {
+                writeCsv = 1;
+            } else {
+                writeCsv = 0;
+            }
 
-            ConfigurationData configurationData = new ConfigurationData(height, width, initialPlants, plantEnergy, plantsPerDay, growthVariant, initialAnimals, initialAnimalEnergy, minEnergyToReproduce, parentEnergyConsumption, minMutations, maxMutations, genomeLength, behaviorVariant, movingCost);
+            int refreshTime = Integer.parseInt(refreshTimeField.getText());
+            ConfigurationData configurationData = new ConfigurationData(height, width, initialPlants, plantEnergy, plantsPerDay, growthVariant, initialAnimals, initialAnimalEnergy, minEnergyToReproduce, parentEnergyConsumption, minMutations, maxMutations, genomeLength, behaviorVariant, movingCost, writeCsv, refreshTime);
 
             new SimulationLauncher().openNewWindow(configurationData);
-
-            System.out.println("Map height: " + height);
-            System.out.println("Map width: " + width);
-            System.out.println("Initial plant count: " + initialPlants);
-            System.out.println("Plant energy gain: " + plantEnergy);
-            System.out.println("Plants per day: " + plantsPerDay);
-            System.out.println("Plant growth variant: " + growthVariant);
-            System.out.println("Initial animal count: " + initialAnimals);
-            System.out.println("Initial animal energy: " + initialAnimalEnergy);
-            System.out.println("Min energy to reproduce: " + minEnergyToReproduce);
-            System.out.println("Parent energy consumption: " + parentEnergyConsumption);
-            System.out.println("Min mutations in offspring: " + minMutations);
-            System.out.println("Max mutations in offspring: " + maxMutations);
-            System.out.println("Genome length: " + genomeLength);
-            System.out.println("Animal behavior variant: " + behaviorVariant);
-            System.out.println("Moving cost: " + movingCost);
 
         } catch (NumberFormatException e) {
             System.out.println("The entered data is not an integer.");
@@ -152,16 +138,46 @@ public class SetupController {
 
     @FXML
     private void loadDataFromFile() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose file with configuration");
-        File selectedFile = fileChooser.showOpenDialog(new Stage());
+        Path configFolderPath = null;
+        List<String> fileNames = new ArrayList<>();
 
-        if (selectedFile != null) {
-            loadConfigurationFromFile(selectedFile.getAbsolutePath());
+        try {
+            Path resourcesPath = Paths.get(getClass().getClassLoader().getResource("").toURI());
+            configFolderPath = resourcesPath.resolve("config");
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+        try {
+
+            Files.walk(configFolderPath)
+                    .filter(Files::isRegularFile)
+                    .filter(path -> path.toString().endsWith(".txt"))
+                    .forEach(path -> fileNames.add(path.getFileName().toString()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(fileNames.get(0), fileNames);
+        dialog.setTitle("Config chooser");
+        dialog.setHeaderText("Choose config file");
+        dialog.setContentText("Available configs:");
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(this::loadConfigurationFromFile);
+
     }
 
-    public void loadConfigurationFromFile(String filePath) {
+    public void loadConfigurationFromFile(String fileName) {
+        String path = "config/" + fileName;
+        String filePath = "";
+        try {
+            filePath = Paths.get(getClass().getClassLoader().getResource(path).toURI()).toString();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -236,14 +252,25 @@ public class SetupController {
                 case "Moving cost":
                     movingCostField.setText(value);
                     break;
-
+                case "Csv writing":
+                    if (value.equals("1")) {
+                        csv1.setSelected(true);
+                        csv0.setSelected(false);
+                    } else if (value.equals("0")) {
+                        csv1.setSelected(false);
+                        csv0.setSelected(true);
+                    }
+                    break;
+                case "Refresh time":
+                    refreshTimeField.setText(value);
+                    break;
             }
         }
     }
 
     @FXML
     private void saveDataToText() {
-        String fileName = FileNameGenerator.generateFileName();
+        String fileName = FileNameGenerator.generateFileName() + ".txt";
 
         try {
             Path resourcesPath = Paths.get(getClass().getClassLoader().getResource("").toURI());
@@ -264,6 +291,10 @@ public class SetupController {
             data.put("Genome length", genomeLengthField.getText());
             data.put("Animal behavior variant", behaviorVariant1.isSelected() ? "1" : "2");
             data.put("Moving cost", movingCostField.getText());
+            data.put("Csv writing", csv1.isSelected() ? "1" : "0");
+            data.put("Refresh time", refreshTimeField.getText());
+            data.put("Energy from eating one plant", plantEnergyField.getText());
+            data.put("Plants growing each day", plantsPerDayField.getText());
 
 
             try (FileWriter writer = new FileWriter(filePath.toFile())) {
@@ -277,6 +308,15 @@ public class SetupController {
             System.out.println("The data has been saved to a file: " + filePath);
         } catch (URISyntaxException e) {
             e.printStackTrace();
+        }
+    }
+
+    private boolean isValidIntegerInput(String input, int min, int max) {
+        try {
+            int value = Integer.parseInt(input);
+            return value >= min && value <= max;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 }

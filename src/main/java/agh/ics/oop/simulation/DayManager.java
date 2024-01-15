@@ -8,25 +8,32 @@ public class DayManager {
 
     private final GrassDealer grassDealer;
     private final AnimalGuardian animalGuardian;
+    private final WorldMap worldMap;
 
     public DayManager(ConfigurationData config, WorldMap worldMap) {
-        this.grassDealer = switch (config.getGrowthVariant())
+        this.worldMap = worldMap;
+        this.grassDealer = switch (config.growthVariant())
         {
-            case FORESTED_EQUATOR -> new ForestedEquatorGrassDealer(worldMap,config.getPlantsPerDay(), config.getInitialPlants());
-            case LIFE_GIVING_CORPSES -> new LifeGivingCorpsesGrassDealer(worldMap,config.getPlantsPerDay(), config.getInitialPlants());
+            case FORESTED_EQUATOR -> new ForestedEquatorGrassDealer(worldMap, config.plantsPerDay(), config.initialPlants());
+            case LIFE_GIVING_CORPSES -> new LifeGivingCorpsesGrassDealer(worldMap, config.plantsPerDay(), config.initialPlants());
         };
-        this.animalGuardian = new AnimalGuardian(worldMap,config.getInitialAnimals(),config.getInitialAnimalEnergy(),config.getGenomeLength(),config.getBehaviorVariant(),config.getMovingCost(),config.getPlantEnergy(), config.getMinEnergyToReproduce(), config.getParentEnergyConsumption());
+        this.animalGuardian = new AnimalGuardian(worldMap, config.initialAnimals(), config.initialAnimalEnergy(),
+                config.genomeLength(), config.behaviorVariant(), config.movingCost(),
+                config.plantEnergy(), config.minEnergyToReproduce(), config.parentEnergyConsumption(),
+                config.minMutations(), config.maxMutations());
     }
-    public void initializeFirstDay()
-    {
+
+    public void initializeFirstDay() {
         grassDealer.initializeGrass();
         animalGuardian.initializeAnimals();
     }
+
     public void updateDay() {
-        grassDealer.spawnGrass();
-        animalGuardian.removeDeadAnimals();
         animalGuardian.moveAnimals();
         animalGuardian.eatGrass();
         animalGuardian.reproduceAnimals();
+        animalGuardian.removeDeadAnimals();
+        grassDealer.spawnGrass();
+        worldMap.increaseWorldLifespan();
     }
 }

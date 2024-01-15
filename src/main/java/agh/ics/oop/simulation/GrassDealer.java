@@ -6,6 +6,5 @@ import java.util.LinkedList;
 
 public interface GrassDealer {
     void initializeGrass();
-
     void spawnGrass();
 }

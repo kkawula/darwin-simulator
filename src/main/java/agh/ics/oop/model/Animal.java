@@ -3,34 +3,31 @@ package agh.ics.oop.model;
 import agh.ics.oop.simulation.MoveValidator;
 
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Objects;
+import java.util.*;
 
 
 public class Animal implements Comparable<Animal> {
+
+    public UUID ID = UUID.randomUUID();
     private Vector2d position;
     private Animal father;
     private Animal mother;
     private int energy;
     private int age = 0;
-    private final int birthDay = 0;
-    private final int deathDay = 0;
-    private final boolean isDead = false;
-    private int children = 0;
-    private int offspring = 0;
-    private final int grassEaten = 0;
-    private int genomeLength;
+    private final int birthDay;
+    private int deathDay = 0;
+    private boolean isDead = false;
+    private final LinkedList<Animal> children = new LinkedList<>();
+    private int grassEaten = 0;
     public int activeGene = 0;
     private final Genome genome;
-
     public Behavior behavior;
 
 
-    public Animal (Vector2d newPosition, int energy, int genomeLength, BehaviorVariant behaviorVariant) {
-        this.position = newPosition;
-        this.energy = energy;
-        this.genomeLength = genomeLength;
+    public Animal (Vector2d newPosition, int initialEnergy, int genomeLength, BehaviorVariant behaviorVariant) {
+        position = newPosition;
+        energy = initialEnergy;
+        birthDay = 0;
         behavior = switch (behaviorVariant)
         {
             case TRAVERSAL_BEHAVIOR -> new TraversalBehavior();
@@ -39,63 +36,55 @@ public class Animal implements Comparable<Animal> {
         this.genome = new Genome(genomeLength);
     }
 
-    public Animal(Vector2d newPosition, int energy, Animal father, Animal mother, BehaviorVariant behaviorVariant) {
+    public Animal(Vector2d newPosition, int energy, int birthDay, Animal father, Animal mother, Behavior behaviorVariant, int minimalMutations, int maximalMutations) {
         position = newPosition;
         this.energy = energy;
         this.father = father;
         this.mother = mother;
-
-        behavior = switch (behaviorVariant)
-        {
-            case TRAVERSAL_BEHAVIOR -> new TraversalBehavior();
-            case PREDESTINATION_BEHAVIOR -> new PredestinationBehavior();
-        };
-
-        updateChildren();
-
+        this.birthDay = birthDay;
+        behavior = behaviorVariant;
         this.genome = new Genome(father.getEnergy(), mother.getEnergy(), father.getGenome(), mother.getGenome());
+        RandomMutation.mutate(this.genome,minimalMutations,maximalMutations);
     }
+    public static Animal reproduce(Animal father, Animal mother, int parentEnergyConsumption, int birthDay, int minimalMutations, int maximalMutations)
+    {
 
-    public void updateChildren() {
-        father.setChildren(father.getChildren() + 1);
-        mother.setChildren(mother.getChildren() + 1);
-
-        HashSet<Animal> visitedParents = new HashSet<>();
-        updateOffspring(visitedParents);
+        Animal child = new Animal(father.position, parentEnergyConsumption, birthDay, father, mother, father.behavior, minimalMutations, maximalMutations);
+        father.children.add(child);
+        mother.children.add(child);
+        father.energy-=parentEnergyConsumption;
+        mother.energy-=parentEnergyConsumption;
+        return child;
     }
-
-    public void updateOffspring(HashSet<Animal> visitedParents) {
-
-        if (father != null && !visitedParents.contains(father)) {
-            father.setOffspring(father.getOffspring() + 1);
-            visitedParents.add(father);
-            father.updateOffspring(visitedParents);
-        }
-        if (mother != null && !visitedParents.contains(mother)) {
-            mother.setOffspring(mother.getOffspring() + 1);
-            visitedParents.add(mother);
-            mother.updateOffspring(visitedParents);
-        }
-    }
-
     public void performGeneBehavior() {
         behavior.geneBehavior(this);
     }
 
     public int getChildren() {
-        return children;
+        return children.size();
     }
 
-    public int getOffspring() {
-        return offspring;
-    }
-
-    public void setChildren(int children) {
-        this.children = children;
-    }
-
-    public void setOffspring(int offspring) {
-        this.offspring = offspring;
+    synchronized public int getOffspring() {
+        HashSet<Animal> visitedAnimals = new HashSet<>();
+        LinkedList<Animal> stack = new LinkedList<>();
+        for(Animal animal : children)
+        {
+            stack.push(animal);
+            visitedAnimals.add(animal);
+        }
+        int numberOfOffspring = 0;
+        while(!stack.isEmpty())
+        {
+            Animal animal = stack.pop();
+            visitedAnimals.add(animal);
+            numberOfOffspring += 1;
+            for(Animal hisChild : animal.children)
+            {
+                if(!visitedAnimals.contains(hisChild))
+                    stack.push(hisChild);
+            }
+        }
+        return numberOfOffspring;
     }
 
     public Genome getGenome() {
@@ -106,10 +95,40 @@ public class Animal implements Comparable<Animal> {
         return energy;
     }
 
+    public String getActiveGene() {
+        return genome.getGene(activeGene).toString();
+    }
+
     public int getAge(){return age;}
+
+    public int getBirthDay(){return birthDay;}
+
+    public int getGrassEaten(){return grassEaten;}
+
+    public int setEnergy(int energy) {
+        this.energy = energy;
+        return energy;
+    }
 
     public Vector2d getPosition() {
         return position;
+    }
+
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void kill() {
+        isDead = true;
+    }
+
+    public int getDeathDay() {
+        return deathDay;
+    }
+
+    public void setDeathDay(int deathDay) {
+        this.deathDay = deathDay;
     }
 
     @Override
@@ -119,19 +138,27 @@ public class Animal implements Comparable<Animal> {
 
     public void eatGrass(int plantEnergy) {
         energy+=plantEnergy;
+        grassEaten++;
     }
 
     public void move(MoveValidator moveValidator, int movingCost) {
         age++;
-        energy-=movingCost;
+        energy -= movingCost;
         position = moveValidator.newPosition(position, genome.getGene(activeGene));
         this.performGeneBehavior();
     }
+
+    public UUID getID() {
+        return ID;
+    }
+
     @Override
     public int compareTo(Animal other) {
         return Comparator.comparing(Animal::getEnergy)
                 .thenComparing(Animal::getAge)
-                .thenComparing(Animal::getOffspring)
+                .thenComparing(Animal::getChildren)
+                .thenComparing(Animal::getBirthday)
+                .thenComparing(Animal::getID)
                 .compare(this, other);
     }
 
@@ -140,11 +167,19 @@ public class Animal implements Comparable<Animal> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Animal animal = (Animal) o;
-        return energy == animal.energy && age == animal.age && birthDay == animal.birthDay && deathDay == animal.deathDay && isDead == animal.isDead && children == animal.children && offspring == animal.offspring && grassEaten == animal.grassEaten && genomeLength == animal.genomeLength && activeGene == animal.activeGene && Objects.equals(position, animal.position) && Objects.equals(father, animal.father) && Objects.equals(mother, animal.mother) && Objects.equals(genome, animal.genome) && Objects.equals(behavior, animal.behavior);
+        return Objects.equals(mother, animal.mother) && Objects.equals(father, animal.father) && Objects.equals(age,animal.age) && Objects.equals(ID, animal.ID);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(position, father, mother, energy, age, birthDay, deathDay, isDead, children, offspring, grassEaten, genomeLength, activeGene, genome, behavior);
+        return Objects.hash(father, mother, age, ID);
+    }
+
+    public int getBirthday() {
+        return birthDay;
+    }
+
+    public int getEatenPlants() {
+        return grassEaten;
     }
 }

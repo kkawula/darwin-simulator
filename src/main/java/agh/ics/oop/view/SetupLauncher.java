@@ -1,4 +1,4 @@
-package agh.ics.oop.presenter;
+package agh.ics.oop.view;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

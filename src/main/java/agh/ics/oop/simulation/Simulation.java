@@ -1,13 +1,18 @@
 package agh.ics.oop.simulation;
 
-import agh.ics.oop.presenter.SimulationLauncher;
+import agh.ics.oop.presenter.DisplayData;
+import agh.ics.oop.view.SimulationLauncher;
+import agh.ics.oop.presenter.SimulationObserver;
 import agh.ics.oop.presenter.StatsWriter;
 import agh.ics.oop.utils.ConfigurationData;
 import agh.ics.oop.utils.CsvWriter;
 import javafx.application.Platform;
 
-public class Simulation implements Runnable {
+import java.util.HashSet;
+import java.util.Set;
 
+public class Simulation implements Runnable {
+    private Set<SimulationObserver> observers = new HashSet<>();
     private final DayManager dayManager;
     public final WorldMap worldMap;
     public final StatsWriter statsWriter;
@@ -26,6 +31,22 @@ public class Simulation implements Runnable {
         statsWriter = new StatsWriter(worldMap);
         this.observer = observer;
         this.refreshTime = config.refreshTime();
+    }
+
+    public void subscribe(SimulationObserver observer) {
+        observers.add(observer);
+    }
+
+    private void notifyObservers(DisplayData displayData) {
+        for (SimulationObserver observer : observers) {
+            observer.update(displayData);
+        }
+    }
+
+    private DisplayData collectData() {
+        // tutaj chyba bedzie trzeba zrobic jakąś logike przypisywania zwierzecia
+        // do jakiejs pointera przechowywanego tutaj chyba
+        return new DisplayData(worldMap, null);
     }
 
     public void pause(){
@@ -53,6 +74,9 @@ public class Simulation implements Runnable {
             dayManager.updateDay();
             statsWriter.updateStats();
             csvWriter.addDayToCsv(statsWriter);
+            DisplayData stats = collectData();
+            notifyObservers(stats);
+
             Platform.runLater(()->
             {
                 observer.updateStats();
@@ -70,6 +94,4 @@ public class Simulation implements Runnable {
             }
         }
     }
-
-
 }

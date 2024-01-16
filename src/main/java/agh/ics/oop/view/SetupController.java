@@ -1,4 +1,4 @@
-package agh.ics.oop.presenter;
+package agh.ics.oop.view;
 
 import agh.ics.oop.model.BehaviorVariant;
 import agh.ics.oop.model.GrowthVariant;
@@ -6,18 +6,13 @@ import agh.ics.oop.utils.ConfigurationData;
 import agh.ics.oop.utils.FileNameGenerator;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class SetupController {
 
@@ -51,9 +46,9 @@ public class SetupController {
         addValidationListener(widthField, 1, 150);
         addValidationListener(initialPlantsField, 0, 1000);
         addValidationListener(plantEnergyField, 0, 10000);
-        addValidationListener(plantsPerDayField, 1, 10000);
-        addValidationListener(initialAnimalsField, 1, 1000);
-        addValidationListener(initialAnimalEnergyField, 1, 10000);
+        addValidationListener(plantsPerDayField, 0, 10000);
+        addValidationListener(initialAnimalsField, 0, 1000);
+        addValidationListener(initialAnimalEnergyField, 0, 10000);
         addValidationListener(minEnergyToReproduceField, 0, 10000);
         addValidationListener(parentEnergyConsumptionField, 0, 10000);
         addValidationListener(minMutationsField, 0, 32);

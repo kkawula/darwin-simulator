@@ -5,9 +5,11 @@ import agh.ics.oop.model.Genome;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.simulation.WorldMap;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public class StatsWriter {
+public class SimulationStats {
 
     private final WorldMap worldMap;
     private int worldLifespan;
@@ -21,58 +23,9 @@ public class StatsWriter {
     private int grass;
     private int maximumAnimalEnergy;
 
-    // data for tracking exact animal
-
-    private Animal animal;
-    private int birthday;
-    private String activeGene ="";
-
-    private String genome = "";
-    private int energy;
-    private int eatenPlants;
-    private int children;
-    private int descendants;
-    private int age;
-    private Vector2d position;
-    private String positionString = "";
-
-    private boolean isFollowed = false;
-
-    public int getBirthday() {
-        return birthday;
-    }
-    public String getGenome() {
-        return genome;
-    }
-    public String getActiveGene() {
-        return activeGene;
-    }
-    public int getEnergy() {
-        return energy;
-    }
-
-    public int getEatenPlants() {
-        return eatenPlants;
-    }
-
-    public int getChildren() {
-        return children;
-    }
-
-    public int getDescendants() {
-        return descendants;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public String getPositionString() {
-        return positionString;
-    }
-
-    public StatsWriter(WorldMap worldMap) {
+    public SimulationStats(WorldMap worldMap) {
         this.worldMap = worldMap;
+        updateStats();
     }
 
     public void updateStats() {
@@ -86,21 +39,6 @@ public class StatsWriter {
         updateGrass();
         updateBestGenes();
 
-        if (isFollowed) {
-            updateFollowedAnimalStats();
-            updatePosition();
-        }
-    }
-    private void updateFollowedAnimalStats() {
-        birthday = animal.getBirthDay();
-        activeGene = animal.getGenome().getGene(animal.activeGene).toString();
-        genome = animal.getGenome().toString();
-        energy = animal.getEnergy();
-        eatenPlants = animal.getGrassEaten();
-        children = animal.getChildren();
-        descendants = animal.getOffspring();
-        age = animal.getAge();
-        positionString = animal.getPosition().toString();
     }
 
     private void updateMaximumAnimalEnergy() {
@@ -112,13 +50,6 @@ public class StatsWriter {
 
     public int getMaximumAnimalEnergy() {
         return maximumAnimalEnergy;
-    }
-
-    public Vector2d getPosition() {
-        return position;
-    }
-    private void updatePosition() {
-        position = animal.getPosition();
     }
 
     private void updateGrass() {
@@ -162,10 +93,6 @@ public class StatsWriter {
         else
             averageEnergy = worldMap.getAliveAnimals().stream().mapToInt(Animal::getEnergy).average().getAsDouble();
     }
-    public Animal getAnimal()
-    {
-        return animal;
-    }
     private void updateAverageLifeLength() {
         if (worldMap.getDeadAnimals().isEmpty())
             averageLifeLength = 0;
@@ -184,20 +111,6 @@ public class StatsWriter {
     }
     private void updateWorldLifespan() {
         worldLifespan = worldMap.getWorldLifespan();
-    }
-
-    public void setAnimal (Vector2d vector) {
-        this.animal = worldMap.getLastAnimal(vector);
-        isFollowed = true;
-    }
-
-    public void unFollowAnimal() {
-        this.animal = null;
-        isFollowed = false;
-    }
-
-    public boolean isFollowed() {
-        return isFollowed;
     }
 
     public int getFreeFields() {

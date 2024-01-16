@@ -1,7 +1,6 @@
-package agh.ics.oop.presenter;
+package agh.ics.oop.view;
 
 import agh.ics.oop.simulation.Simulation;
-import agh.ics.oop.simulation.WorldMap;
 import agh.ics.oop.utils.ConfigurationData;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -37,6 +36,7 @@ public class SimulationLauncher extends Application {
         Scene scene = new Scene(loader.load());
         controller = loader.getController();
         controller.init(simulation);
+        simulation.subscribe(controller);
         updateGrid();
 
         primaryStage.setTitle("Simulation");

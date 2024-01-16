@@ -1,7 +1,10 @@
-package agh.ics.oop.presenter;
+package agh.ics.oop.view;
 
 import agh.ics.oop.model.Animal;
 import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.presenter.DisplayData;
+import agh.ics.oop.presenter.SimulationObserver;
+import agh.ics.oop.presenter.StatsWriter;
 import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.simulation.WorldMap;
 import agh.ics.oop.utils.ConfigurationData;
@@ -23,7 +26,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class SimulationController {
+public class SimulationController implements SimulationObserver {
 
     private static final int WIDTH = 700;
     private static final int HEIGHT = 700;
@@ -53,12 +56,13 @@ public class SimulationController {
     @FXML
     private VBox animalStats;
     private GridPane grid;
-
     private StatsWriter statsWriter;
     private List<Vector2d> grassesPositions;
     private HashMap<Vector2d, Integer> animalsPositions;
     private LinkedList<Vector2d> deadAnimalsPositions = new LinkedList<>();
     private int cellSize;
+
+    private boolean isPaused = false;
 
     public void init(Simulation simulation) {
         this.simulation = simulation;
@@ -67,6 +71,11 @@ public class SimulationController {
         this.statsWriter = simulation.statsWriter;
 
         generateGrid();
+    }
+
+    @Override
+    public void update(DisplayData displayData) {
+        System.out.println("update");
     }
 
     public Circle createEnergyCircle(double energy) {
@@ -182,7 +191,7 @@ public class SimulationController {
                     int columnIndex = GridPane.getColumnIndex(source);
                     Vector2d newFollowedAnimalPosition = new Vector2d(columnIndex, rowIndex);
 
-                    if (!worldMap.getAnimals().get(newFollowedAnimalPosition).isEmpty() && newFollowedAnimalPosition != followedAnimalPosition) {
+                    if (isPaused && !worldMap.getAnimals().get(newFollowedAnimalPosition).isEmpty() && newFollowedAnimalPosition != followedAnimalPosition) {
                         statsWriter.setAnimal(newFollowedAnimalPosition);
                         setNewFollowedAnimalPosition(statsWriter.getAnimal());
                     }
@@ -202,17 +211,19 @@ public class SimulationController {
         simulation.start();
         startButton.disableProperty().setValue(true);
         pauseButton.disableProperty().setValue(false);
+        isPaused = false;
     }
     @FXML void pauseSimulation() {
         simulation.pause();
         startButton.disableProperty().setValue(false);
         pauseButton.disableProperty().setValue(true);
-
+        isPaused = true;
     }
     @FXML void shutDownSimulation() {
         simulation.shutDown();
         startButton.disableProperty().setValue(true);
         pauseButton.disableProperty().setValue(true);
+        isPaused = true;
     }
     @FXML
     synchronized void stopFollowingAnimal() {

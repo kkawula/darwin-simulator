@@ -66,6 +66,7 @@ public class SimulationController implements SimulationObserver {
         this.worldMap = simulation.worldMap;
 
         generateGrid();
+        fillCells();
     }
 
     @Override

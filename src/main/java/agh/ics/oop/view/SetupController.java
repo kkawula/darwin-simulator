@@ -4,6 +4,7 @@ import agh.ics.oop.model.BehaviorVariant;
 import agh.ics.oop.model.GrowthVariant;
 import agh.ics.oop.utils.ConfigurationData;
 import agh.ics.oop.utils.FileNameGenerator;
+import agh.ics.oop.utils.SimulationEngine;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -27,6 +28,8 @@ public class SetupController {
 
     @FXML
     private RadioButton behaviorVariant1, behaviorVariant2;
+
+    private final SimulationEngine simulationEngine = new SimulationEngine();
 
 
     @FXML
@@ -124,7 +127,7 @@ public class SetupController {
             int refreshTime = Integer.parseInt(refreshTimeField.getText());
             ConfigurationData configurationData = new ConfigurationData(height, width, initialPlants, plantEnergy, plantsPerDay, growthVariant, initialAnimals, initialAnimalEnergy, minEnergyToReproduce, parentEnergyConsumption, minMutations, maxMutations, genomeLength, behaviorVariant, movingCost, writeCsv, refreshTime);
 
-            new SimulationLauncher().openNewWindow(configurationData);
+            simulationEngine.start(configurationData);
 
         } catch (NumberFormatException e) {
             System.out.println("The entered data is not an integer.");

@@ -43,8 +43,6 @@ public class Simulation implements Runnable {
         followedAnimal = worldMap.getLastAnimal(newPosition);
     }
     private DisplayData collectData() {
-        // tutaj chyba bedzie trzeba zrobic jakąś logike przypisywania zwierzecia
-        // do jakiejs pointera przechowywanego tutaj chyba
         return new DisplayData(worldMap, followedAnimal);
     }
 

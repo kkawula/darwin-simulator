@@ -52,6 +52,7 @@ public class SimulationController implements SimulationObserver {
     private List<Vector2d> grassesPositions = new LinkedList<>();
     private HashMap<Vector2d, Integer> animalsPositions = new HashMap<>();
     private LinkedList<Vector2d> deadAnimalsPositions = new LinkedList<>();
+    private LinkedList<Vector2d> theMostPopularGenesPositions = new LinkedList<>();
     private SimulationStats simulationStats;
     private AnimalStats animalStats;
     private int cellSize;
@@ -75,10 +76,15 @@ public class SimulationController implements SimulationObserver {
             deadAnimalsPositions = displayData.getPositionsData().getLastDayDeadAnimalsPositions();
             animalsPositions = displayData.getPositionsData().getAnimalPositions();
             grassesPositions = displayData.getPositionsData().getGrassPositions();
+            theMostPopularGenesPositions = displayData.getPositionsData().getTheMostPopularGenesPositions();
 
             animalStats = displayData.getAnimalStats();
             if (Objects.nonNull(animalStats))
-                updateFollowedAnimalStats();
+                if(animalStats.isDead()) {
+                    deathDayValue.setText(animalStats.getDeathDay() + "");
+                } else {
+                    updateFollowedAnimalStats();
+                }
 
             fillCells();
             updateStats();
@@ -151,8 +157,11 @@ public class SimulationController implements SimulationObserver {
         Circle animal = (Circle) cell.getChildren().get(0);
         animal.setFill(Color.PURPLE);
         followedAnimalPosition = newFollowedAnimalPosition;
-        updateFollowAnimalStatsOnPause(worldMap.getLastAnimal(followedAnimalPosition));
-//        updateFollowedAnimalStats();
+        if (isPaused) {
+            updateFollowAnimalStatsOnPause(worldMap.getLastAnimal(followedAnimalPosition));
+        } else {
+            updateFollowedAnimalStats();
+        }
     }
 
     public void fillCells() {
@@ -195,9 +204,10 @@ public class SimulationController implements SimulationObserver {
                     Vector2d newFollowedAnimalPosition = new Vector2d(columnIndex, rowIndex);
 
                     if (isPaused && !worldMap.getAnimals().get(newFollowedAnimalPosition).isEmpty() && newFollowedAnimalPosition != followedAnimalPosition) {
+                        isFollowed = true;
                         simulation.setFollowedAnimal(newFollowedAnimalPosition);
                         setNewFollowedAnimalPosition(newFollowedAnimalPosition);
-                        isFollowed = true;
+
                     }
                 });
 
@@ -206,6 +216,13 @@ public class SimulationController implements SimulationObserver {
         }
         grid.setGridLinesVisible(true);
         content.getChildren().add(grid);
+    }
+
+    private void fillTheMostPopularGenesPositions() {
+        for (Vector2d position : theMostPopularGenesPositions) {
+            GridPane cell = (GridPane) grid.getChildren().get(position.getY() * config.mapWidth() + position.getX());
+            cell.setStyle("-fx-background-color: #FFD700;");
+        }
     }
 
 
@@ -221,6 +238,8 @@ public class SimulationController implements SimulationObserver {
         startButton.disableProperty().setValue(false);
         pauseButton.disableProperty().setValue(true);
         isPaused = true;
+
+        fillTheMostPopularGenesPositions();
     }
     @FXML void shutDownSimulation() {
         simulation.shutDown();

@@ -47,8 +47,4 @@ public class SimulationLauncher extends Application {
     public void updateGrid() {
         controller.fillCells();
     }
-
-    public void updateStats() {
-        controller.updateStats();
-    }
 }

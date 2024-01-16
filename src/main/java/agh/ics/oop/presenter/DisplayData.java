@@ -29,8 +29,6 @@ public class DisplayData {
         return simulationStats;
     }
     public AnimalStats getAnimalStats() {
-        // mozna rzucic wyjatek jesli animal == null
-        // jakis fancy wyjatek
         return animalStats;
     }
 

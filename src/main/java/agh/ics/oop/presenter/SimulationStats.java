@@ -21,7 +21,6 @@ public class SimulationStats {
     private double averageChildrenNumber;
     private Genome bestGenes;
     private int grass;
-    private int maximumAnimalEnergy;
 
     public SimulationStats(WorldMap worldMap) {
         this.worldMap = worldMap;
@@ -38,17 +37,6 @@ public class SimulationStats {
         updateWorldLifespan();
         updateGrass();
         updateBestGenes();
-    }
-
-    private void updateMaximumAnimalEnergy() {
-        if (worldMap.getAliveAnimals().isEmpty())
-            maximumAnimalEnergy = 0;
-        else
-            maximumAnimalEnergy = worldMap.getAliveAnimals().stream().mapToInt(Animal::getEnergy).max().getAsInt();
-    }
-
-    public int getMaximumAnimalEnergy() {
-        return maximumAnimalEnergy;
     }
 
     private void updateGrass() {

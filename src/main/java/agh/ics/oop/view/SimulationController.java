@@ -2,13 +2,12 @@ package agh.ics.oop.view;
 
 import agh.ics.oop.model.Animal;
 import agh.ics.oop.model.Vector2d;
-import agh.ics.oop.presenter.DisplayData;
-import agh.ics.oop.presenter.SimulationObserver;
-import agh.ics.oop.presenter.StatsWriter;
+import agh.ics.oop.presenter.*;
 import agh.ics.oop.simulation.Simulation;
 import agh.ics.oop.simulation.WorldMap;
 import agh.ics.oop.utils.ConfigurationData;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -32,17 +31,14 @@ public class SimulationController implements SimulationObserver {
     private static final int HEIGHT = 700;
 
     @FXML
-    private Button startButton;
-    @FXML
-    private Button pauseButton;
+    private Button startButton, pauseButton;
     private ConfigurationData config;
     private WorldMap worldMap;
     private Simulation simulation;
-
     private Vector2d followedAnimalPosition;
 
     @FXML
-    private VBox content;
+    private VBox content, animalStatsPanel;
 
     @FXML
     private Label mapWidthValue, mapHeightValue, animalsAliveValue,
@@ -52,34 +48,46 @@ public class SimulationController implements SimulationObserver {
             genomeValue, activeGeneValue,energyValue, eatenPlantsValue,
             childrenValue, descendantsValue, ageValue,
             positionValue, bestGenesValue, deathDayValue;
-
-    @FXML
-    private VBox animalStats;
     private GridPane grid;
-    private StatsWriter statsWriter;
-    private List<Vector2d> grassesPositions;
-    private HashMap<Vector2d, Integer> animalsPositions;
+    private List<Vector2d> grassesPositions = new LinkedList<>();
+    private HashMap<Vector2d, Integer> animalsPositions = new HashMap<>();
     private LinkedList<Vector2d> deadAnimalsPositions = new LinkedList<>();
+    private SimulationStats simulationStats;
+    private AnimalStats animalStats;
     private int cellSize;
-
     private boolean isPaused = false;
+
+    private boolean isFollowed = false;
 
     public void init(Simulation simulation) {
         this.simulation = simulation;
         this.config = simulation.config;
         this.worldMap = simulation.worldMap;
-        this.statsWriter = simulation.statsWriter;
 
         generateGrid();
     }
 
     @Override
     public void update(DisplayData displayData) {
-        System.out.println("update");
+        Platform.runLater(() -> {
+            simulationStats = displayData.getSimulationStats();
+
+            deadAnimalsPositions = displayData.getPositionsData().getLastDayDeadAnimalsPositions();
+            animalsPositions = displayData.getPositionsData().getAnimalPositions();
+            grassesPositions = displayData.getPositionsData().getGrassPositions();
+
+            animalStats = displayData.getAnimalStats();
+            if (Objects.nonNull(animalStats))
+                updateFollowedAnimalStats();
+
+            fillCells();
+            updateStats();
+        });
+
     }
 
     public Circle createEnergyCircle(double energy) {
-        double averageEnergy = statsWriter.getAverageEnergy();
+        double averageEnergy = simulationStats.getAverageEnergy();
         double distanceFromAverage = energy - averageEnergy;
         double shift = distanceFromAverage / averageEnergy;
         double saturation = Math.max(0.0, Math.min(1.0, 0.5 + shift));
@@ -127,8 +135,8 @@ public class SimulationController implements SimulationObserver {
         }
     }
 
-    private void setNewFollowedAnimalPosition(Animal newFollowedAnimal){
-        Vector2d newFollowedAnimalPosition = newFollowedAnimal.getPosition();
+    private void setNewFollowedAnimalPosition(Vector2d newFollowedAnimalPosition) {
+
         if (Objects.nonNull(followedAnimalPosition)) {
             int row = followedAnimalPosition.getY();
             int col = followedAnimalPosition.getX();
@@ -137,30 +145,28 @@ public class SimulationController implements SimulationObserver {
         int row = newFollowedAnimalPosition.getY();
         int col = newFollowedAnimalPosition.getX();
 
-        animalStats.setVisible(true);
+        animalStatsPanel.setVisible(true);
 
         GridPane cell = (GridPane) grid.getChildren().get(row * config.mapWidth() + col);
         Circle animal = (Circle) cell.getChildren().get(0);
         animal.setFill(Color.PURPLE);
         followedAnimalPosition = newFollowedAnimalPosition;
-        updateFollowAnimalStatsOnPause(newFollowedAnimal);
+        updateFollowAnimalStatsOnPause(worldMap.getLastAnimal(followedAnimalPosition));
+//        updateFollowedAnimalStats();
     }
 
     public void fillCells() {
-        deadAnimalsPositions = worldMap.getLastDayDeadAnimalsPositions();
-        animalsPositions = worldMap.getAnimalsPositions();
-        grassesPositions = worldMap.getGrassesPositions();
 
         for (int row = 0; row < config.mapHeight(); row++)
             for (int col = 0; col < config.mapWidth(); col++)
                 fillCell(col, row);
 
-        if(statsWriter.isFollowed()) {
-            if(statsWriter.getAnimal().isDead())
+        if(isFollowed) {
+            if(animalStats.isDead())
             {
-                deathDayValue.setText(statsWriter.getAnimal().getDeathDay()+"");
+                deathDayValue.setText(animalStats.getDeathDay() + "");
             }
-            else setNewFollowedAnimalPosition(statsWriter.getAnimal());
+            else setNewFollowedAnimalPosition(animalStats.getPosition());
         }
     }
 
@@ -171,9 +177,6 @@ public class SimulationController implements SimulationObserver {
         int columns = config.mapWidth();
         grid = new GridPane();
         cellSize = Math.min(WIDTH/columns, HEIGHT/rows);
-
-        animalsPositions = worldMap.getAnimalsPositions();
-        grassesPositions = worldMap.getGrassesPositions();
 
         ColumnConstraints width = new ColumnConstraints(cellSize);
         RowConstraints height = new RowConstraints(cellSize);
@@ -192,13 +195,13 @@ public class SimulationController implements SimulationObserver {
                     Vector2d newFollowedAnimalPosition = new Vector2d(columnIndex, rowIndex);
 
                     if (isPaused && !worldMap.getAnimals().get(newFollowedAnimalPosition).isEmpty() && newFollowedAnimalPosition != followedAnimalPosition) {
-                        statsWriter.setAnimal(newFollowedAnimalPosition);
-                        setNewFollowedAnimalPosition(statsWriter.getAnimal());
+                        simulation.setFollowedAnimal(newFollowedAnimalPosition);
+                        setNewFollowedAnimalPosition(newFollowedAnimalPosition);
+                        isFollowed = true;
                     }
                 });
 
                 grid.add(cell, col, row);
-                fillCell(col, row);
             }
         }
         grid.setGridLinesVisible(true);
@@ -227,9 +230,9 @@ public class SimulationController implements SimulationObserver {
     }
     @FXML
     synchronized void stopFollowingAnimal() {
-        statsWriter.unFollowAnimal();
+        isFollowed = false;
         fillCell(followedAnimalPosition.getX(), followedAnimalPosition.getY());
-        animalStats.setVisible(false);
+        animalStatsPanel.setVisible(false);
 
     }
 
@@ -241,30 +244,27 @@ public class SimulationController implements SimulationObserver {
 
         mapWidthValue.setText(config.mapWidth() + "");
         mapHeightValue.setText(config.mapHeight() + "");
-        animalsAliveValue.setText(statsWriter.getAnimalsAlive() + "");
-        animalsDeadValue.setText(statsWriter.getAnimalsDead() + "");
-        plantsValue.setText(statsWriter.getGrass() + "");
-        freeFieldsValue.setText(statsWriter.getFreeFields() + "");
-        averageEnergyValue.setText(String.format("%.2f", statsWriter.getAverageEnergy()));
-        averageLifespanValue.setText(String.format("%.2f", statsWriter.getAverageLifeLength()));
-        averageChildrenValue.setText(String.format("%.2f", statsWriter.getAverageChildrenNumber()));
-        worldLifespanValue.setText(statsWriter.getWorldLifespan() + "");
-        bestGenesValue.setText(statsWriter.getBestGenes() + "");
-        if(animalStats.visibleProperty().get() && !statsWriter.getAnimal().isDead())
-            updateFollowedAnimalStats();
+        animalsAliveValue.setText(simulationStats.getAnimalsAlive() + "");
+        animalsDeadValue.setText(simulationStats.getAnimalsDead() + "");
+        plantsValue.setText(simulationStats.getGrass() + "");
+        freeFieldsValue.setText(simulationStats.getFreeFields() + "");
+        averageEnergyValue.setText(String.format("%.2f", simulationStats.getAverageEnergy()));
+        averageLifespanValue.setText(String.format("%.2f", simulationStats.getAverageLifeLength()));
+        averageChildrenValue.setText(String.format("%.2f", simulationStats.getAverageChildrenNumber()));
+        worldLifespanValue.setText(simulationStats.getWorldLifespan() + "");
+        bestGenesValue.setText(simulationStats.getBestGenes() + "");
     }
 
     private void updateFollowedAnimalStats() {
-        birthdayValue.setText(statsWriter.getBirthday() + "");
-        genomeValue.setText(statsWriter.getGenome() + "");
-        activeGeneValue.setText(statsWriter.getActiveGene() + "");
-        energyValue.setText(statsWriter.getEnergy() + "");
-        eatenPlantsValue.setText(statsWriter.getEatenPlants() + "");
-        childrenValue.setText(statsWriter.getChildren() + "");
-        descendantsValue.setText(statsWriter.getDescendants() + "");
-        ageValue.setText(statsWriter.getAge() + "");
-        positionValue.setText(statsWriter.getPositionString() + "");
-        deathDayValue.setText(statsWriter.getAnimal().isDead() ? statsWriter.getAnimal().getDeathDay() + "" : "");
+        birthdayValue.setText(animalStats.getBirthday() + "");
+        genomeValue.setText(animalStats.getGenome() + "");
+        activeGeneValue.setText(animalStats.getActiveGene() + "");
+        energyValue.setText(animalStats.getEnergy() + "");
+        eatenPlantsValue.setText(animalStats.getEatenPlants() + "");
+        childrenValue.setText(animalStats.getChildren() + "");
+        descendantsValue.setText(animalStats.getDescendants() + "");
+        ageValue.setText(animalStats.getAge() + "");
+        positionValue.setText(animalStats.getPositionString() + "");
     }
     private void updateFollowAnimalStatsOnPause(Animal animal)
     {
@@ -277,6 +277,5 @@ public class SimulationController implements SimulationObserver {
         descendantsValue.setText(animal.getOffspring() + "");
         ageValue.setText(animal.getAge() + "");
         positionValue.setText(animal.getPosition() + "");
-        deathDayValue.setText(animal.isDead() ? statsWriter.getAnimal().getDeathDay() + "" : "");
     }
 }

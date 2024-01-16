@@ -38,7 +38,6 @@ public class SimulationStats {
         updateWorldLifespan();
         updateGrass();
         updateBestGenes();
-
     }
 
     private void updateMaximumAnimalEnergy() {

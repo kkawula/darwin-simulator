@@ -18,10 +18,10 @@ public class DisplayData {
     }
 
     private void createData() {
-        SimulationStats simulationStats = new SimulationStats(worldMap);
-        PositionsData positionsData = new PositionsData(worldMap);
+        simulationStats = new SimulationStats(worldMap);
+        positionsData = new PositionsData(worldMap);
         if (animal != null) {
-            AnimalStats animalStats = new AnimalStats(animal);
+            animalStats = new AnimalStats(animal);
         }
     }
 
@@ -37,4 +37,5 @@ public class DisplayData {
     public PositionsData getPositionsData() {
         return positionsData;
     }
+
 }

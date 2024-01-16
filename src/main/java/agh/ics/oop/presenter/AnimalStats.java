@@ -1,11 +1,13 @@
 package agh.ics.oop.presenter;
 
 import agh.ics.oop.model.Animal;
+import agh.ics.oop.model.Vector2d;
 
 public class AnimalStats {
 
     private final Animal animal;
     private int birthday;
+    private int deathDay;
     private String activeGene = "";
     private String genome = "";
     private int energy;
@@ -13,7 +15,9 @@ public class AnimalStats {
     private int children;
     private int descendants;
     private int age;
+    private boolean isDead = false;
     private String positionString = "";
+    private Vector2d position;
 
     public AnimalStats(Animal animal) {
         this.animal = animal;
@@ -29,6 +33,11 @@ public class AnimalStats {
         descendants = animal.getOffspring();
         age = animal.getAge();
         positionString = animal.getPosition().toString();
+        position = animal.getPosition();
+        isDead = animal.isDead();
+        if (isDead) {
+            deathDay = animal.getDeathDay();
+        }
     }
 
     public int getBirthday() {
@@ -65,5 +74,17 @@ public class AnimalStats {
 
     public String getPositionString() {
         return positionString;
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public int getDeathDay() {
+        return deathDay;
+    }
+
+    public Vector2d getPosition() {
+        return position;
     }
 }

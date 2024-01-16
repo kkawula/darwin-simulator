@@ -1,6 +1,6 @@
 package agh.ics.oop.utils;
 
-import agh.ics.oop.presenter.StatsWriter;
+import agh.ics.oop.presenter.SimulationStats;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -95,11 +95,11 @@ public class CsvWriter {
         }
     }
 
-    public void addDayToCsv(StatsWriter stats) {
-        String[] record = {String.valueOf(stats.getWorldLifespan()), String.valueOf(stats.getAnimalsAlive()),
-                String.valueOf(stats.getGrass()), String.valueOf(stats.getAnimalsDead()),
-                String.valueOf(stats.getAverageLifeLength()), String.valueOf(stats.getAverageEnergy()),
-                String.valueOf(stats.getAverageChildrenNumber()), String.valueOf(stats.getFreeFields()), String.valueOf(stats.getBestGenes())};
+    public void addDayToCsv(SimulationStats simulationStats) {
+        String[] record = {String.valueOf(simulationStats.getWorldLifespan()), String.valueOf(simulationStats.getAnimalsAlive()),
+                String.valueOf(simulationStats.getGrass()), String.valueOf(simulationStats.getAnimalsDead()),
+                String.valueOf(simulationStats.getAverageLifeLength()), String.valueOf(simulationStats.getAverageEnergy()),
+                String.valueOf(simulationStats.getAverageChildrenNumber()), String.valueOf(simulationStats.getFreeFields()), String.valueOf(simulationStats.getBestGenes())};
 
         list.add(record);
     }

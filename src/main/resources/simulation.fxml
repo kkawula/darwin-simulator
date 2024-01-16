@@ -61,7 +61,7 @@
                 <BorderPane>
                     <bottom>
                         <VBox spacing="20" alignment="CENTER">
-                            <VBox fx:id="animalStats" visible="false" alignment="CENTER" spacing="10">
+                            <VBox fx:id="animalStatsPanel" visible="false" alignment="CENTER" spacing="10">
                                 <GridPane gridLinesVisible="true">
                                     <columnConstraints>
                                         <ColumnConstraints maxWidth="90" minWidth="90" prefWidth="90" />

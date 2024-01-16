@@ -22,7 +22,7 @@ public class Simulation implements Runnable {
     CsvWriter csvWriter = new CsvWriter();
     private final long refreshTime;
 
-    public Simulation(ConfigurationData config, SimulationLauncher observer) {
+    public Simulation(ConfigurationData config) {
         this.config = config;
         worldMap = new WorldMap(config.mapWidth(), config.mapHeight());
         dayManager = new DayManager(config, worldMap);

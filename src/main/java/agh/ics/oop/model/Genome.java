@@ -3,7 +3,6 @@ package agh.ics.oop.model;
 import java.util.*;
 
 import static java.lang.Math.max;
-import static java.util.Arrays.stream;
 
 public class Genome {
     private final int length;

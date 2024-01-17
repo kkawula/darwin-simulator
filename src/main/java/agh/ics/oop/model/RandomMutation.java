@@ -12,7 +12,7 @@ import static java.lang.Math.min;
 public class RandomMutation implements Mutation {
 
     public void mutate(Genome genome, int minimumMutations, int maximalMutations) {
-        List<Integer> genesIdx = IntStream.of(0,genome.getLength()-1)
+        List<Integer> genesIdx = IntStream.range(0,genome.getLength()-1)
                 .boxed()
                 .collect(Collectors.toCollection(ArrayList::new));
         Collections.shuffle(genesIdx);

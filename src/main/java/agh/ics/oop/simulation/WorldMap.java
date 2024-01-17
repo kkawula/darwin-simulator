@@ -31,6 +31,7 @@ public class WorldMap implements MoveValidator{
         this.height = height;
         initializeHashMap(width, height);
     }
+
     private void initializeHashMap(int width, int height) {
         for (int i = 0; i < width * height; i++) {
             animals.put(new Vector2d(i % width,i / width), new TreeSet<>());
@@ -40,14 +41,16 @@ public class WorldMap implements MoveValidator{
     public void clearLastDayDeadAnimalsPositions() {
         lastDayDeadAnimalsPositions.clear();
     }
+
     public LinkedList<Animal> getAliveAnimals(){
         return aliveAnimals;
     }
+
     public LinkedList<Animal> getDeadAnimals() {
         return deadAnimals;
     }
 
-    synchronized public HashMap<Vector2d, TreeSet<Animal>> getAnimals() {
+    public HashMap<Vector2d, TreeSet<Animal>> getAnimals() {
         return animals;
     }
 

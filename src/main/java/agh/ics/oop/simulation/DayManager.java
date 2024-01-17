@@ -29,11 +29,11 @@ public class DayManager {
     }
 
     public void updateDay() {
+        grassDealer.spawnGrass();
         animalGuardian.moveAnimals();
         animalGuardian.eatGrass();
         animalGuardian.reproduceAnimals();
         animalGuardian.removeDeadAnimals();
-        grassDealer.spawnGrass();
         worldMap.increaseWorldLifespan();
     }
 }

@@ -2,8 +2,6 @@ package agh.ics.oop.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class RandomMutationTest {
 
     @Test
@@ -11,7 +9,7 @@ class RandomMutationTest {
         Genome genome = new Genome(7);
         System.out.println(genome);
         Mutation mutation = new RandomMutation();
-        mutation.mutate(genome);
+        mutation.mutate(genome,0,2);
         System.out.println(genome);
     }
 }

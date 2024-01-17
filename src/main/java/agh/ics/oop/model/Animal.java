@@ -50,7 +50,6 @@ public class Animal implements Comparable<Animal> {
     }
     public static Animal reproduce(Animal father, Animal mother, int parentEnergyConsumption, int birthDay, int minimalMutations, int maximalMutations)
     {
-
         Animal child = new Animal(father.position, parentEnergyConsumption, birthDay, father, mother, father.behavior, minimalMutations, maximalMutations);
         father.children.add(child);
         mother.children.add(child);
@@ -107,15 +106,9 @@ public class Animal implements Comparable<Animal> {
 
     public int getGrassEaten(){return grassEaten;}
 
-    public int setEnergy(int energy) {
-        this.energy = energy;
-        return energy;
-    }
-
     public Vector2d getPosition() {
         return position;
     }
-
 
     public boolean isDead() {
         return isDead;

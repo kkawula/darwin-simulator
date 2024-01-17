@@ -301,5 +301,6 @@ public class SimulationController implements SimulationObserver {
         descendantsValue.setText(animal.getOffspring() + "");
         ageValue.setText(animal.getAge() + "");
         positionValue.setText(animal.getPosition() + "");
+        deathDayValue.setText("");
     }
 }

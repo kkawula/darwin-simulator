@@ -14,7 +14,7 @@
             xmlns:fx="http://javafx.com/fxml"
             minHeight="500.0" minWidth="600.0"
             stylesheets="simulation.css"
-            fx:controller="agh.ics.oop.presenter.SimulationController">
+            fx:controller="agh.ics.oop.view.SimulationController">
     <top>
         <HBox styleClass="header-section" alignment="CENTER">
             <Label text="Darwin Evolution Simulator" styleClass="header-text"/>
@@ -61,7 +61,7 @@
                 <BorderPane>
                     <bottom>
                         <VBox spacing="20" alignment="CENTER">
-                            <VBox fx:id="animalStats" visible="false" alignment="CENTER" spacing="10">
+                            <VBox fx:id="animalStatsPanel" visible="false" alignment="CENTER" spacing="10">
                                 <GridPane gridLinesVisible="true">
                                     <columnConstraints>
                                         <ColumnConstraints maxWidth="90" minWidth="90" prefWidth="90" />

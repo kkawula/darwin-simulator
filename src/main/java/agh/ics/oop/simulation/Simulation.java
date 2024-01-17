@@ -3,7 +3,6 @@ package agh.ics.oop.simulation;
 import agh.ics.oop.model.Animal;
 import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.presenter.DisplayData;
-import agh.ics.oop.view.SimulationLauncher;
 import agh.ics.oop.presenter.SimulationObserver;
 import agh.ics.oop.utils.ConfigurationData;
 import agh.ics.oop.utils.CsvWriter;
@@ -12,14 +11,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Simulation implements Runnable {
-    private Set<SimulationObserver> observers = new HashSet<>();
+    private final Set<SimulationObserver> observers = new HashSet<>();
     private final DayManager dayManager;
     public final WorldMap worldMap;
     public final ConfigurationData config;
     private Animal followedAnimal;
     private boolean threadSuspended = false;
     private boolean interrupted = false;
-    CsvWriter csvWriter = new CsvWriter();
+    private final CsvWriter csvWriter = new CsvWriter();
     private final long refreshTime;
 
     public Simulation(ConfigurationData config) {

@@ -70,13 +70,13 @@ public class AnimalGuardian {
     }
     public void eatGrass() {
         for (Grass grass : worldMap.getGrasses())
-            if (!worldMap.getAnimals().get(grass.getPosition()).isEmpty())
+            if (!worldMap.getAnimals().get(grass.position()).isEmpty())
             {
-                Animal animal = worldMap.getAnimals().get(grass.getPosition()).pollLast();
+                Animal animal = worldMap.getAnimals().get(grass.position()).pollLast();
                 animal.eatGrass(plantEnergy);
-                worldMap.getAnimals().get(grass.getPosition()).add(animal);
+                worldMap.getAnimals().get(grass.position()).add(animal);
             }
-        worldMap.getGrasses().removeIf(grass -> !worldMap.getAnimals().get(grass.getPosition()).isEmpty());
+        worldMap.getGrasses().removeIf(grass -> !worldMap.getAnimals().get(grass.position()).isEmpty());
     }
     public void reproduceAnimals()
     {
@@ -86,9 +86,9 @@ public class AnimalGuardian {
             {
                 Animal father = worldMap.getAnimals().get(position).pollLast();
                 Animal mother = worldMap.getAnimals().get(position).pollLast();
-                if(father.getEnergy()>=minEnergyToReproduce && mother.getEnergy()>=minEnergyToReproduce)
+                if(father.getEnergy() >= minEnergyToReproduce && mother.getEnergy() >= minEnergyToReproduce)
                 {
-                    Animal child = Animal.reproduce(father,mother,parentEnergyConsumption,(worldMap.getWorldLifespan() + 1),minimalMutations,maximalMutations);
+                    Animal child = Animal.reproduce(father, mother, parentEnergyConsumption, (worldMap.getWorldLifespan() + 1), minimalMutations, maximalMutations);
                     worldMap.getAnimals().get(position).add(child);
                     worldMap.getAliveAnimals().add(child);
                 }

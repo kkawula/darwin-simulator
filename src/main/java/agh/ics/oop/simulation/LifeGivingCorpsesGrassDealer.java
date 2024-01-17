@@ -5,10 +5,6 @@ import agh.ics.oop.model.Vector2d;
 import agh.ics.oop.utils.RandomPositionGenerator;
 
 import java.util.LinkedList;
-import java.util.stream.IntStream;
-
-import static java.lang.Math.max;
-import static java.lang.Math.min;
 
 public class LifeGivingCorpsesGrassDealer implements GrassDealer{
 

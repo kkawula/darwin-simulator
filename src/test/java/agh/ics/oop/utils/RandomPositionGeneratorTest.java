@@ -1,6 +1,5 @@
 package agh.ics.oop.utils;
 
-import agh.ics.oop.model.Animal;
 import agh.ics.oop.model.Vector2d;
 import org.junit.jupiter.api.Test;
 

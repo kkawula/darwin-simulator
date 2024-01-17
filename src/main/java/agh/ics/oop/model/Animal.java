@@ -8,7 +8,7 @@ import java.util.*;
 
 public class Animal implements Comparable<Animal> {
 
-    public UUID ID = UUID.randomUUID();
+    public final UUID ID = UUID.randomUUID();
     private Vector2d position;
     private Animal father;
     private Animal mother;
@@ -21,7 +21,7 @@ public class Animal implements Comparable<Animal> {
     private int grassEaten = 0;
     public int activeGene = 0;
     private final Genome genome;
-    public Behavior behavior;
+    public final Behavior behavior;
 
 
     public Animal (Vector2d newPosition, int initialEnergy, int genomeLength, BehaviorVariant behaviorVariant) {
@@ -50,7 +50,6 @@ public class Animal implements Comparable<Animal> {
     }
     public static Animal reproduce(Animal father, Animal mother, int parentEnergyConsumption, int birthDay, int minimalMutations, int maximalMutations)
     {
-
         Animal child = new Animal(father.position, parentEnergyConsumption, birthDay, father, mother, father.behavior, minimalMutations, maximalMutations);
         father.children.add(child);
         mother.children.add(child);
@@ -69,12 +68,15 @@ public class Animal implements Comparable<Animal> {
     synchronized public int getOffspring() {
         HashSet<Animal> visitedAnimals = new HashSet<>();
         LinkedList<Animal> stack = new LinkedList<>();
+
         for(Animal animal : children)
         {
             stack.push(animal);
             visitedAnimals.add(animal);
         }
+
         int numberOfOffspring = 0;
+
         while(!stack.isEmpty())
         {
             Animal animal = stack.pop();
@@ -89,55 +91,6 @@ public class Animal implements Comparable<Animal> {
         return numberOfOffspring;
     }
 
-    public Genome getGenome() {
-        return genome;
-    }
-
-    public int getEnergy() {
-        return energy;
-    }
-
-    public String getActiveGene() {
-        return genome.getGene(activeGene).toString();
-    }
-
-    public int getAge(){return age;}
-
-    public int getBirthDay(){return birthDay;}
-
-    public int getGrassEaten(){return grassEaten;}
-
-    public int setEnergy(int energy) {
-        this.energy = energy;
-        return energy;
-    }
-
-    public Vector2d getPosition() {
-        return position;
-    }
-
-
-    public boolean isDead() {
-        return isDead;
-    }
-
-    public void kill() {
-        isDead = true;
-    }
-
-    public int getDeathDay() {
-        return deathDay;
-    }
-
-    public void setDeathDay(int deathDay) {
-        this.deathDay = deathDay;
-    }
-
-    @Override
-    public String toString() {
-        return position.toString();
-    }
-
     public void eatGrass(int plantEnergy) {
         energy+=plantEnergy;
         grassEaten++;
@@ -150,10 +103,10 @@ public class Animal implements Comparable<Animal> {
         this.performGeneBehavior();
     }
 
-    public UUID getID() {
-        return ID;
+    @Override
+    public String toString() {
+        return position.toString();
     }
-
     @Override
     public int compareTo(Animal other) {
         return Comparator.comparing(Animal::getEnergy)
@@ -175,6 +128,48 @@ public class Animal implements Comparable<Animal> {
     @Override
     public int hashCode() {
         return Objects.hash(father, mother, age, ID);
+    }
+
+    public UUID getID() {
+        return ID;
+    }
+
+    public Genome getGenome() {
+        return genome;
+    }
+
+    public int getEnergy() {
+        return energy;
+    }
+
+    public String getActiveGene() {
+        return genome.getGene(activeGene).toString();
+    }
+
+    public int getAge(){return age;}
+
+    public int getBirthDay(){return birthDay;}
+
+    public int getGrassEaten(){return grassEaten;}
+
+    public Vector2d getPosition() {
+        return position;
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void kill() {
+        isDead = true;
+    }
+
+    public int getDeathDay() {
+        return deathDay;
+    }
+
+    public void setDeathDay(int deathDay) {
+        this.deathDay = deathDay;
     }
 
     public int getBirthday() {

@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class SimulationLauncher extends Application {
-    private SimulationController controller;
     private Simulation simulation;
 
     public void run(Stage primaryStage, Simulation simulation) {
@@ -21,7 +20,7 @@ public class SimulationLauncher extends Application {
         loader.setLocation(getClass().getClassLoader().getResource("simulation.fxml"));
         try {
             Scene scene = new Scene(loader.load());
-            controller = loader.getController();
+            SimulationController controller = loader.getController();
             controller.init(simulation);
             simulation.subscribe(controller);
 

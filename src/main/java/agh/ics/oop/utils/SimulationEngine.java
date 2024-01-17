@@ -13,9 +13,7 @@ public class SimulationEngine {
         SimulationLauncher simulationLauncher = new SimulationLauncher();
 
         Stage stage = new Stage();
-        stage.setOnCloseRequest(event -> {
-            executorService.shutdownNow();
-        });
+        stage.setOnCloseRequest(event -> executorService.shutdownNow());
 
         Simulation simulation = new Simulation(config);
 

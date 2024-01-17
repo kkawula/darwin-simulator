@@ -8,7 +8,7 @@ import java.util.*;
 
 public class Animal implements Comparable<Animal> {
 
-    public UUID ID = UUID.randomUUID();
+    public final UUID ID = UUID.randomUUID();
     private Vector2d position;
     private Animal father;
     private Animal mother;
@@ -21,7 +21,7 @@ public class Animal implements Comparable<Animal> {
     private int grassEaten = 0;
     public int activeGene = 0;
     private final Genome genome;
-    public Behavior behavior;
+    public final Behavior behavior;
 
 
     public Animal (Vector2d newPosition, int initialEnergy, int genomeLength, BehaviorVariant behaviorVariant) {

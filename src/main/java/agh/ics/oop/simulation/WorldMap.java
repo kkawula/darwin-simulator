@@ -75,7 +75,7 @@ public class WorldMap implements MoveValidator{
 
     public LinkedList<Vector2d> getGrassesPositions() {
         return grasses.stream()
-                .map(Grass::getPosition)
+                .map(Grass::position)
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -106,12 +106,12 @@ public class WorldMap implements MoveValidator{
     @Override
     public Vector2d newPosition(Vector2d position, MapDirection mapDirection)
     {
-        int newX =(position.getX() + mapDirection.toUnitVector().getX()) >= 0 ?
-                (position.getX() + mapDirection.toUnitVector().getX()) % width : width - 1;
-        int newY = position.getY() + mapDirection.toUnitVector().getY();
+        int newX =(position.x() + mapDirection.toUnitVector().x()) >= 0 ?
+                (position.x() + mapDirection.toUnitVector().x()) % width : width - 1;
+        int newY = position.y() + mapDirection.toUnitVector().y();
         if(newY < 0 || newY >= height)
         {
-            return new Vector2d(newX, position.getY());
+            return new Vector2d(newX, position.y());
         }
         else
         {

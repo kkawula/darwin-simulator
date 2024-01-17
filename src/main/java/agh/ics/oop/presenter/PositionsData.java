@@ -7,18 +7,15 @@ import agh.ics.oop.simulation.WorldMap;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.TreeSet;
 
 public class PositionsData {
-    private final WorldMap worldMap;
     private final LinkedList<Animal> aliveAnimals;
-    private HashMap<Vector2d, Integer> animalPositions; // nazwa do zmiany, Integer to maksymalna energia zwierzecia na danym polu
-    private LinkedList<Vector2d> grassPositions;
-    private LinkedList<Vector2d> lastDayDeadAnimalsPositions;
-    private LinkedList<Vector2d> theMostPopularGenesPositions;
+    private final HashMap<Vector2d, Integer> animalPositions; // nazwa do zmiany, Integer to maksymalna energia zwierzecia na danym polu
+    private final LinkedList<Vector2d> grassPositions;
+    private final LinkedList<Vector2d> lastDayDeadAnimalsPositions;
+    private final LinkedList<Vector2d> theMostPopularGenesPositions;
 
     public PositionsData(WorldMap worldMap) {
-        this.worldMap = worldMap;
         this.aliveAnimals = worldMap.getAliveAnimals();
         this.animalPositions = worldMap.getAnimalsPositions();
         this.grassPositions = worldMap.getGrassesPositions();

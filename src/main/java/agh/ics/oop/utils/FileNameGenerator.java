@@ -7,8 +7,7 @@ public class FileNameGenerator {
     public static String generateFileName() {
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-        String fileName = dateFormat.format(date);
-        return fileName;
+        return dateFormat.format(date);
     }
 
 }

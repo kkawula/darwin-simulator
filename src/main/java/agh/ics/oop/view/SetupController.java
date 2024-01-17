@@ -59,7 +59,6 @@ public class SetupController {
         addValidationListener(genomeLengthField, 1, 32);
         addValidationListener(movingCostField, 0, 10000);
         addValidationListener(refreshTimeField, 0, 10000);
-
         loadConfigurationFromFile("Jungle.txt");
 
     }
@@ -72,19 +71,30 @@ public class SetupController {
         });
     }
 
-    private void showAlert() {
+    private void showAlert(String validationMessage) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Validation error");
         alert.setHeaderText(null);
-        alert.setContentText("Each field must be filled with a valid integer value.");
+        alert.setContentText(validationMessage);
         alert.showAndWait();
     }
 
     @FXML
     private void saveData() {
 
-        if (heightField.getText().isEmpty() || widthField.getText().isEmpty() || initialPlantsField.getText().isEmpty() || plantEnergyField.getText().isEmpty() || plantsPerDayField.getText().isEmpty() || initialAnimalsField.getText().isEmpty() || initialAnimalEnergyField.getText().isEmpty() || minEnergyToReproduceField.getText().isEmpty() || parentEnergyConsumptionField.getText().isEmpty() || minMutationsField.getText().isEmpty() || maxMutationsField.getText().isEmpty() || genomeLengthField.getText().isEmpty() || movingCostField.getText().isEmpty() || refreshTimeField.getText().isEmpty()) {
-            showAlert();
+        if (heightField.getText().isEmpty() || widthField.getText().isEmpty() || initialPlantsField.getText().isEmpty() ||
+                plantEnergyField.getText().isEmpty() || plantsPerDayField.getText().isEmpty() || initialAnimalsField.getText().isEmpty() ||
+                initialAnimalEnergyField.getText().isEmpty() || minEnergyToReproduceField.getText().isEmpty() ||
+                parentEnergyConsumptionField.getText().isEmpty() || minMutationsField.getText().isEmpty() ||
+                maxMutationsField.getText().isEmpty() || genomeLengthField.getText().isEmpty() ||
+                movingCostField.getText().isEmpty() || refreshTimeField.getText().isEmpty()) {
+            showAlert("Nie wypelniles wszystkich pol!");
+            return;
+        }
+        else if(Integer.parseInt(maxMutationsField.getText())>Integer.parseInt(genomeLengthField.getText()) ||
+                Integer.parseInt(maxMutationsField.getText())<Integer.parseInt(minMutationsField.getText()))
+        {
+            showAlert("Zle wypelniles opcje mutacji");
             return;
         }
 
@@ -148,7 +158,6 @@ public class SetupController {
         }
 
         try {
-
             Files.walk(configFolderPath)
                     .filter(Files::isRegularFile)
                     .filter(path -> path.toString().endsWith(".txt"))

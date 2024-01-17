@@ -145,12 +145,12 @@ public class SimulationController implements SimulationObserver {
     private void setNewFollowedAnimalPosition(Vector2d newFollowedAnimalPosition) {
 
         if (Objects.nonNull(followedAnimalPosition)) {
-            int row = followedAnimalPosition.getY();
-            int col = followedAnimalPosition.getX();
+            int row = followedAnimalPosition.y();
+            int col = followedAnimalPosition.x();
             fillCell(col, row);
         }
-        int row = newFollowedAnimalPosition.getY();
-        int col = newFollowedAnimalPosition.getX();
+        int row = newFollowedAnimalPosition.y();
+        int col = newFollowedAnimalPosition.x();
 
         animalStatsPanel.setVisible(true);
 
@@ -221,7 +221,7 @@ public class SimulationController implements SimulationObserver {
 
     private void fillTheMostPopularGenesPositions() {
         for (Vector2d position : theMostPopularGenesPositions) {
-            GridPane cell = (GridPane) grid.getChildren().get(position.getY() * config.mapWidth() + position.getX());
+            GridPane cell = (GridPane) grid.getChildren().get(position.y() * config.mapWidth() + position.x());
             cell.setStyle("-fx-background-color: #FFD700;");
         }
     }
@@ -251,7 +251,7 @@ public class SimulationController implements SimulationObserver {
     @FXML
     synchronized void stopFollowingAnimal() {
         isFollowed = false;
-        fillCell(followedAnimalPosition.getX(), followedAnimalPosition.getY());
+        fillCell(followedAnimalPosition.x(), followedAnimalPosition.y());
         animalStatsPanel.setVisible(false);
 
     }
@@ -272,25 +272,25 @@ public class SimulationController implements SimulationObserver {
         averageLifespanValue.setText(String.format("%.2f", simulationStats.getAverageLifeLength()));
         averageChildrenValue.setText(String.format("%.2f", simulationStats.getAverageChildrenNumber()));
         worldLifespanValue.setText(simulationStats.getWorldLifespan() + "");
-        bestGenesValue.setText(simulationStats.getBestGenes() + "");
+        bestGenesValue.setText(simulationStats.getBestGenes());
     }
 
     private void updateFollowedAnimalStats() {
         birthdayValue.setText(animalStats.getBirthday() + "");
-        genomeValue.setText(animalStats.getGenome() + "");
-        activeGeneValue.setText(animalStats.getActiveGene() + "");
+        genomeValue.setText(animalStats.getGenome());
+        activeGeneValue.setText(animalStats.getActiveGene());
         energyValue.setText(animalStats.getEnergy() + "");
         eatenPlantsValue.setText(animalStats.getEatenPlants() + "");
         childrenValue.setText(animalStats.getChildren() + "");
         descendantsValue.setText(animalStats.getDescendants() + "");
         ageValue.setText(animalStats.getAge() + "");
-        positionValue.setText(animalStats.getPositionString() + "");
+        positionValue.setText(animalStats.getPositionString());
     }
     private void updateFollowAnimalStatsOnPause(Animal animal)
     {
         birthdayValue.setText(animal.getBirthday() + "");
         genomeValue.setText(animal.getGenome() + "");
-        activeGeneValue.setText(animal.getActiveGene() + "");
+        activeGeneValue.setText(animal.getActiveGene());
         energyValue.setText(animal.getEnergy() + "");
         eatenPlantsValue.setText(animal.getEatenPlants() + "");
         childrenValue.setText(animal.getChildren() + "");

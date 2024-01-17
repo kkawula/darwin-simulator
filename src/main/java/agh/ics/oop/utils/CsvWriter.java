@@ -20,11 +20,11 @@ public class CsvWriter {
     private static final String EMBEDDED_DOUBLE_QUOTES = "\"\"";
     private static final String NEW_LINE_UNIX = "\n";
     private static final String NEW_LINE_WINDOWS = "\r\n";
-    private static List<String[]> list = new ArrayList<>();
+    private static final List<String[]> list = new ArrayList<>();
 
     public CsvWriter() {
         String[] header = {"Day", "Animal alive", "Plants", "Dead animals", "Average age of deaths",
-                "Average energy", "Average quantity of kids", "Free fileds", "Best genes"};
+                "Average energy", "Average quantity of kids", "Free fields", "Best genes"};
         list.add(header);
     }
 
@@ -71,10 +71,6 @@ public class CsvWriter {
 
             result = result.replace(DOUBLE_QUOTES, EMBEDDED_DOUBLE_QUOTES);
 
-        } else {
-            if (quote) {
-                result = result;
-            }
         }
 
         return result;

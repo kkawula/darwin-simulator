@@ -6,15 +6,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import static org.mockito.Mockito.*;
-
 class AnimalTest {
 
     @Test
     void updateChildren1() {
         Animal father = new Animal(new Vector2d(0,0), 30, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
         Animal mother = new Animal(new Vector2d(0,0), 30, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
-        Animal kid1 = Animal.reproduce(mother,father,30,0);
+        Animal kid1 = Animal.reproduce(mother,father,30,0,0,1);
         assertEquals(1, father.getChildren());
         assertEquals(1, mother.getChildren());
     }
@@ -23,8 +21,8 @@ class AnimalTest {
     void updateChildren2() {
         Animal father = new Animal(new Vector2d(0,0), 30, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
         Animal mother = new Animal(new Vector2d(0,0), 30, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
-        Animal kid1 = Animal.reproduce(mother,father,30,0);
-        Animal kid2 = Animal.reproduce(mother,father,30,0);
+        Animal kid1 = Animal.reproduce(mother,father,30,0,0,1);
+        Animal kid2 = Animal.reproduce(mother,father,30,0,0,1);
         assertEquals(2, father.getChildren());
         assertEquals(2, mother.getChildren());
     }
@@ -33,8 +31,8 @@ class AnimalTest {
         Animal father = new Animal(new Vector2d(0,0), 30, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
         Animal mother = new Animal(new Vector2d(0,0), 30, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
         Animal postMan = new Animal(new Vector2d(0,0), 30, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
-        Animal kid1 = Animal.reproduce(mother,father,30,0);
-        Animal kid2 = Animal.reproduce(mother,postMan,30,0);
+        Animal kid1 = Animal.reproduce(mother,father,30,0,0,1);
+        Animal kid2 = Animal.reproduce(mother,postMan,30,0,0,1);
         assertEquals(1, father.getChildren());
         assertEquals(1, postMan.getChildren());
         assertEquals(2, mother.getChildren());
@@ -44,7 +42,7 @@ class AnimalTest {
     void updateOffSpring1() {
         Animal father = new Animal(new Vector2d(0,0), 30, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
         Animal mother = new Animal(new Vector2d(0,0), 30, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
-        Animal kid1 = Animal.reproduce(mother,father,30,0);
+        Animal kid1 = Animal.reproduce(mother,father,30,0,0,1);
         assertEquals(1, father.getOffspring());
         assertEquals(1, mother.getOffspring());
     }
@@ -52,8 +50,8 @@ class AnimalTest {
     void updateOffSpring2() {
         Animal father = new Animal(new Vector2d(0,0), 30, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
         Animal mother = new Animal(new Vector2d(0,0), 30, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
-        Animal kid1 = Animal.reproduce(mother,father,30,0);
-        Animal kid2 = Animal.reproduce(mother,father,30,0);
+        Animal kid1 = Animal.reproduce(mother,father,30,0,0,1);
+        Animal kid2 = Animal.reproduce(mother,father,30,0,0,1);
         assertEquals(2, father.getOffspring());
         assertEquals(2, mother.getOffspring());
     }
@@ -62,8 +60,8 @@ class AnimalTest {
         Animal father = new Animal(new Vector2d(0,0), 30, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
         Animal mother = new Animal(new Vector2d(0,0), 30, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
         Animal postMan = new Animal(new Vector2d(0,0), 30, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
-        Animal kid1 = Animal.reproduce(mother,father,30,0);
-        Animal kid2 = Animal.reproduce(mother,postMan,30,0);
+        Animal kid1 = Animal.reproduce(mother,father,30,0,0,1);
+        Animal kid2 = Animal.reproduce(mother,postMan,30,0,0,1);
         assertEquals(1, father.getOffspring());
         assertEquals(1, postMan.getOffspring());
         assertEquals(2, mother.getOffspring());
@@ -74,9 +72,9 @@ class AnimalTest {
 
         Animal father = new Animal(new Vector2d(0,0), 30, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
         Animal mother = new Animal(new Vector2d(0,0), 30, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
-        Animal kid1 = Animal.reproduce(mother,father,30,0);
-        Animal kid2 = Animal.reproduce(mother,father,30,0);
-        Animal kid3 = Animal.reproduce(kid1,kid2,30,0);
+        Animal kid1 = Animal.reproduce(mother,father,30,0,0,1);
+        Animal kid2 = Animal.reproduce(mother,father,30,0,0,1);
+        Animal kid3 = Animal.reproduce(kid1,kid2,30,0,0,1);
 
         assertEquals(3, father.getOffspring());
         assertEquals(3, mother.getOffspring());
@@ -89,10 +87,10 @@ class AnimalTest {
 
         Animal father = new Animal(new Vector2d(0,0), 100, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
         Animal mother = new Animal(new Vector2d(0,0), 100, 4, BehaviorVariant.PREDESTINATION_BEHAVIOR);
-        Animal kid1 = Animal.reproduce(mother,father,30,0);
-        Animal kid2 = Animal.reproduce(mother,father,30,0);
-        Animal kid3 = Animal.reproduce(kid1,kid2,30,0);
-        Animal kid4 = Animal.reproduce(kid3,father,30,0);
+        Animal kid1 = Animal.reproduce(mother,father,30,0,0,1);
+        Animal kid2 = Animal.reproduce(mother,father,30,0,0,1);
+        Animal kid3 = Animal.reproduce(kid1,kid2,30,0,0,1);
+        Animal kid4 = Animal.reproduce(kid3,father,30,0,0,1);
 
         assertEquals(4, father.getOffspring());
         assertEquals(4, mother.getOffspring());

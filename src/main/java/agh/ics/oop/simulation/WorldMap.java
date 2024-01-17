@@ -31,6 +31,7 @@ public class WorldMap implements MoveValidator{
         this.height = height;
         initializeHashMap(width, height);
     }
+
     private void initializeHashMap(int width, int height) {
         for (int i = 0; i < width * height; i++) {
             animals.put(new Vector2d(i % width,i / width), new TreeSet<>());
@@ -40,14 +41,16 @@ public class WorldMap implements MoveValidator{
     public void clearLastDayDeadAnimalsPositions() {
         lastDayDeadAnimalsPositions.clear();
     }
+
     public LinkedList<Animal> getAliveAnimals(){
         return aliveAnimals;
     }
+
     public LinkedList<Animal> getDeadAnimals() {
         return deadAnimals;
     }
 
-    synchronized public HashMap<Vector2d, TreeSet<Animal>> getAnimals() {
+    public HashMap<Vector2d, TreeSet<Animal>> getAnimals() {
         return animals;
     }
 
@@ -72,7 +75,7 @@ public class WorldMap implements MoveValidator{
 
     public LinkedList<Vector2d> getGrassesPositions() {
         return grasses.stream()
-                .map(Grass::getPosition)
+                .map(Grass::position)
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
@@ -103,12 +106,12 @@ public class WorldMap implements MoveValidator{
     @Override
     public Vector2d newPosition(Vector2d position, MapDirection mapDirection)
     {
-        int newX =(position.getX() + mapDirection.toUnitVector().getX()) >= 0 ?
-                (position.getX() + mapDirection.toUnitVector().getX()) % width : width - 1;
-        int newY = position.getY() + mapDirection.toUnitVector().getY();
+        int newX =(position.x() + mapDirection.toUnitVector().x()) >= 0 ?
+                (position.x() + mapDirection.toUnitVector().x()) % width : width - 1;
+        int newY = position.y() + mapDirection.toUnitVector().y();
         if(newY < 0 || newY >= height)
         {
-            return new Vector2d(newX, position.getY());
+            return new Vector2d(newX, position.y());
         }
         else
         {

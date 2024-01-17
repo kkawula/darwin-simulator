@@ -1,6 +1,6 @@
 package agh.ics.oop.utils;
 
-import agh.ics.oop.presenter.StatsWriter;
+import agh.ics.oop.presenter.SimulationStats;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -20,11 +20,11 @@ public class CsvWriter {
     private static final String EMBEDDED_DOUBLE_QUOTES = "\"\"";
     private static final String NEW_LINE_UNIX = "\n";
     private static final String NEW_LINE_WINDOWS = "\r\n";
-    private static List<String[]> list = new ArrayList<>();
+    private static final List<String[]> list = new ArrayList<>();
 
     public CsvWriter() {
         String[] header = {"Day", "Animal alive", "Plants", "Dead animals", "Average age of deaths",
-                "Average energy", "Average quantity of kids", "Free fileds", "Best genes"};
+                "Average energy", "Average quantity of kids", "Free fields", "Best genes"};
         list.add(header);
     }
 
@@ -55,12 +55,12 @@ public class CsvWriter {
             final boolean quote) {
 
         return Stream.of(line)
-                .map(l -> formatCsvField(l, quote))
+                .map(l -> formatCsvField(l))
                 .collect(Collectors.joining(separator));
 
     }
 
-    private String formatCsvField(final String field, final boolean quote) {
+    private String formatCsvField(final String field) {
 
         String result = field;
 
@@ -71,10 +71,6 @@ public class CsvWriter {
 
             result = result.replace(DOUBLE_QUOTES, EMBEDDED_DOUBLE_QUOTES);
 
-        } else {
-            if (quote) {
-                result = result;
-            }
         }
 
         return result;
@@ -95,11 +91,11 @@ public class CsvWriter {
         }
     }
 
-    public void addDayToCsv(StatsWriter stats) {
-        String[] record = {String.valueOf(stats.getWorldLifespan()), String.valueOf(stats.getAnimalsAlive()),
-                String.valueOf(stats.getGrass()), String.valueOf(stats.getAnimalsDead()),
-                String.valueOf(stats.getAverageLifeLength()), String.valueOf(stats.getAverageEnergy()),
-                String.valueOf(stats.getAverageChildrenNumber()), String.valueOf(stats.getFreeFields()), String.valueOf(stats.getBestGenes())};
+    public void addDayToCsv(SimulationStats simulationStats) {
+        String[] record = {String.valueOf(simulationStats.getWorldLifespan()), String.valueOf(simulationStats.getAnimalsAlive()),
+                String.valueOf(simulationStats.getGrass()), String.valueOf(simulationStats.getAnimalsDead()),
+                String.valueOf(simulationStats.getAverageLifeLength()), String.valueOf(simulationStats.getAverageEnergy()),
+                String.valueOf(simulationStats.getAverageChildrenNumber()), String.valueOf(simulationStats.getFreeFields()), String.valueOf(simulationStats.getBestGenes())};
 
         list.add(record);
     }

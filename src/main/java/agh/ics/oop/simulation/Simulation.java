@@ -1,31 +1,48 @@
 package agh.ics.oop.simulation;
 
-import agh.ics.oop.presenter.SimulationLauncher;
-import agh.ics.oop.presenter.StatsWriter;
+import agh.ics.oop.model.Animal;
+import agh.ics.oop.model.Vector2d;
+import agh.ics.oop.presenter.DisplayData;
+import agh.ics.oop.presenter.SimulationObserver;
 import agh.ics.oop.utils.ConfigurationData;
 import agh.ics.oop.utils.CsvWriter;
-import javafx.application.Platform;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class Simulation implements Runnable {
-
+    private final Set<SimulationObserver> observers = new HashSet<>();
     private final DayManager dayManager;
     public final WorldMap worldMap;
-    public final StatsWriter statsWriter;
     public final ConfigurationData config;
-    private final SimulationLauncher observer;
+    private Animal followedAnimal;
     private boolean threadSuspended = false;
     private boolean interrupted = false;
-    CsvWriter csvWriter = new CsvWriter();
+    private final CsvWriter csvWriter = new CsvWriter();
     private final long refreshTime;
 
-    public Simulation(ConfigurationData config, SimulationLauncher observer) {
+    public Simulation(ConfigurationData config) {
         this.config = config;
         worldMap = new WorldMap(config.mapWidth(), config.mapHeight());
         dayManager = new DayManager(config, worldMap);
         dayManager.initializeFirstDay();
-        statsWriter = new StatsWriter(worldMap);
-        this.observer = observer;
         this.refreshTime = config.refreshTime();
+    }
+
+    public void subscribe(SimulationObserver observer) {
+        observers.add(observer);
+    }
+
+    private void notifyObservers(DisplayData displayData) {
+        for (SimulationObserver observer : observers) {
+            observer.update(displayData);
+        }
+    }
+    public void setFollowedAnimal(Vector2d newPosition) {
+        followedAnimal = worldMap.getLastAnimal(newPosition);
+    }
+    private DisplayData collectData() {
+        return new DisplayData(worldMap, followedAnimal);
     }
 
     public void pause(){
@@ -51,13 +68,10 @@ public class Simulation implements Runnable {
 
         while(!interrupted){
             dayManager.updateDay();
-            statsWriter.updateStats();
-            csvWriter.addDayToCsv(statsWriter);
-            Platform.runLater(()->
-            {
-                observer.updateStats();
-                observer.updateGrid();
-            });
+            DisplayData stats = collectData();
+            csvWriter.addDayToCsv(stats.getSimulationStats());
+
+            notifyObservers(stats);
 
             try {
                 Thread.sleep(refreshTime);
@@ -70,6 +84,4 @@ public class Simulation implements Runnable {
             }
         }
     }
-
-
 }

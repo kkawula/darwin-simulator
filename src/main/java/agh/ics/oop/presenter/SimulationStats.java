@@ -46,7 +46,7 @@ public class SimulationStats {
     private void updateBestGenes() {
 
         Map<Genome, Integer> counterMap = new HashMap<>();
-        worldMap.getAliveAnimals().forEach(animal1 -> counterMap.put(animal1.getGenome(),0));
+        worldMap.getAliveAnimals().forEach(animal1 -> counterMap.put(animal1.getGenome(), 0));
         worldMap.getAliveAnimals().forEach(animal1 -> counterMap.put(animal1.getGenome(), counterMap.get(animal1.getGenome())+1));
         int maximum = 0;
         Genome bestGenome = null;

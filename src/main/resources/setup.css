@@ -20,3 +20,7 @@ HBox {
     -fx-alignment: center;
 }
 
+.button {
+    -fx-cursor: hand;
+    -fx-pref-width: 85px;
+}

@@ -86,9 +86,9 @@ public class AnimalGuardian {
             {
                 Animal father = worldMap.getAnimals().get(position).pollLast();
                 Animal mother = worldMap.getAnimals().get(position).pollLast();
-                if(father.getEnergy()>=minEnergyToReproduce && mother.getEnergy()>=minEnergyToReproduce)
+                if(father.getEnergy() >= minEnergyToReproduce && mother.getEnergy() >= minEnergyToReproduce)
                 {
-                    Animal child = Animal.reproduce(father,mother,parentEnergyConsumption,(worldMap.getWorldLifespan() + 1),minimalMutations,maximalMutations);
+                    Animal child = Animal.reproduce(father, mother, parentEnergyConsumption, (worldMap.getWorldLifespan() + 1), minimalMutations, maximalMutations);
                     worldMap.getAnimals().get(position).add(child);
                     worldMap.getAliveAnimals().add(child);
                 }

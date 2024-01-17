@@ -68,12 +68,15 @@ public class Animal implements Comparable<Animal> {
     synchronized public int getOffspring() {
         HashSet<Animal> visitedAnimals = new HashSet<>();
         LinkedList<Animal> stack = new LinkedList<>();
+
         for(Animal animal : children)
         {
             stack.push(animal);
             visitedAnimals.add(animal);
         }
+
         int numberOfOffspring = 0;
+
         while(!stack.isEmpty())
         {
             Animal animal = stack.pop();
@@ -86,6 +89,49 @@ public class Animal implements Comparable<Animal> {
             }
         }
         return numberOfOffspring;
+    }
+
+    public void eatGrass(int plantEnergy) {
+        energy+=plantEnergy;
+        grassEaten++;
+    }
+
+    public void move(MoveValidator moveValidator, int movingCost) {
+        age++;
+        energy -= movingCost;
+        position = moveValidator.newPosition(position, genome.getGene(activeGene));
+        this.performGeneBehavior();
+    }
+
+    @Override
+    public String toString() {
+        return position.toString();
+    }
+    @Override
+    public int compareTo(Animal other) {
+        return Comparator.comparing(Animal::getEnergy)
+                .thenComparing(Animal::getAge)
+                .thenComparing(Animal::getChildren)
+                .thenComparing(Animal::getBirthday)
+                .thenComparing(Animal::getID)
+                .compare(this, other);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Animal animal = (Animal) o;
+        return Objects.equals(mother, animal.mother) && Objects.equals(father, animal.father) && Objects.equals(age,animal.age) && Objects.equals(ID, animal.ID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(father, mother, age, ID);
+    }
+
+    public UUID getID() {
+        return ID;
     }
 
     public Genome getGenome() {
@@ -124,50 +170,6 @@ public class Animal implements Comparable<Animal> {
 
     public void setDeathDay(int deathDay) {
         this.deathDay = deathDay;
-    }
-
-    @Override
-    public String toString() {
-        return position.toString();
-    }
-
-    public void eatGrass(int plantEnergy) {
-        energy+=plantEnergy;
-        grassEaten++;
-    }
-
-    public void move(MoveValidator moveValidator, int movingCost) {
-        age++;
-        energy -= movingCost;
-        position = moveValidator.newPosition(position, genome.getGene(activeGene));
-        this.performGeneBehavior();
-    }
-
-    public UUID getID() {
-        return ID;
-    }
-
-    @Override
-    public int compareTo(Animal other) {
-        return Comparator.comparing(Animal::getEnergy)
-                .thenComparing(Animal::getAge)
-                .thenComparing(Animal::getChildren)
-                .thenComparing(Animal::getBirthday)
-                .thenComparing(Animal::getID)
-                .compare(this, other);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Animal animal = (Animal) o;
-        return Objects.equals(mother, animal.mother) && Objects.equals(father, animal.father) && Objects.equals(age,animal.age) && Objects.equals(ID, animal.ID);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(father, mother, age, ID);
     }
 
     public int getBirthday() {

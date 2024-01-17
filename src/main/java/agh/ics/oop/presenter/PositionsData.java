@@ -10,7 +10,7 @@ import java.util.LinkedList;
 
 public class PositionsData {
     private final LinkedList<Animal> aliveAnimals;
-    private final HashMap<Vector2d, Integer> animalPositions; // nazwa do zmiany, Integer to maksymalna energia zwierzecia na danym polu
+    private final HashMap<Vector2d, Integer> animalPositions;
     private final LinkedList<Vector2d> grassPositions;
     private final LinkedList<Vector2d> lastDayDeadAnimalsPositions;
     private final LinkedList<Vector2d> theMostPopularGenesPositions;
@@ -49,6 +49,7 @@ public class PositionsData {
     public HashMap<Vector2d, Integer> getAnimalPositions() {
         return animalPositions;
     }
+
     public LinkedList<Vector2d> getGrassPositions() {
         return grassPositions;
     }

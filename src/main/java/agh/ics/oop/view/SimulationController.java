@@ -148,6 +148,10 @@ public class SimulationController implements SimulationObserver {
             int row = followedAnimalPosition.y();
             int col = followedAnimalPosition.x();
             fillCell(col, row);
+            if (theMostPopularGenesPositions.contains(followedAnimalPosition)) {
+                GridPane cell = (GridPane) grid.getChildren().get(row * config.mapWidth() + col);
+                cell.setStyle("-fx-background-color: #FFD700;");
+            }
         }
         int row = newFollowedAnimalPosition.y();
         int col = newFollowedAnimalPosition.x();

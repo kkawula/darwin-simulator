@@ -55,12 +55,12 @@ public class CsvWriter {
             final boolean quote) {
 
         return Stream.of(line)
-                .map(l -> formatCsvField(l, quote))
+                .map(l -> formatCsvField(l))
                 .collect(Collectors.joining(separator));
 
     }
 
-    private String formatCsvField(final String field, final boolean quote) {
+    private String formatCsvField(final String field) {
 
         String result = field;
 

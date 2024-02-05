@@ -18,6 +18,10 @@ public class SetupLauncher extends Application{
         primaryStage.show();
     }
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     private void configureStage(Stage primaryStage, BorderPane viewRoot) {
         var scene = new Scene(viewRoot);
         primaryStage.setScene(scene);

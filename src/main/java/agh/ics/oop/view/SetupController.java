@@ -146,14 +146,14 @@ public class SetupController {
 
     @FXML
     private void loadDataFromFile() {
+
+        String pathh = "config/";
+        String filePath = "";
         Path configFolderPath = null;
         List<String> fileNames = new ArrayList<>();
-
         try {
-            Path resourcesPath = Paths.get(getClass().getClassLoader().getResource("").toURI());
-            configFolderPath = resourcesPath.resolve("config");
-
-        } catch (Exception e) {
+            configFolderPath = Paths.get(getClass().getClassLoader().getResource(pathh).toURI());
+        } catch (URISyntaxException e) {
             e.printStackTrace();
         }
 

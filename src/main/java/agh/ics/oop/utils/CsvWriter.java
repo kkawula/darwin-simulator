@@ -31,13 +31,12 @@ public class CsvWriter {
     public void saveFile() {
         String fileName = FileNameGenerator.generateFileName() + ".csv";
         try {
-            Path resourcesPath = Paths.get(getClass().getClassLoader().getResource("").toURI());
-            Path configFolder = resourcesPath.resolve("simulationData");
-            Path filePath = configFolder.resolve(fileName).normalize().toAbsolutePath();
+            Path resourcesPath = Paths.get(getClass().getClassLoader().getResource("simulationData").toURI());
+            Path filePath = resourcesPath.resolve(fileName).normalize().toAbsolutePath();
             writeToCsvFile(list, filePath);
 
         } catch (IOException | URISyntaxException exception) {
-            System.out.println("nie zapisało się");
+            System.out.println("File didn't save properly.");
         }
     }
 

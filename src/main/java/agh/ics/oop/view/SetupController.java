@@ -147,12 +147,10 @@ public class SetupController {
     @FXML
     private void loadDataFromFile() {
 
-        String pathh = "config/";
-        String filePath = "";
         Path configFolderPath = null;
         List<String> fileNames = new ArrayList<>();
         try {
-            configFolderPath = Paths.get(getClass().getClassLoader().getResource(pathh).toURI());
+            configFolderPath = Paths.get(getClass().getClassLoader().getResource("config/").toURI());
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -280,9 +278,8 @@ public class SetupController {
         String fileName = FileNameGenerator.generateFileName() + ".txt";
 
         try {
-            Path resourcesPath = Paths.get(getClass().getClassLoader().getResource("").toURI());
-            Path configFolder = resourcesPath.resolve("config");
-            Path filePath = configFolder.resolve(fileName).normalize().toAbsolutePath();
+            Path resourcesPath = Paths.get(getClass().getClassLoader().getResource("config").toURI());
+            Path filePath = resourcesPath.resolve(fileName).normalize().toAbsolutePath();
 
             Map<String, String> data = new HashMap<>();
             data.put("Map height", heightField.getText());

@@ -34,3 +34,6 @@ A video presenting all the functions of the application: [YouTube](https://youtu
 ## Concept
 
 You can find detailed description for this project on [GitHub](https://github.com/Soamid/obiektowe-lab/tree/master/proj)
+
+## Screenshots
+![Simulation](screenshots/simulation.png)
